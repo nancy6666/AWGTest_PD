@@ -728,7 +728,7 @@ namespace AWGTestClient
                         DrawPicture(m_stPLCData.m_pdwILMaxArray, m_stPLCData.m_pdwWavelengthArray, "ILMax Plot", "Wavelength(nm)", "LossMax(dB)", m_bRadioDrawType);
 
                         double dblTemperature = 0;
-                        string strTmplFileName = @"Z:\Config\StationSetting\" + "AWGTLSSetting" + (iStation) + ".ini";
+                        string strTmplFileName = $"{cfg.RawDataPath}\\Config\\StationSetting\\AWGTLSSetting{iStation}.ini";
 
                         string strTempp = awgTestClient.GetSeting(strTmplFileName, "Temperature", "Temperature", "XXX");
                         if (strTempp == "XXX")
@@ -746,12 +746,7 @@ namespace AWGTestClient
                         {
                             dblSpecWL = C / (specCommon.ITU_Start_Freq - specCommon.ITU_Step_Freq);
                         }
-                        double dblPreSetTemp;
-                        if (dblSpecWL >= m_stPLCTestResultData.m_dblCW[2])
-                            dblPreSetTemp = (dblSpecWL - m_stPLCTestResultData.m_dblCW[2]) / 10.9 + dblTemperature;
-                        else
-                            dblPreSetTemp = (-1.0) * (m_stPLCTestResultData.m_dblCW[2] - dblSpecWL) / 10.9 + dblTemperature;
-                        m_strPreTemperature = Math.Round(dblPreSetTemp, 2).ToString();
+
 
                         int dwOutputPortCount = dwEndChannel - dwStartChannel + 1;
                         bool bUseTETM = false;
@@ -788,9 +783,10 @@ namespace AWGTestClient
 
                         DateTime filterDataStart = DateTime.Now;
 
-                        ShowMsg("Filtering test data ...", true);
-                        bFunctionOK = awgTestClient.CalulateILAve(m_stPLCData, 0, dwOutputPortCount, true, bUseTETM, false,out pdwMinLossArrayTest,out pdwMaxLossArrayTest);
-                        if(!bFunctionOK)
+                        //    ShowMsg("Filtering test data ...", true);
+                        bFunctionOK = awgTestClient.CalulateILAve(m_stPLCData, 0, dwOutputPortCount, out pdwMinLossArrayTest, out pdwMaxLossArrayTest);
+
+                        if (!bFunctionOK)
                         {
                             strMsg = "Filtering test data Failed !!!";
                             ShowMsg(strMsg, false);

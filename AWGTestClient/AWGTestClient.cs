@@ -22,20 +22,16 @@ namespace AWGTestClient
         tagAutoWaveform m_stPLCData;
         tagPLCData m_stPLCTestResultData;      
         double[] m_pdwWave;
-       // double[,] m_pdwPwr;
-        ///   double[,] m_pdwPDL;
-        // double[,] m_pdwTE;
-        //  double[,] m_pdwTM;
-        double[,] m_pdwPolPwr1;
-        double[,] m_pdwPolPwr2;
-        double[,] m_pdwPolPwr3;
-        double[,] m_pdwPolPwr4;
-        double[,] m_pdwCaliPolPwr1;
-        double[,] m_pdwCaliPolPwr2;
-        double[,] m_pdwCaliPolPwr3;
-        double[,] m_pdwCaliPolPwr4;
-        //double[,] m_pdwILMin;
-        //double[,] m_pdwILMax;
+       
+        double[] m_pdwPolPwr1;
+        double[] m_pdwPolPwr2;
+        double[] m_pdwPolPwr3;
+        double[] m_pdwPolPwr4;
+        double[] m_pdwCaliPolPwr1;
+        double[] m_pdwCaliPolPwr2;
+        double[] m_pdwCaliPolPwr3;
+        double[] m_pdwCaliPolPwr4;
+     
         double[] m_pdwRef;
         int window;
     private Frm_AWGTestClient frmAWGClient;
@@ -57,7 +53,7 @@ namespace AWGTestClient
 
             return bSuccess;
         }
-        public bool CalulateILAve(tagAutoWaveform pstAutoWaveform, int dwStartChannel, int dwEndChannel, bool bUseITU, bool bUseTETM, bool bUseMaxMin,out double[,] pdwMinLossArrayTest, out double[,] pdwMaxLossArrayTest)
+        public bool CalulateILAve(tagAutoWaveform pstAutoWaveform, int dwStartChannel, int dwEndChannel, out double[,] pdwMinLossArrayTest, out double[,] pdwMaxLossArrayTest)
         {
             bool bSuccess = false;
             int dwSamplePoint = pstAutoWaveform.m_dwSampleCount;
@@ -70,8 +66,6 @@ namespace AWGTestClient
             {
                 #region calc ILMax ILMin ILAve
 
-                if (bUseMaxMin)
-                {
                     for (int i = 0; i < dwSamplePoint; i++)
                     {
                         pdwMinLossArrayTest[iChannel, i] = pstAutoWaveform.m_pdwILMinArray[iChannel, i];
@@ -81,54 +75,7 @@ namespace AWGTestClient
                         return false;
                     if (pdwMaxLossArrayTest == null)
                         return false;
-                }
-                else if (bUseTETM)
-                {
-                    for (int i = 0; i < dwSamplePoint; i++)
-                    {
-                        pdwMinLossArrayTest[iChannel, i] = pstAutoWaveform.m_pdwTEArray[iChannel, i] > pstAutoWaveform.m_pdwTMArray[iChannel, i] ? pstAutoWaveform.m_pdwTMArray[iChannel, i] : pstAutoWaveform.m_pdwTEArray[iChannel, i];
-                        pdwMaxLossArrayTest[iChannel, i] = pstAutoWaveform.m_pdwTEArray[iChannel, i] > pstAutoWaveform.m_pdwTMArray[iChannel, i] ? pstAutoWaveform.m_pdwTEArray[iChannel, i] : pstAutoWaveform.m_pdwTMArray[iChannel, i];
-                    }
-                    if (pdwMinLossArrayTest == null)
-                        return false;
-                    if (pdwMaxLossArrayTest == null)
-                        return false;
-                }
-                else
-                {
-                    for (int i = 0; i < dwSamplePoint; i++)
-                    {
-                        pdwLossArray[i] = pstAutoWaveform.m_pdwLossArray[iChannel, i];
-                        pdwPDLArray[i] = pstAutoWaveform.m_pdwPDLArray[iChannel, i];
-                    }
-                    if (pdwLossArray == null)
-                        return false;
-                    if (pdwPDLArray == null)
-                        return false;
-
-                    for (int dwIndex = 0x00; dwIndex < dwSamplePoint; dwIndex++)
-                    {
-                        double dblILave = pdwLossArray[dwIndex];
-
-                        double dblPDL = pdwPDLArray[dwIndex];
-
-                        double dblb = Math.Pow(10, dblILave / (-10.0));
-
-                        double dblk = Math.Pow(10, dblPDL / 10.0);
-
-                        double dblTemp = 2.0 * dblb / (1 + dblk);
-                        dblTemp = -1.0 * 10 * Math.Log10(dblTemp);
-                        pdwMaxLossArrayTest[iChannel, dwIndex] = dblTemp;
-
-                        dblTemp = 2.0 * dblk * dblb / (1 + dblk);
-                        dblTemp = -1.0 * 10 * Math.Log10(dblTemp);
-                        pdwMinLossArrayTest[iChannel, dwIndex] = dblTemp;
-
-                        //   pdwAverageArray[dwIndex] = (pdwMinLossArray[dwIndex] + pdwMaxLossArray[dwIndex]) / 2.0;
-                    }
-
-                }
-
+               
                 #endregion
 
                 #region smooth the curve
@@ -153,7 +100,7 @@ namespace AWGTestClient
             bSuccess = true;
             return bSuccess;
         }
-        public bool CalculateILPDL_New(ref tagPLCData pstResultData, ref tagAutoWaveform pstAutoWaveform,testConditionStruct pstCriteria, int dwStartChannel, int dwEndChannel,bool bUseITU,bool bUseTETM,bool bUseMaxMin, double[,] pdwMinLossArrayTest, double[,] pdwMaxLossArrayTest)
+        public bool CalculateILPDL_New(ref tagPLCData pstResultData, ref tagAutoWaveform pstAutoWaveform,testConditionStruct pstCriteria, int dwStartChannel, int dwEndChannel,bool bUseITU,bool bUseTETM,bool bUseMaxMin)
         {
             bool bSuccess = false;
             int dwSamplePoint = pstAutoWaveform.m_dwSampleCount;
@@ -197,8 +144,8 @@ namespace AWGTestClient
 
                         for (int index = 0; index < m_dwSamplePoint; index++)
                         {
-                            pdwMinLossArray[index] = pdwMinLossArrayTest[iChannel, index];
-                            pdwMaxLossArray[index] = pdwMaxLossArrayTest[iChannel, index];
+                            pdwMinLossArray[index] = pstAutoWaveform.m_pdwILMinArray[iChannel, index];
+                            pdwMaxLossArray[index] = pstAutoWaveform.m_pdwILMaxArray[iChannel, index];
                         }
                         // CW
                         #region Calc CW
@@ -1409,13 +1356,12 @@ namespace AWGTestClient
 
         public bool ReadRawData(string strFilePathName)
         {
-            int dwChannelIndex;
             double dblTemp;
             m_pdwWave = new double[m_dwSamplePoint];
-            m_pdwPolPwr1 = new double[CHANNEL_COUNT , m_dwSamplePoint];
-            m_pdwPolPwr2 = new double[CHANNEL_COUNT, m_dwSamplePoint];
-            m_pdwPolPwr3 = new double[CHANNEL_COUNT, m_dwSamplePoint];
-            m_pdwPolPwr4 = new double[CHANNEL_COUNT, m_dwSamplePoint];
+            m_pdwPolPwr1 = new double[m_dwSamplePoint];
+            m_pdwPolPwr2 = new double[m_dwSamplePoint];
+            m_pdwPolPwr3 = new double[m_dwSamplePoint];
+            m_pdwPolPwr4 = new double[m_dwSamplePoint];
 
             int lineNbr = 0;
 
@@ -1446,13 +1392,13 @@ namespace AWGTestClient
                             m_pdwWave[dwIndex] = double.Parse(lineElems[0]);
 
                             dblTemp = double.Parse(lineElems[1]);
-                            m_pdwPolPwr1[0, dwIndex] = dblTemp;
+                            m_pdwPolPwr1[dwIndex] = dblTemp;
                             dblTemp = double.Parse(lineElems[2]);
-                            m_pdwPolPwr2[0, dwIndex] = dblTemp;
+                            m_pdwPolPwr2[dwIndex] = dblTemp;
                             dblTemp = double.Parse(lineElems[3]);
-                            m_pdwPolPwr3[0, dwIndex] = dblTemp;
+                            m_pdwPolPwr3[dwIndex] = dblTemp;
                             dblTemp = double.Parse(lineElems[4]);
-                            m_pdwPolPwr4[0, dwIndex] = dblTemp;
+                            m_pdwPolPwr4[dwIndex] = dblTemp;
 
                             dwIndex++;
                             if (dwIndex >= m_dwSamplePoint)
@@ -1485,13 +1431,12 @@ namespace AWGTestClient
         /// <returns></returns>
         public bool ReadCaliRawData(string strFilePathName)
         {
-            int dwChannelIndex;
             double dblTemp;
             m_pdwWave = new double[m_dwSamplePoint];
-            m_pdwCaliPolPwr1 = new double[CHANNEL_COUNT, m_dwSamplePoint];
-            m_pdwCaliPolPwr2 = new double[CHANNEL_COUNT, m_dwSamplePoint];
-            m_pdwCaliPolPwr3 = new double[CHANNEL_COUNT, m_dwSamplePoint];
-            m_pdwCaliPolPwr4 = new double[CHANNEL_COUNT, m_dwSamplePoint];
+            m_pdwCaliPolPwr1 = new double[m_dwSamplePoint];
+            m_pdwCaliPolPwr2 = new double[m_dwSamplePoint];
+            m_pdwCaliPolPwr3 = new double[m_dwSamplePoint];
+            m_pdwCaliPolPwr4 = new double[m_dwSamplePoint];
 
             int lineNbr = 0;
 
@@ -1512,7 +1457,7 @@ namespace AWGTestClient
                     lineNbr++;
                     lineElems = reader.GetLine();
                     int lineElemLen = lineElems.Length;
-                    if (lineElemLen <= 7)
+                    if (lineElemLen <6)
                         return false;
                     do
                     {
@@ -1520,17 +1465,16 @@ namespace AWGTestClient
                         try
                         {
                             m_pdwWave[dwIndex] = double.Parse(lineElems[0]);
-                            for (dwChannelIndex = 0x00; dwChannelIndex < CHANNEL_COUNT; dwChannelIndex++)
-                            {
-                                dblTemp = double.Parse(lineElems[1 + dwChannelIndex * 2]);//第1、3、5、7列
-                                m_pdwCaliPolPwr1[dwChannelIndex, dwIndex] = dblTemp;
-                                dblTemp = double.Parse(lineElems[2 + dwChannelIndex * 2]);
-                                m_pdwCaliPolPwr2[dwChannelIndex, dwIndex] = dblTemp;
-                                dblTemp = double.Parse(lineElems[3 + dwChannelIndex * 2]);
-                                m_pdwCaliPolPwr3[dwChannelIndex, dwIndex] = dblTemp;
-                                dblTemp = double.Parse(lineElems[4 + dwChannelIndex * 2]);
-                                m_pdwPolPwr4[dwChannelIndex, dwIndex] = dblTemp;
-                            }
+                           
+                                dblTemp = double.Parse(lineElems[1]);
+                                m_pdwCaliPolPwr1[ dwIndex] = dblTemp;
+                                dblTemp = double.Parse(lineElems[2]);
+                                m_pdwCaliPolPwr2[dwIndex] = dblTemp;
+                                dblTemp = double.Parse(lineElems[3]);
+                                m_pdwCaliPolPwr3[dwIndex] = dblTemp;
+                                dblTemp = double.Parse(lineElems[4]);
+                                m_pdwCaliPolPwr4[dwIndex] = dblTemp;
+                         
                             dwIndex++;
                             if (dwIndex >= m_dwSamplePoint)
                                 break;
@@ -1555,6 +1499,10 @@ namespace AWGTestClient
             }
             return true;
         }
+        /// <summary>
+        /// 根据测试功率和校准功率算出ILmin和ILmax
+        /// </summary>
+        /// <param name="pstAutoWaveform"></param>
         public void GetILMinMax(ref tagAutoWaveform pstAutoWaveform)
         {
             double m11 ;
@@ -1565,22 +1513,27 @@ namespace AWGTestClient
             double TMin;
             try
             {
-                for (int ch = 0; ch < CHANNEL_COUNT; ch++)
+                //功率由dBm转换成mW 10^(P/10)
+                for (int point = 0; point < m_dwSamplePoint; point++)
                 {
-                    for (int point = 0; point < m_dwSamplePoint; point++)
+                    m11 = (Math.Pow(10,m_pdwPolPwr1[point]/10) /Math.Pow(10, m_pdwCaliPolPwr1[point]/10) +Math.Pow(10, m_pdwPolPwr2[point]/10) /Math.Pow(10, m_pdwCaliPolPwr2[point]/10)) / 2;
+                    m12 = (Math.Pow(10, m_pdwPolPwr1[point]/10) /Math.Pow(10, m_pdwCaliPolPwr1[point]/10) -Math.Pow(10, m_pdwPolPwr2[point]/10) /Math.Pow(10, m_pdwCaliPolPwr2[point]/10)) / 2;
+                    m13 = (Math.Pow(10, m_pdwPolPwr3[point]/10) /Math.Pow(10, m_pdwCaliPolPwr3[point]/2) - m11) / 2;
+                    m14 = (Math.Pow(10, m_pdwPolPwr4[point]/10) / Math.Pow(10, m_pdwCaliPolPwr4[point])/2 - m11) / 2;
+                    TMax = m11 + Math.Sqrt(m12 * m12 + m13 * m13 + m14 * m14);
+                    if ((m12 * m12 - m13 * m13 - m14 * m14) < 0)
                     {
-                        m11 = (m_pdwPolPwr1[ch, point] / m_pdwCaliPolPwr1[ch, point] + m_pdwPolPwr2[ch, point] / m_pdwCaliPolPwr2[ch, point]) / 2;
-                        m12 = (m_pdwPolPwr1[ch, point] / m_pdwCaliPolPwr1[ch, point] - m_pdwPolPwr2[ch, point] / m_pdwCaliPolPwr2[ch, point]) / 2;
-                        m13 = (m_pdwPolPwr3[ch, point] / m_pdwCaliPolPwr3[ch, point] - m11) / 2;
-                        m14 = (m_pdwPolPwr4[ch, point] / m_pdwCaliPolPwr4[ch, point] - m11) / 2;
-                        TMax = m11 + Math.Sqrt(m12 * m12 + m13 * m13 + m14 * m14);
-                        TMin = m11 - Math.Sqrt(m12 * m12 - m13 * m13 - m14 * m14);
-                        pstAutoWaveform.m_pdwILMinArray[ch, point] = -10 * Math.Log10(TMax);
-                        pstAutoWaveform.m_pdwILMaxArray[ch, point] = -10 * Math.Log10(TMin);
+                        TMin = m11;
                     }
+                    else
+                    {
+                        TMin = m11 - Math.Sqrt(m12 * m12 - m13 * m13 - m14 * m14);
+                    }
+                    pstAutoWaveform.m_pdwILMinArray[0, point] = -10 * Math.Log10(TMax);
+                    pstAutoWaveform.m_pdwILMaxArray[0, point] = -10 * Math.Log10(TMin);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw new Exception($"计算ILMin和ILMax出错，{ex.Message}");
             }
@@ -1646,16 +1599,15 @@ namespace AWGTestClient
                 for (int dwIndex = 0; dwIndex < dwSampleCount; dwIndex++)
                 {
                     strTemp = Math.Round(pstAutoWaveform.m_pdwWavelengthArray[dwIndex], 3).ToString("####.000") + "\t";
-                    for (int dwChannelIndex = 0; dwChannelIndex < dwChannelCount; dwChannelIndex++)
-                    {
+                    
                         double dblILMin, dblILMax;
 
-                        dblILMax = pstAutoWaveform.m_pdwILMaxArray[dwChannelCount, dwIndex];
-                        dblILMin = pstAutoWaveform.m_pdwILMinArray[dwChannelCount, dwIndex];
+                        dblILMax = pstAutoWaveform.m_pdwILMaxArray[0, dwIndex];
+                        dblILMin = pstAutoWaveform.m_pdwILMinArray[0, dwIndex];
 
                         str1 = string.Format("{0}\t{1}\t", Math.Round(dblILMin, 3).ToString("####.000"), Math.Round(dblILMax, 3).ToString("####.000"));
                         strTemp += str1;
-                    }
+                   
                     sw.Write(strTemp);
                     sw.Write("\r\n");
                 }

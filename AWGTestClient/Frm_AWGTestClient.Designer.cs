@@ -185,7 +185,7 @@
             // buttonStartTest
             // 
             this.buttonStartTest.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonStartTest.Location = new System.Drawing.Point(14, 83);
+            this.buttonStartTest.Location = new System.Drawing.Point(14, 66);
             this.buttonStartTest.Margin = new System.Windows.Forms.Padding(2);
             this.buttonStartTest.Name = "buttonStartTest";
             this.buttonStartTest.Size = new System.Drawing.Size(157, 30);
@@ -197,7 +197,7 @@
             // buttonCalibration
             // 
             this.buttonCalibration.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonCalibration.Location = new System.Drawing.Point(14, 49);
+            this.buttonCalibration.Location = new System.Drawing.Point(14, 22);
             this.buttonCalibration.Margin = new System.Windows.Forms.Padding(2);
             this.buttonCalibration.Name = "buttonCalibration";
             this.buttonCalibration.Size = new System.Drawing.Size(157, 30);
@@ -1152,7 +1152,6 @@
             this.btnTETMCalcu.TabIndex = 50;
             this.btnTETMCalcu.Text = "ILPDL Calculate";
             this.btnTETMCalcu.UseVisualStyleBackColor = true;
-         //   this.btnTETMCalcu.Click += new System.EventHandler(this.btnTETMCalcu_Click);
             // 
             // Frm_AWGTestClient
             // 
