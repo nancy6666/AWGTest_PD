@@ -1,0 +1,49 @@
+c:\users\nancy\documents\visual studio 2017\Projects\SqlFunctions\SqlFunctions\obj\Debug\SqlFunctions.csproj.CoreCompileInputs.cache
+c:\users\nancy\documents\visual studio 2017\Projects\SqlFunctions\SqlFunctions\bin\Debug\SqlFunctions.dll
+c:\users\nancy\documents\visual studio 2017\Projects\SqlFunctions\SqlFunctions\bin\Debug\SqlFunctions.pdb
+c:\users\nancy\documents\visual studio 2017\Projects\SqlFunctions\SqlFunctions\obj\Debug\SqlFunctions.dll
+c:\users\nancy\documents\visual studio 2017\Projects\SqlFunctions\SqlFunctions\obj\Debug\SqlFunctions.pdb
+E:\Database Software\SqlFunctions\SqlFunctions\obj\Debug\SqlFunctions.csproj.CoreCompileInputs.cache
+E:\Database Software\SqlFunctions\SqlFunctions\obj\Debug\SqlFunctions.dll
+E:\Database Software\SqlFunctions\SqlFunctions\obj\Debug\SqlFunctions.pdb
+E:\Database Software\SqlFunctions\SqlFunctions\bin\Debug\SqlFunctions.dll
+E:\Database Software\SqlFunctions\SqlFunctions\bin\Debug\SqlFunctions.pdb
+E:\Database Software\Sql_Functions_PLC\SqlFunctions\SqlFunctions\bin\Debug\SqlFunctions.dll
+E:\Database Software\Sql_Functions_PLC\SqlFunctions\SqlFunctions\bin\Debug\SqlFunctions.pdb
+E:\Database Software\Sql_Functions_PLC\SqlFunctions\SqlFunctions\obj\Debug\SqlFunctions.csprojResolveAssemblyReference.cache
+E:\Database Software\Sql_Functions_PLC\SqlFunctions\SqlFunctions\obj\Debug\SqlFunctions.csproj.CoreCompileInputs.cache
+E:\Database Software\Sql_Functions_PLC\SqlFunctions\SqlFunctions\obj\Debug\SqlFunctions.dll
+E:\Database Software\Sql_Functions_PLC\SqlFunctions\SqlFunctions\obj\Debug\SqlFunctions.pdb
+E:\Database Software\AWGTestSoftware\SqlFunctions\obj\Debug\SqlFunctions.csproj.CoreCompileInputs.cache
+E:\Database Software\AWGTestSoftware\SqlFunctions\obj\Debug\SqlFunctions.dll
+E:\Database Software\AWGTestSoftware\SqlFunctions\obj\Debug\SqlFunctions.pdb
+E:\Database Software\AWGTestSoftware\SqlFunctions\bin\Debug\SqlFunctions.dll
+E:\Database Software\AWGTestSoftware\SqlFunctions\bin\Debug\SqlFunctions.pdb
+E:\Database Software\AWGTestSoftware\SqlFunctions\obj\Debug\SqlFunctions.csprojResolveAssemblyReference.cache
+D:\AWGTestSoftware\AWGTestSoftware\SqlFunctions\bin\Debug\SqlFunctions.dll
+D:\AWGTestSoftware\AWGTestSoftware\SqlFunctions\bin\Debug\SqlFunctions.pdb
+D:\AWGTestSoftware\AWGTestSoftware\SqlFunctions\obj\Debug\SqlFunctions.csprojResolveAssemblyReference.cache
+D:\AWGTestSoftware\AWGTestSoftware\SqlFunctions\obj\Debug\SqlFunctions.dll
+D:\AWGTestSoftware\AWGTestSoftware\SqlFunctions\obj\Debug\SqlFunctions.pdb
+D:\AWGTestSoftware\AWGTestSoftware\AWGTestSoftware\AWGTestSoftware\SqlFunctions\bin\Debug\SqlFunctions.dll
+D:\AWGTestSoftware\AWGTestSoftware\AWGTestSoftware\AWGTestSoftware\SqlFunctions\bin\Debug\SqlFunctions.pdb
+D:\AWGTestSoftware\AWGTestSoftware\AWGTestSoftware\AWGTestSoftware\SqlFunctions\obj\Debug\SqlFunctions.csprojResolveAssemblyReference.cache
+D:\AWGTestSoftware\AWGTestSoftware\AWGTestSoftware\AWGTestSoftware\SqlFunctions\obj\Debug\SqlFunctions.dll
+D:\AWGTestSoftware\AWGTestSoftware\AWGTestSoftware\AWGTestSoftware\SqlFunctions\obj\Debug\SqlFunctions.pdb
+D:\AWGTestSoftware\AWGTestSoftware0412\AWGTestSoftware\AWGTestSoftware\AWGTestSoftware\SqlFunctions\bin\Debug\SqlFunctions.dll
+D:\AWGTestSoftware\AWGTestSoftware0412\AWGTestSoftware\AWGTestSoftware\AWGTestSoftware\SqlFunctions\bin\Debug\SqlFunctions.pdb
+D:\AWGTestSoftware\AWGTestSoftware0412\AWGTestSoftware\AWGTestSoftware\AWGTestSoftware\SqlFunctions\obj\Debug\SqlFunctions.csprojResolveAssemblyReference.cache
+D:\AWGTestSoftware\AWGTestSoftware0412\AWGTestSoftware\AWGTestSoftware\AWGTestSoftware\SqlFunctions\obj\Debug\SqlFunctions.dll
+D:\AWGTestSoftware\AWGTestSoftware0412\AWGTestSoftware\AWGTestSoftware\AWGTestSoftware\SqlFunctions\obj\Debug\SqlFunctions.pdb
+E:\Database Software\AWGTest\AWGTestSoftware\AWGTestSoftware\AWGTestSoftware\SqlFunctions\bin\Debug\SqlFunctions.dll
+E:\Database Software\AWGTest\AWGTestSoftware\AWGTestSoftware\AWGTestSoftware\SqlFunctions\bin\Debug\SqlFunctions.pdb
+E:\Database Software\AWGTest\AWGTestSoftware\AWGTestSoftware\AWGTestSoftware\SqlFunctions\obj\Debug\SqlFunctions.csprojResolveAssemblyReference.cache
+E:\Database Software\AWGTest\AWGTestSoftware\AWGTestSoftware\AWGTestSoftware\SqlFunctions\obj\Debug\SqlFunctions.csproj.CoreCompileInputs.cache
+E:\Database Software\AWGTest\AWGTestSoftware\AWGTestSoftware\AWGTestSoftware\SqlFunctions\obj\Debug\SqlFunctions.dll
+E:\Database Software\AWGTest\AWGTestSoftware\AWGTestSoftware\AWGTestSoftware\SqlFunctions\obj\Debug\SqlFunctions.pdb
+E:\PLC Test Line\AWGTest\AWGTestSoftware\SqlFunctions\bin\Debug\SqlFunctions.dll
+E:\PLC Test Line\AWGTest\AWGTestSoftware\SqlFunctions\bin\Debug\SqlFunctions.pdb
+E:\PLC Test Line\AWGTest\AWGTestSoftware\SqlFunctions\obj\Debug\SqlFunctions.csprojResolveAssemblyReference.cache
+E:\PLC Test Line\AWGTest\AWGTestSoftware\SqlFunctions\obj\Debug\SqlFunctions.csproj.CoreCompileInputs.cache
+E:\PLC Test Line\AWGTest\AWGTestSoftware\SqlFunctions\obj\Debug\SqlFunctions.dll
+E:\PLC Test Line\AWGTest\AWGTestSoftware\SqlFunctions\obj\Debug\SqlFunctions.pdb

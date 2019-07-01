@@ -1,0 +1,6 @@
+SCMBranch=MicroItla_ReceptacleAlignPER_Dev
+SCMRepository=Oclaro_Test/TestEngine/Plugins/SrcCommon/Algorithms/Alg_PowConvert_dB
+SCMMainlineUUID={5d0c3479-1286-4df2-9795-a47157806d1f}
+SCMBranchRepositoryID=614227
+Alg_PowConvert_dB.cs;1686237035;1;1392171841;|28364|2778718
+Alg_PowConvert_dB.csproj;682458749;1;1392171841;|28365|2778719
