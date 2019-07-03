@@ -47,28 +47,18 @@
             this.buttonX1 = new DevComponents.DotNetBar.ButtonX();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.checkBoxInput = new System.Windows.Forms.CheckBox();
-            this.textBoxPreTemperature = new System.Windows.Forms.TextBox();
             this.comboBoxOOption = new System.Windows.Forms.ComboBox();
             this.comboBoxCLOption = new System.Windows.Forms.ComboBox();
-            this.checkBoxMaskName = new System.Windows.Forms.CheckBox();
-            this.checkBoxComment = new System.Windows.Forms.CheckBox();
-            this.checkBoxOutput = new System.Windows.Forms.CheckBox();
             this.checkBoxSerialNum = new System.Windows.Forms.CheckBox();
             this.checkBoxOperator = new System.Windows.Forms.CheckBox();
             this.label10 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
-            this.textBoxMaskName = new System.Windows.Forms.TextBox();
-            this.label8 = new System.Windows.Forms.Label();
-            this.textBoxComment = new System.Windows.Forms.TextBox();
-            this.label7 = new System.Windows.Forms.Label();
             this.textBoxChipID = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.textBoxDate = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.textBoxTemperature = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.textBoxOutput = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
             this.textBoxInput = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.textBoxSerialNum = new System.Windows.Forms.TextBox();
@@ -80,19 +70,13 @@
             this.textBoxTestTemp = new System.Windows.Forms.TextBox();
             this.label19 = new System.Windows.Forms.Label();
             this.buttonGetTestCondition = new System.Windows.Forms.Button();
-            this.textBoxCLBandDesp = new System.Windows.Forms.TextBox();
             this.label16 = new System.Windows.Forms.Label();
-            this.label15 = new System.Windows.Forms.Label();
             this.textBoxPower = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
             this.textBoxStopWavelength = new System.Windows.Forms.TextBox();
             this.textBoxStartWavelength = new System.Windows.Forms.TextBox();
             this.label13 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
-            this.comboBoxCLBandStep = new System.Windows.Forms.ComboBox();
-            this.comboBoxCLBandOutPort = new System.Windows.Forms.ComboBox();
-            this.comboBoxProductType = new System.Windows.Forms.ComboBox();
-            this.label11 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.radioButtonPDLDrawType = new System.Windows.Forms.RadioButton();
             this.radioButtonILDrawType = new System.Windows.Forms.RadioButton();
@@ -128,6 +112,7 @@
             this.Customer_PN = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.TestResult = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.btnTETMCalcu = new System.Windows.Forms.Button();
+            this.txtbSweepStep = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -157,10 +142,10 @@
             this.listView2.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader19});
             this.listView2.GridLines = true;
-            this.listView2.Location = new System.Drawing.Point(175, 14);
+            this.listView2.Location = new System.Drawing.Point(175, 23);
             this.listView2.Margin = new System.Windows.Forms.Padding(2);
             this.listView2.Name = "listView2";
-            this.listView2.Size = new System.Drawing.Size(119, 133);
+            this.listView2.Size = new System.Drawing.Size(119, 124);
             this.listView2.TabIndex = 56;
             this.listView2.UseCompatibleStateImageBehavior = false;
             this.listView2.View = System.Windows.Forms.View.Details;
@@ -185,7 +170,7 @@
             // buttonStartTest
             // 
             this.buttonStartTest.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonStartTest.Location = new System.Drawing.Point(14, 66);
+            this.buttonStartTest.Location = new System.Drawing.Point(14, 73);
             this.buttonStartTest.Margin = new System.Windows.Forms.Padding(2);
             this.buttonStartTest.Name = "buttonStartTest";
             this.buttonStartTest.Size = new System.Drawing.Size(157, 30);
@@ -333,39 +318,29 @@
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.checkBoxInput);
-            this.groupBox3.Controls.Add(this.textBoxPreTemperature);
             this.groupBox3.Controls.Add(this.comboBoxOOption);
             this.groupBox3.Controls.Add(this.comboBoxCLOption);
-            this.groupBox3.Controls.Add(this.checkBoxMaskName);
-            this.groupBox3.Controls.Add(this.checkBoxComment);
-            this.groupBox3.Controls.Add(this.checkBoxOutput);
             this.groupBox3.Controls.Add(this.checkBoxSerialNum);
             this.groupBox3.Controls.Add(this.checkBoxOperator);
             this.groupBox3.Controls.Add(this.label10);
             this.groupBox3.Controls.Add(this.label9);
-            this.groupBox3.Controls.Add(this.textBoxMaskName);
-            this.groupBox3.Controls.Add(this.label8);
-            this.groupBox3.Controls.Add(this.textBoxComment);
-            this.groupBox3.Controls.Add(this.label7);
             this.groupBox3.Controls.Add(this.textBoxChipID);
             this.groupBox3.Controls.Add(this.label6);
             this.groupBox3.Controls.Add(this.textBoxDate);
             this.groupBox3.Controls.Add(this.label5);
             this.groupBox3.Controls.Add(this.textBoxTemperature);
             this.groupBox3.Controls.Add(this.label4);
-            this.groupBox3.Controls.Add(this.textBoxOutput);
-            this.groupBox3.Controls.Add(this.label3);
             this.groupBox3.Controls.Add(this.textBoxInput);
             this.groupBox3.Controls.Add(this.label2);
             this.groupBox3.Controls.Add(this.textBoxSerialNum);
             this.groupBox3.Controls.Add(this.label1);
             this.groupBox3.Controls.Add(this.textBoxOperator);
             this.groupBox3.Controls.Add(this.label34);
-            this.groupBox3.Location = new System.Drawing.Point(581, 11);
+            this.groupBox3.Location = new System.Drawing.Point(581, 10);
             this.groupBox3.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Padding = new System.Windows.Forms.Padding(2);
-            this.groupBox3.Size = new System.Drawing.Size(358, 187);
+            this.groupBox3.Size = new System.Drawing.Size(371, 188);
             this.groupBox3.TabIndex = 11;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "DUT测试信息";
@@ -375,85 +350,39 @@
             this.checkBoxInput.AutoSize = true;
             this.checkBoxInput.Checked = true;
             this.checkBoxInput.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxInput.Location = new System.Drawing.Point(149, 85);
+            this.checkBoxInput.Location = new System.Drawing.Point(164, 82);
             this.checkBoxInput.Margin = new System.Windows.Forms.Padding(2);
             this.checkBoxInput.Name = "checkBoxInput";
             this.checkBoxInput.Size = new System.Drawing.Size(15, 14);
             this.checkBoxInput.TabIndex = 30;
             this.checkBoxInput.UseVisualStyleBackColor = true;
             // 
-            // textBoxPreTemperature
-            // 
-            this.textBoxPreTemperature.Enabled = false;
-            this.textBoxPreTemperature.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxPreTemperature.Location = new System.Drawing.Point(118, 124);
-            this.textBoxPreTemperature.Margin = new System.Windows.Forms.Padding(2);
-            this.textBoxPreTemperature.Name = "textBoxPreTemperature";
-            this.textBoxPreTemperature.Size = new System.Drawing.Size(45, 23);
-            this.textBoxPreTemperature.TabIndex = 29;
-            // 
             // comboBoxOOption
             // 
             this.comboBoxOOption.Enabled = false;
             this.comboBoxOOption.FormattingEnabled = true;
-            this.comboBoxOOption.Location = new System.Drawing.Point(252, 151);
+            this.comboBoxOOption.Location = new System.Drawing.Point(250, 89);
             this.comboBoxOOption.Margin = new System.Windows.Forms.Padding(2);
             this.comboBoxOOption.Name = "comboBoxOOption";
-            this.comboBoxOOption.Size = new System.Drawing.Size(68, 20);
+            this.comboBoxOOption.Size = new System.Drawing.Size(91, 20);
             this.comboBoxOOption.TabIndex = 28;
             // 
             // comboBoxCLOption
             // 
             this.comboBoxCLOption.Enabled = false;
             this.comboBoxCLOption.FormattingEnabled = true;
-            this.comboBoxCLOption.Location = new System.Drawing.Point(252, 131);
+            this.comboBoxCLOption.Location = new System.Drawing.Point(250, 56);
             this.comboBoxCLOption.Margin = new System.Windows.Forms.Padding(2);
             this.comboBoxCLOption.Name = "comboBoxCLOption";
-            this.comboBoxCLOption.Size = new System.Drawing.Size(68, 20);
+            this.comboBoxCLOption.Size = new System.Drawing.Size(91, 20);
             this.comboBoxCLOption.TabIndex = 27;
-            // 
-            // checkBoxMaskName
-            // 
-            this.checkBoxMaskName.AutoSize = true;
-            this.checkBoxMaskName.Checked = true;
-            this.checkBoxMaskName.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxMaskName.Location = new System.Drawing.Point(325, 115);
-            this.checkBoxMaskName.Margin = new System.Windows.Forms.Padding(2);
-            this.checkBoxMaskName.Name = "checkBoxMaskName";
-            this.checkBoxMaskName.Size = new System.Drawing.Size(15, 14);
-            this.checkBoxMaskName.TabIndex = 26;
-            this.checkBoxMaskName.UseVisualStyleBackColor = true;
-            // 
-            // checkBoxComment
-            // 
-            this.checkBoxComment.AutoSize = true;
-            this.checkBoxComment.Checked = true;
-            this.checkBoxComment.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxComment.Location = new System.Drawing.Point(325, 79);
-            this.checkBoxComment.Margin = new System.Windows.Forms.Padding(2);
-            this.checkBoxComment.Name = "checkBoxComment";
-            this.checkBoxComment.Size = new System.Drawing.Size(15, 14);
-            this.checkBoxComment.TabIndex = 25;
-            this.checkBoxComment.UseVisualStyleBackColor = true;
-            // 
-            // checkBoxOutput
-            // 
-            this.checkBoxOutput.AutoSize = true;
-            this.checkBoxOutput.Checked = true;
-            this.checkBoxOutput.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxOutput.Location = new System.Drawing.Point(149, 108);
-            this.checkBoxOutput.Margin = new System.Windows.Forms.Padding(2);
-            this.checkBoxOutput.Name = "checkBoxOutput";
-            this.checkBoxOutput.Size = new System.Drawing.Size(15, 14);
-            this.checkBoxOutput.TabIndex = 24;
-            this.checkBoxOutput.UseVisualStyleBackColor = true;
             // 
             // checkBoxSerialNum
             // 
             this.checkBoxSerialNum.AutoSize = true;
             this.checkBoxSerialNum.Checked = true;
             this.checkBoxSerialNum.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxSerialNum.Location = new System.Drawing.Point(164, 64);
+            this.checkBoxSerialNum.Location = new System.Drawing.Point(164, 54);
             this.checkBoxSerialNum.Margin = new System.Windows.Forms.Padding(2);
             this.checkBoxSerialNum.Name = "checkBoxSerialNum";
             this.checkBoxSerialNum.Size = new System.Drawing.Size(15, 14);
@@ -465,7 +394,7 @@
             this.checkBoxOperator.AutoSize = true;
             this.checkBoxOperator.Checked = true;
             this.checkBoxOperator.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxOperator.Location = new System.Drawing.Point(149, 28);
+            this.checkBoxOperator.Location = new System.Drawing.Point(164, 26);
             this.checkBoxOperator.Margin = new System.Windows.Forms.Padding(2);
             this.checkBoxOperator.Name = "checkBoxOperator";
             this.checkBoxOperator.Size = new System.Drawing.Size(15, 14);
@@ -477,7 +406,7 @@
             this.label10.Enabled = false;
             this.label10.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(181, 149);
+            this.label10.Location = new System.Drawing.Point(202, 87);
             this.label10.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(50, 18);
@@ -489,58 +418,17 @@
             this.label9.Enabled = false;
             this.label9.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label9.Location = new System.Drawing.Point(181, 131);
+            this.label9.Location = new System.Drawing.Point(202, 56);
             this.label9.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(50, 18);
             this.label9.TabIndex = 20;
             this.label9.Text = "CL 选项";
             // 
-            // textBoxMaskName
-            // 
-            this.textBoxMaskName.Enabled = false;
-            this.textBoxMaskName.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxMaskName.Location = new System.Drawing.Point(183, 109);
-            this.textBoxMaskName.Margin = new System.Windows.Forms.Padding(2);
-            this.textBoxMaskName.Name = "textBoxMaskName";
-            this.textBoxMaskName.Size = new System.Drawing.Size(138, 23);
-            this.textBoxMaskName.TabIndex = 19;
-            // 
-            // label8
-            // 
-            this.label8.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(181, 94);
-            this.label8.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(67, 18);
-            this.label8.TabIndex = 18;
-            this.label8.Text = "MaskName";
-            // 
-            // textBoxComment
-            // 
-            this.textBoxComment.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxComment.Location = new System.Drawing.Point(183, 72);
-            this.textBoxComment.Margin = new System.Windows.Forms.Padding(2);
-            this.textBoxComment.Name = "textBoxComment";
-            this.textBoxComment.Size = new System.Drawing.Size(138, 23);
-            this.textBoxComment.TabIndex = 17;
-            // 
-            // label7
-            // 
-            this.label7.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.Location = new System.Drawing.Point(181, 56);
-            this.label7.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(67, 18);
-            this.label7.TabIndex = 16;
-            this.label7.Text = "Comment";
-            // 
             // textBoxChipID
             // 
             this.textBoxChipID.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxChipID.Location = new System.Drawing.Point(229, 21);
+            this.textBoxChipID.Location = new System.Drawing.Point(250, 22);
             this.textBoxChipID.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxChipID.Name = "textBoxChipID";
             this.textBoxChipID.Size = new System.Drawing.Size(92, 23);
@@ -550,7 +438,7 @@
             // 
             this.label6.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(181, 19);
+            this.label6.Location = new System.Drawing.Point(202, 20);
             this.label6.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(67, 18);
@@ -564,7 +452,7 @@
             this.textBoxDate.Location = new System.Drawing.Point(69, 147);
             this.textBoxDate.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxDate.Name = "textBoxDate";
-            this.textBoxDate.Size = new System.Drawing.Size(68, 23);
+            this.textBoxDate.Size = new System.Drawing.Size(95, 23);
             this.textBoxDate.TabIndex = 13;
             // 
             // label5
@@ -583,10 +471,10 @@
             // 
             this.textBoxTemperature.Enabled = false;
             this.textBoxTemperature.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxTemperature.Location = new System.Drawing.Point(69, 124);
+            this.textBoxTemperature.Location = new System.Drawing.Point(69, 113);
             this.textBoxTemperature.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxTemperature.Name = "textBoxTemperature";
-            this.textBoxTemperature.Size = new System.Drawing.Size(45, 23);
+            this.textBoxTemperature.Size = new System.Drawing.Size(91, 23);
             this.textBoxTemperature.TabIndex = 11;
             // 
             // label4
@@ -594,48 +482,27 @@
             this.label4.Enabled = false;
             this.label4.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(10, 131);
+            this.label4.Location = new System.Drawing.Point(10, 117);
             this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(67, 18);
             this.label4.TabIndex = 10;
             this.label4.Text = "温度";
             // 
-            // textBoxOutput
-            // 
-            this.textBoxOutput.Enabled = false;
-            this.textBoxOutput.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxOutput.Location = new System.Drawing.Point(69, 102);
-            this.textBoxOutput.Margin = new System.Windows.Forms.Padding(2);
-            this.textBoxOutput.Name = "textBoxOutput";
-            this.textBoxOutput.Size = new System.Drawing.Size(68, 23);
-            this.textBoxOutput.TabIndex = 9;
-            // 
-            // label3
-            // 
-            this.label3.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(10, 108);
-            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(67, 18);
-            this.label3.TabIndex = 8;
-            this.label3.Text = "Output";
-            // 
             // textBoxInput
             // 
             this.textBoxInput.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxInput.Location = new System.Drawing.Point(69, 80);
+            this.textBoxInput.Location = new System.Drawing.Point(69, 83);
             this.textBoxInput.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxInput.Name = "textBoxInput";
-            this.textBoxInput.Size = new System.Drawing.Size(68, 23);
+            this.textBoxInput.Size = new System.Drawing.Size(91, 23);
             this.textBoxInput.TabIndex = 7;
             // 
             // label2
             // 
             this.label2.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(10, 86);
+            this.label2.Location = new System.Drawing.Point(10, 82);
             this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(67, 18);
@@ -645,7 +512,7 @@
             // textBoxSerialNum
             // 
             this.textBoxSerialNum.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxSerialNum.Location = new System.Drawing.Point(69, 57);
+            this.textBoxSerialNum.Location = new System.Drawing.Point(69, 49);
             this.textBoxSerialNum.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxSerialNum.Name = "textBoxSerialNum";
             this.textBoxSerialNum.Size = new System.Drawing.Size(91, 23);
@@ -655,7 +522,7 @@
             // 
             this.label1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(10, 64);
+            this.label1.Location = new System.Drawing.Point(10, 51);
             this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(67, 18);
@@ -665,10 +532,10 @@
             // textBoxOperator
             // 
             this.textBoxOperator.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxOperator.Location = new System.Drawing.Point(69, 22);
+            this.textBoxOperator.Location = new System.Drawing.Point(69, 18);
             this.textBoxOperator.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxOperator.Name = "textBoxOperator";
-            this.textBoxOperator.Size = new System.Drawing.Size(68, 23);
+            this.textBoxOperator.Size = new System.Drawing.Size(91, 23);
             this.textBoxOperator.TabIndex = 3;
             // 
             // label34
@@ -685,31 +552,26 @@
             // textBoxPartNum
             // 
             this.textBoxPartNum.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxPartNum.Location = new System.Drawing.Point(94, 10);
+            this.textBoxPartNum.Location = new System.Drawing.Point(101, 19);
             this.textBoxPartNum.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxPartNum.Name = "textBoxPartNum";
-            this.textBoxPartNum.Size = new System.Drawing.Size(147, 23);
+            this.textBoxPartNum.Size = new System.Drawing.Size(143, 23);
             this.textBoxPartNum.TabIndex = 32;
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.txtbSweepStep);
             this.groupBox4.Controls.Add(this.textBoxTestTemp);
             this.groupBox4.Controls.Add(this.label19);
             this.groupBox4.Controls.Add(this.buttonGetTestCondition);
             this.groupBox4.Controls.Add(this.textBoxPartNum);
-            this.groupBox4.Controls.Add(this.textBoxCLBandDesp);
             this.groupBox4.Controls.Add(this.label16);
-            this.groupBox4.Controls.Add(this.label15);
             this.groupBox4.Controls.Add(this.textBoxPower);
             this.groupBox4.Controls.Add(this.label14);
             this.groupBox4.Controls.Add(this.textBoxStopWavelength);
             this.groupBox4.Controls.Add(this.textBoxStartWavelength);
             this.groupBox4.Controls.Add(this.label13);
             this.groupBox4.Controls.Add(this.label12);
-            this.groupBox4.Controls.Add(this.comboBoxCLBandStep);
-            this.groupBox4.Controls.Add(this.comboBoxCLBandOutPort);
-            this.groupBox4.Controls.Add(this.comboBoxProductType);
-            this.groupBox4.Controls.Add(this.label11);
             this.groupBox4.Location = new System.Drawing.Point(309, 10);
             this.groupBox4.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox4.Name = "groupBox4";
@@ -722,7 +584,7 @@
             // textBoxTestTemp
             // 
             this.textBoxTestTemp.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxTestTemp.Location = new System.Drawing.Point(95, 35);
+            this.textBoxTestTemp.Location = new System.Drawing.Point(102, 49);
             this.textBoxTestTemp.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxTestTemp.Name = "textBoxTestTemp";
             this.textBoxTestTemp.Size = new System.Drawing.Size(58, 23);
@@ -733,7 +595,7 @@
             this.label19.AutoSize = true;
             this.label19.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.label19.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label19.Location = new System.Drawing.Point(19, 42);
+            this.label19.Location = new System.Drawing.Point(5, 56);
             this.label19.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(53, 12);
@@ -743,58 +605,35 @@
             // buttonGetTestCondition
             // 
             this.buttonGetTestCondition.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonGetTestCondition.Location = new System.Drawing.Point(150, 33);
+            this.buttonGetTestCondition.Location = new System.Drawing.Point(171, 48);
             this.buttonGetTestCondition.Margin = new System.Windows.Forms.Padding(2);
             this.buttonGetTestCondition.Name = "buttonGetTestCondition";
-            this.buttonGetTestCondition.Size = new System.Drawing.Size(91, 25);
+            this.buttonGetTestCondition.Size = new System.Drawing.Size(87, 25);
             this.buttonGetTestCondition.TabIndex = 61;
             this.buttonGetTestCondition.Text = "获取测试条件";
             this.buttonGetTestCondition.UseVisualStyleBackColor = true;
             this.buttonGetTestCondition.Click += new System.EventHandler(this.buttonGetTestCondition_Click);
-            // 
-            // textBoxCLBandDesp
-            // 
-            this.textBoxCLBandDesp.Enabled = false;
-            this.textBoxCLBandDesp.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxCLBandDesp.Location = new System.Drawing.Point(20, 160);
-            this.textBoxCLBandDesp.Margin = new System.Windows.Forms.Padding(2);
-            this.textBoxCLBandDesp.Name = "textBoxCLBandDesp";
-            this.textBoxCLBandDesp.Size = new System.Drawing.Size(198, 21);
-            this.textBoxCLBandDesp.TabIndex = 54;
-            this.textBoxCLBandDesp.Visible = false;
             // 
             // label16
             // 
             this.label16.AutoSize = true;
             this.label16.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.label16.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label16.Location = new System.Drawing.Point(18, 122);
+            this.label16.Location = new System.Drawing.Point(5, 152);
             this.label16.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(53, 12);
             this.label16.TabIndex = 53;
             this.label16.Text = "扫描步长";
             // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.label15.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label15.Location = new System.Drawing.Point(18, 102);
-            this.label15.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(53, 12);
-            this.label15.TabIndex = 52;
-            this.label15.Text = "输出端口";
-            // 
             // textBoxPower
             // 
             this.textBoxPower.Enabled = false;
             this.textBoxPower.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxPower.Location = new System.Drawing.Point(94, 78);
+            this.textBoxPower.Location = new System.Drawing.Point(102, 113);
             this.textBoxPower.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxPower.Name = "textBoxPower";
-            this.textBoxPower.Size = new System.Drawing.Size(58, 23);
+            this.textBoxPower.Size = new System.Drawing.Size(143, 23);
             this.textBoxPower.TabIndex = 51;
             // 
             // label14
@@ -802,7 +641,7 @@
             this.label14.AutoSize = true;
             this.label14.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.label14.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label14.Location = new System.Drawing.Point(18, 82);
+            this.label14.Location = new System.Drawing.Point(5, 118);
             this.label14.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(83, 12);
@@ -813,7 +652,7 @@
             // 
             this.textBoxStopWavelength.Enabled = false;
             this.textBoxStopWavelength.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxStopWavelength.Location = new System.Drawing.Point(156, 58);
+            this.textBoxStopWavelength.Location = new System.Drawing.Point(187, 81);
             this.textBoxStopWavelength.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxStopWavelength.Name = "textBoxStopWavelength";
             this.textBoxStopWavelength.Size = new System.Drawing.Size(58, 23);
@@ -823,7 +662,7 @@
             // 
             this.textBoxStartWavelength.Enabled = false;
             this.textBoxStartWavelength.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxStartWavelength.Location = new System.Drawing.Point(94, 58);
+            this.textBoxStartWavelength.Location = new System.Drawing.Point(102, 83);
             this.textBoxStartWavelength.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxStartWavelength.Name = "textBoxStartWavelength";
             this.textBoxStartWavelength.Size = new System.Drawing.Size(58, 23);
@@ -834,7 +673,7 @@
             this.label13.AutoSize = true;
             this.label13.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.label13.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label13.Location = new System.Drawing.Point(18, 16);
+            this.label13.Location = new System.Drawing.Point(4, 26);
             this.label13.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(53, 12);
@@ -846,55 +685,12 @@
             this.label12.AutoSize = true;
             this.label12.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.label12.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label12.Location = new System.Drawing.Point(18, 62);
+            this.label12.Location = new System.Drawing.Point(5, 88);
             this.label12.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(101, 12);
             this.label12.TabIndex = 46;
             this.label12.Text = "波长扫面范围(nm)";
-            // 
-            // comboBoxCLBandStep
-            // 
-            this.comboBoxCLBandStep.Enabled = false;
-            this.comboBoxCLBandStep.FormattingEnabled = true;
-            this.comboBoxCLBandStep.Location = new System.Drawing.Point(94, 118);
-            this.comboBoxCLBandStep.Margin = new System.Windows.Forms.Padding(2);
-            this.comboBoxCLBandStep.Name = "comboBoxCLBandStep";
-            this.comboBoxCLBandStep.Size = new System.Drawing.Size(58, 20);
-            this.comboBoxCLBandStep.TabIndex = 45;
-            // 
-            // comboBoxCLBandOutPort
-            // 
-            this.comboBoxCLBandOutPort.Enabled = false;
-            this.comboBoxCLBandOutPort.FormattingEnabled = true;
-            this.comboBoxCLBandOutPort.Location = new System.Drawing.Point(94, 99);
-            this.comboBoxCLBandOutPort.Margin = new System.Windows.Forms.Padding(2);
-            this.comboBoxCLBandOutPort.Name = "comboBoxCLBandOutPort";
-            this.comboBoxCLBandOutPort.Size = new System.Drawing.Size(58, 20);
-            this.comboBoxCLBandOutPort.TabIndex = 44;
-            // 
-            // comboBoxProductType
-            // 
-            this.comboBoxProductType.Enabled = false;
-            this.comboBoxProductType.FormattingEnabled = true;
-            this.comboBoxProductType.Location = new System.Drawing.Point(94, 136);
-            this.comboBoxProductType.Margin = new System.Windows.Forms.Padding(2);
-            this.comboBoxProductType.Name = "comboBoxProductType";
-            this.comboBoxProductType.Size = new System.Drawing.Size(58, 20);
-            this.comboBoxProductType.TabIndex = 43;
-            this.comboBoxProductType.SelectedIndexChanged += new System.EventHandler(this.comboBoxProductType_SelectedIndexChanged);
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label11.Location = new System.Drawing.Point(17, 142);
-            this.label11.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(59, 15);
-            this.label11.TabIndex = 42;
-            this.label11.Text = "DUT 类型";
             // 
             // panel1
             // 
@@ -1114,7 +910,7 @@
             // groupBox5
             // 
             this.groupBox5.Controls.Add(this.lstviewTestResult);
-            this.groupBox5.Location = new System.Drawing.Point(959, 12);
+            this.groupBox5.Location = new System.Drawing.Point(967, 12);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(133, 186);
             this.groupBox5.TabIndex = 49;
@@ -1129,7 +925,7 @@
             this.lstviewTestResult.GridLines = true;
             this.lstviewTestResult.Location = new System.Drawing.Point(6, 16);
             this.lstviewTestResult.Name = "lstviewTestResult";
-            this.lstviewTestResult.Size = new System.Drawing.Size(116, 156);
+            this.lstviewTestResult.Size = new System.Drawing.Size(116, 163);
             this.lstviewTestResult.TabIndex = 0;
             this.lstviewTestResult.UseCompatibleStateImageBehavior = false;
             this.lstviewTestResult.View = System.Windows.Forms.View.Details;
@@ -1152,6 +948,15 @@
             this.btnTETMCalcu.TabIndex = 50;
             this.btnTETMCalcu.Text = "ILPDL Calculate";
             this.btnTETMCalcu.UseVisualStyleBackColor = true;
+            this.btnTETMCalcu.Click += new System.EventHandler(this.btnTETMCalcu_Click);
+            // 
+            // txtbSweepStep
+            // 
+            this.txtbSweepStep.Enabled = false;
+            this.txtbSweepStep.Location = new System.Drawing.Point(103, 149);
+            this.txtbSweepStep.Name = "txtbSweepStep";
+            this.txtbSweepStep.Size = new System.Drawing.Size(142, 21);
+            this.txtbSweepStep.TabIndex = 64;
             // 
             // Frm_AWGTestClient
             // 
@@ -1204,31 +1009,22 @@
         private DevComponents.DotNetBar.Controls.ComboBoxEx comboBoxEx1;
         private DevComponents.DotNetBar.ButtonX buttonX1;
         private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.TextBox textBoxComment;
-        private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TextBox textBoxChipID;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox textBoxDate;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox textBoxTemperature;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox textBoxOutput;
-        private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox textBoxInput;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox textBoxSerialNum;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox textBoxOperator;
         private System.Windows.Forms.Label label34;
-        private System.Windows.Forms.TextBox textBoxMaskName;
-        private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.CheckBox checkBoxOutput;
         private System.Windows.Forms.CheckBox checkBoxSerialNum;
         private System.Windows.Forms.CheckBox checkBoxOperator;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.CheckBox checkBoxMaskName;
-        private System.Windows.Forms.CheckBox checkBoxComment;
         private System.Windows.Forms.ComboBox comboBoxCLOption;
         private System.Windows.Forms.ComboBox comboBoxOOption;
         private System.Windows.Forms.TextBox textBox4;
@@ -1241,18 +1037,12 @@
         private System.Windows.Forms.RadioButton radioButton1;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.Label label16;
-        private System.Windows.Forms.Label label15;
         private System.Windows.Forms.TextBox textBoxPower;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.TextBox textBoxStopWavelength;
         private System.Windows.Forms.TextBox textBoxStartWavelength;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.ComboBox comboBoxCLBandStep;
-        private System.Windows.Forms.ComboBox comboBoxCLBandOutPort;
-        private System.Windows.Forms.ComboBox comboBoxProductType;
-        private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.TextBox textBoxCLBandDesp;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.RadioButton radioButtonPDLDrawType;
         private System.Windows.Forms.RadioButton radioButtonILDrawType;
@@ -1285,8 +1075,6 @@
         private System.Windows.Forms.ColumnHeader columnHeader18;
         private System.Windows.Forms.ListView listView2;
         private System.Windows.Forms.ColumnHeader columnHeader19;
-
-		private System.Windows.Forms.TextBox textBoxPreTemperature;
         private System.Windows.Forms.CheckBox checkBoxInput;
         private System.Windows.Forms.TextBox textBoxPartNum;
         private System.Windows.Forms.Button buttonGetTestCondition;
@@ -1297,6 +1085,7 @@
         private System.Windows.Forms.ColumnHeader Customer_PN;
         private System.Windows.Forms.ColumnHeader TestResult;
         private System.Windows.Forms.Button btnTETMCalcu;
+        private System.Windows.Forms.TextBox txtbSweepStep;
     }
 }
 

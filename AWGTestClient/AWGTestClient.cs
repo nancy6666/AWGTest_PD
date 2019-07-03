@@ -298,7 +298,10 @@ namespace AWGTestClient
                             while (CrossPoint.Contains(0) || CrossPoint1.Contains(0))
                             {
                                 if (startIndex == 0 && endIndex == m_dwSamplePoint - 1)
+                                {
+                                    // throw new Exception("计算CW时，没有交叉点！");
                                     break;
+                                }
                                 startIndex -= 200 * j;
                                 endIndex += 200 * j;
                                 if (startIndex < 0)
@@ -544,115 +547,115 @@ namespace AWGTestClient
                         };
                         #endregion
 
-                        #region  CrossTalk
-                        double deltaWaveCrossTalk = 0;
-                        if (pstCriteria.CrossTalkLosWindow > 100)
-                        {
-                            if (bUseITU)
-                                deltaWaveCrossTalk = C * pstCriteria.CrossTalkLosWindow / Math.Pow(C / pstCriteria.iTUWL[iChannel], 2);
-                            else
-                                deltaWaveCrossTalk = C * pstCriteria.CrossTalkLosWindow / Math.Pow(C / pstResultData.m_dblCW[iChannel], 2);
-                        }
-                        else
-                            deltaWaveCrossTalk = pstCriteria.CrossTalkLosWindow;
-                        for (int iCrossChannel = 0; iCrossChannel < dwEndChannel; iCrossChannel++)
-                        {
-                            if (iChannel == iCrossChannel)
-                            {
-                                CrossTalk[iChannel, iCrossChannel] = 0;
-                                continue;
-                            }
-                            dwCW = pstResultData.m_dblCW[iCrossChannel];
+                        //#region  CrossTalk
+                        //double deltaWaveCrossTalk = 0;
+                        //if (pstCriteria.CrossTalkLosWindow > 100)
+                        //{
+                        //    if (bUseITU)
+                        //        deltaWaveCrossTalk = C * pstCriteria.CrossTalkLosWindow / Math.Pow(C / pstCriteria.iTUWL[iChannel], 2);
+                        //    else
+                        //        deltaWaveCrossTalk = C * pstCriteria.CrossTalkLosWindow / Math.Pow(C / pstResultData.m_dblCW[iChannel], 2);
+                        //}
+                        //else
+                        //    deltaWaveCrossTalk = pstCriteria.CrossTalkLosWindow;
+                        //for (int iCrossChannel = 0; iCrossChannel < dwEndChannel; iCrossChannel++)
+                        //{
+                        //    if (iChannel == iCrossChannel)
+                        //    {
+                        //        CrossTalk[iChannel, iCrossChannel] = 0;
+                        //        continue;
+                        //    }
+                        //    dwCW = pstResultData.m_dblCW[iCrossChannel];
 
-                            double dwTargetDataCrossTalk = pstCriteria.iTUWL[iCrossChannel] - deltaWaveCrossTalk;
-                            iPoint1 = Alg_PointSearch.FindFirstValue(pdwWaveArray, Alg_PointSearch.ComparisonOperator.GreaterThanOrEqualTo, dwTargetDataCrossTalk);
+                        //    double dwTargetDataCrossTalk = pstCriteria.iTUWL[iCrossChannel] - deltaWaveCrossTalk;
+                        //    iPoint1 = Alg_PointSearch.FindFirstValue(pdwWaveArray, Alg_PointSearch.ComparisonOperator.GreaterThanOrEqualTo, dwTargetDataCrossTalk);
 
-                            dwTargetDataCrossTalk = pstCriteria.iTUWL[iCrossChannel] + deltaWaveCrossTalk;
-                            iPoint2 = Alg_PointSearch.FindFirstValue(pdwWaveArray, Alg_PointSearch.ComparisonOperator.GreaterThanOrEqualTo, dwTargetDataCrossTalk);
-                            if (iPoint1 >= 1 && iPoint2 >= 1)
-                            {
-                                double cross = Alg_PointSearch.FindMinValueInArray(pdwMinLossArray, iPoint1 - 1, iPoint2);
-                                CrossTalk[iChannel, iCrossChannel] = Math.Round(cross, 3);
-                            }
-                            else
-                                CrossTalk[iChannel, iCrossChannel] = 999;
-                        }
-                        #endregion
+                        //    dwTargetDataCrossTalk = pstCriteria.iTUWL[iCrossChannel] + deltaWaveCrossTalk;
+                        //    iPoint2 = Alg_PointSearch.FindFirstValue(pdwWaveArray, Alg_PointSearch.ComparisonOperator.GreaterThanOrEqualTo, dwTargetDataCrossTalk);
+                        //    if (iPoint1 >= 1 && iPoint2 >= 1)
+                        //    {
+                        //        double cross = Alg_PointSearch.FindMinValueInArray(pdwMinLossArray, iPoint1 - 1, iPoint2);
+                        //        CrossTalk[iChannel, iCrossChannel] = Math.Round(cross, 3);
+                        //    }
+                        //    else
+                        //        CrossTalk[iChannel, iCrossChannel] = 999;
+                        //}
+                        //#endregion
 
-                        #region for AX-
-                        if (iChannel == 0x00)
-                            pstResultData.m_dblAXLeft[iChannel] = 99;
-                        else
-                        {
-                            pstResultData.m_dblAXLeft[iChannel] = Math.Round(CrossTalk[iChannel, iChannel - 1] - dwMaxLossMax[iChannel], 2);
-                        }
-                        #endregion
+                        //#region for AX-
+                        //if (iChannel == 0x00)
+                        //    pstResultData.m_dblAXLeft[iChannel] = 99;
+                        //else
+                        //{
+                        //    pstResultData.m_dblAXLeft[iChannel] = Math.Round(CrossTalk[iChannel, iChannel - 1] - dwMaxLossMax[iChannel], 2);
+                        //}
+                        //#endregion
 
-                        #region  for AX+
-                        if (iChannel == dwEndChannel - 1)
-                            pstResultData.m_dblAXRight[iChannel] = 99;
-                        else
-                        {
-                            pstResultData.m_dblAXRight[iChannel] = Math.Round(CrossTalk[iChannel, iChannel + 1] - dwMaxLossMax[iChannel], 2);
-                        }
-                        #endregion
+                        //#region  for AX+
+                        //if (iChannel == dwEndChannel - 1)
+                        //    pstResultData.m_dblAXRight[iChannel] = 99;
+                        //else
+                        //{
+                        //    pstResultData.m_dblAXRight[iChannel] = Math.Round(CrossTalk[iChannel, iChannel + 1] - dwMaxLossMax[iChannel], 2);
+                        //}
+                        //#endregion
 
-                        #region for TAX
-                        double dblTemp1 = Math.Pow(10, -pstResultData.m_dblAXLeft[iChannel] / 10.0);
-                        double dblTemp2 = Math.Pow(10, -pstResultData.m_dblAXRight[iChannel] / 10.0);
+                        //#region for TAX
+                        //double dblTemp1 = Math.Pow(10, -pstResultData.m_dblAXLeft[iChannel] / 10.0);
+                        //double dblTemp2 = Math.Pow(10, -pstResultData.m_dblAXRight[iChannel] / 10.0);
 
-                        double Temp = 0;
-                        if (iChannel == 0)
-                            Temp = dblTemp2;
-                        else if (iChannel == dwEndChannel - 1)
-                            Temp = dblTemp1;
-                        else
-                            Temp = dblTemp1 + dblTemp2;
-                        pstResultData.m_dblTAX[iChannel] = CalcTotal(Temp);
-                        #endregion
+                        //double Temp = 0;
+                        //if (iChannel == 0)
+                        //    Temp = dblTemp2;
+                        //else if (iChannel == dwEndChannel - 1)
+                        //    Temp = dblTemp1;
+                        //else
+                        //    Temp = dblTemp1 + dblTemp2;
+                        //pstResultData.m_dblTAX[iChannel] = CalcTotal(Temp);
+                        //#endregion
 
-                        #region  for NX
-                        double dblNX = 10000000.0;
-                        for (int dwITUIndex = 0x00; dwITUIndex < dwEndChannel; dwITUIndex++)
-                        {
-                            if (dwITUIndex < iChannel && (iChannel - dwITUIndex) < 2)
-                                continue;
+                        //#region  for NX
+                        //double dblNX = 10000000.0;
+                        //for (int dwITUIndex = 0x00; dwITUIndex < dwEndChannel; dwITUIndex++)
+                        //{
+                        //    if (dwITUIndex < iChannel && (iChannel - dwITUIndex) < 2)
+                        //        continue;
 
-                            if (dwITUIndex >= iChannel && (dwITUIndex - iChannel) < 2)
-                                continue;
+                        //    if (dwITUIndex >= iChannel && (dwITUIndex - iChannel) < 2)
+                        //        continue;
 
-                            if ((CrossTalk[iChannel, dwITUIndex] - dwMaxLossMax[iChannel]) < dblNX)
-                                dblNX = CrossTalk[iChannel, dwITUIndex] - dwMaxLossMax[iChannel];
-                        }
+                        //    if ((CrossTalk[iChannel, dwITUIndex] - dwMaxLossMax[iChannel]) < dblNX)
+                        //        dblNX = CrossTalk[iChannel, dwITUIndex] - dwMaxLossMax[iChannel];
+                        //}
                    
-                        pstResultData.m_dblNX[iChannel] = Math.Round(dblNX, 2);
-                        #endregion
+                        //pstResultData.m_dblNX[iChannel] = Math.Round(dblNX, 2);
+                        //#endregion
 
-                        #region  for TX
-                        double dblTX = 0.0;
-                        for (int dwITUIndex = 0x00; dwITUIndex < dwEndChannel; dwITUIndex++)
-                        {
-                            if (dwITUIndex == iChannel)
-                                continue;
-                            dblTX += Calc10Power(CrossTalk[iChannel, dwITUIndex] - dwMaxLossMax[iChannel]);
-                        }
-                        pstResultData.m_dblTX[iChannel] = CalcTotal(dblTX);
-                        #endregion
+                        //#region  for TX
+                        //double dblTX = 0.0;
+                        //for (int dwITUIndex = 0x00; dwITUIndex < dwEndChannel; dwITUIndex++)
+                        //{
+                        //    if (dwITUIndex == iChannel)
+                        //        continue;
+                        //    dblTX += Calc10Power(CrossTalk[iChannel, dwITUIndex] - dwMaxLossMax[iChannel]);
+                        //}
+                        //pstResultData.m_dblTX[iChannel] = CalcTotal(dblTX);
+                        //#endregion
 
-                        #region  for TX - AX
-                        double dblTXAX = 0.0;
-                        for (int dwITUIndex = 0x00; dwITUIndex < dwEndChannel; dwITUIndex++)
-                        {
-                            if (dwITUIndex < iChannel && (iChannel - dwITUIndex) < 2)
-                                continue;
+                        //#region  for TX - AX
+                        //double dblTXAX = 0.0;
+                        //for (int dwITUIndex = 0x00; dwITUIndex < dwEndChannel; dwITUIndex++)
+                        //{
+                        //    if (dwITUIndex < iChannel && (iChannel - dwITUIndex) < 2)
+                        //        continue;
 
-                            if (dwITUIndex >= iChannel && (dwITUIndex - iChannel) < 2)
-                                continue;
+                        //    if (dwITUIndex >= iChannel && (dwITUIndex - iChannel) < 2)
+                        //        continue;
 
-                            dblTXAX += Calc10Power(CrossTalk[iChannel, dwITUIndex] - dwMaxLossMax[iChannel]);
-                        }
-                        pstResultData.m_dblTXAX[iChannel] = CalcTotal(dblTXAX);
-                        #endregion
+                        //    dblTXAX += Calc10Power(CrossTalk[iChannel, dwITUIndex] - dwMaxLossMax[iChannel]);
+                        //}
+                        //pstResultData.m_dblTXAX[iChannel] = CalcTotal(dblTXAX);
+                        //#endregion
                     }
                     catch (Exception ex)
                     {
@@ -660,25 +663,25 @@ namespace AWGTestClient
                         throw ex;
                     }
                 }
-                #region  for TNX
-                for (int dwChannelIndex = dwStartChannel; dwChannelIndex < dwEndChannel; dwChannelIndex++)
-                {
-                    double dblTemp = 0.0;
-                    for (int dwIndex = dwStartChannel; dwIndex < dwEndChannel; dwIndex++)
-                    {
-                        if (dwIndex < dwChannelIndex && (dwChannelIndex - dwIndex) < 2)
-                            continue;
+                //#region  for TNX
+                //for (int dwChannelIndex = dwStartChannel; dwChannelIndex < dwEndChannel; dwChannelIndex++)
+                //{
+                //    double dblTemp = 0.0;
+                //    for (int dwIndex = dwStartChannel; dwIndex < dwEndChannel; dwIndex++)
+                //    {
+                //        if (dwIndex < dwChannelIndex && (dwChannelIndex - dwIndex) < 2)
+                //            continue;
 
-                        if (dwIndex >= dwChannelIndex && (dwIndex - dwChannelIndex) < 2)
-                            continue;
+                //        if (dwIndex >= dwChannelIndex && (dwIndex - dwChannelIndex) < 2)
+                //            continue;
 
-                        double dblNX = CrossTalk[dwChannelIndex, dwIndex] - dwMaxLossMax[dwChannelIndex];
+                //        double dblNX = CrossTalk[dwChannelIndex, dwIndex] - dwMaxLossMax[dwChannelIndex];
 
-                        dblTemp += Calc10Power(dblNX);
-                    }
-                    pstResultData.m_dblTNX[dwChannelIndex] = CalcTotal(dblTemp);
-                }
-                #endregion
+                //        dblTemp += Calc10Power(dblNX);
+                //    }
+                //    pstResultData.m_dblTNX[dwChannelIndex] = CalcTotal(dblTemp);
+                //}
+                //#endregion
 
                 //Uniformity
                 double max = Alg_PointSearch.FindMaxValueInArray(pstResultData.m_dblILMax);
@@ -1283,67 +1286,29 @@ namespace AWGTestClient
             }
             return bDataFound;
         }
-        public bool ReadDatILMaxMinData(string strFilePathName, ref tagAutoWaveform pstAutoWaveform, bool bReverse)
+        public bool ReadDatILMaxMinData(string strFilePathName, ref tagAutoWaveform pstAutoWaveform)
         {
             double[] m_pdwWaveLengt = new double[m_dwSamplePoint];
             try
             {
-                window = Convert.ToInt32(4 / m_dwStep);
-                if (window / 2 == 0)
+                using (CsvReader reader = new CsvReader())
                 {
-                    window++;
-                };
-                StreamReader sr = new StreamReader(strFilePathName, Encoding.Default);
-                String line;
-                int iCount = 0;
-                line = sr.ReadLine();
-                while ((line = sr.ReadLine()) != null)
-                {
-                    string[] temp = line.Split(',');
-                    try
+                    reader.OpenFile(strFilePathName);
+
+                    String[] line;
+                    int iCount = 0;
+                    line = reader.GetLine();
+                    while ((line=reader.GetLine()) != null)
                     {
-                        m_pdwWaveLengt[iCount] = double.Parse(temp[0]);
-                        for (int i = 0; i < 4; i++)
+                        m_pdwWaveLengt[iCount] = double.Parse(line[0]);
+                        pstAutoWaveform.m_pdwWavelengthArray[iCount] = m_pdwWaveLengt[iCount];
+                        for (int i = 0; i < this.CHANNEL_COUNT; i++)
                         {
-                            if (bReverse)
-                            {
-                                pstAutoWaveform.m_pdwILMaxArray[i, iCount] = -double.Parse(temp[1 + 2 * i]);
-                                pstAutoWaveform.m_pdwILMinArray[i, iCount] = -double.Parse(temp[1 + 2 * i + 1]);
-                            }
-                            else
-                            {
-                                pstAutoWaveform.m_pdwILMinArray[i, iCount] = -double.Parse(temp[1 + 2 * i]);
-                                pstAutoWaveform.m_pdwILMaxArray[i, iCount] = -double.Parse(temp[1 + 2 * i + 1]);
-                            }
+                            pstAutoWaveform.m_pdwILMinArray[i, iCount] = double.Parse(line[1]);
+                            pstAutoWaveform.m_pdwILMaxArray[i, iCount] = double.Parse(line[2]);
                         }
                         iCount++;
                     }
-                    catch (Exception ex)
-                    {
-                        throw ex;
-                    }
-                }
-               // smooth the curve
-                for (int dwChannelIndex = 0x00; dwChannelIndex < CHANNEL_COUNT; dwChannelIndex++)
-                {
-                    PointsCollection pointsILMin = new PointsCollection();
-                    PointsCollection pointsILMax = new PointsCollection();
-                    for (int index = 0; index < m_dwSamplePoint; index++)
-                    {
-                        pointsILMin.Add(new Point(m_pdwWaveLengt[index], pstAutoWaveform.m_pdwILMinArray[dwChannelIndex, index]));
-                        pointsILMax.Add(new Point(m_pdwWaveLengt[index], pstAutoWaveform.m_pdwILMaxArray[dwChannelIndex, index]));
-                    }
-                    List<Point> DataILMin = pointsILMin.DoSGFilter(window, 2);
-                    List<Point> DataILMax = pointsILMax.DoSGFilter(window, 2);
-                    for (int index = 0; index < m_dwSamplePoint; index++)
-                    {
-                        pstAutoWaveform.m_pdwILMinArray[dwChannelIndex, index] = DataILMin[index].Intensity;
-                        pstAutoWaveform.m_pdwILMaxArray[dwChannelIndex, index] = DataILMax[index].Intensity;
-                    }
-                }
-                for (int i = 0x00; i < m_dwSamplePoint; i++)
-                {
-                    pstAutoWaveform.m_pdwWavelengthArray[i] = m_pdwWaveLengt[i];
                 }
             }
             catch (Exception ex)
@@ -1467,7 +1432,7 @@ namespace AWGTestClient
                             m_pdwWave[dwIndex] = double.Parse(lineElems[0]);
                            
                                 dblTemp = double.Parse(lineElems[1]);
-                                m_pdwCaliPolPwr1[ dwIndex] = dblTemp;
+                                m_pdwCaliPolPwr1[dwIndex] = dblTemp;
                                 dblTemp = double.Parse(lineElems[2]);
                                 m_pdwCaliPolPwr2[dwIndex] = dblTemp;
                                 dblTemp = double.Parse(lineElems[3]);
@@ -1516,10 +1481,10 @@ namespace AWGTestClient
                 //功率由dBm转换成mW 10^(P/10)
                 for (int point = 0; point < m_dwSamplePoint; point++)
                 {
-                    m11 = (Math.Pow(10,m_pdwPolPwr1[point]/10) /Math.Pow(10, m_pdwCaliPolPwr1[point]/10) +Math.Pow(10, m_pdwPolPwr2[point]/10) /Math.Pow(10, m_pdwCaliPolPwr2[point]/10)) / 2;
-                    m12 = (Math.Pow(10, m_pdwPolPwr1[point]/10) /Math.Pow(10, m_pdwCaliPolPwr1[point]/10) -Math.Pow(10, m_pdwPolPwr2[point]/10) /Math.Pow(10, m_pdwCaliPolPwr2[point]/10)) / 2;
-                    m13 = (Math.Pow(10, m_pdwPolPwr3[point]/10) /Math.Pow(10, m_pdwCaliPolPwr3[point]/2) - m11) / 2;
-                    m14 = (Math.Pow(10, m_pdwPolPwr4[point]/10) / Math.Pow(10, m_pdwCaliPolPwr4[point])/2 - m11) / 2;
+                    m11 = (Math.Pow(10, m_pdwPolPwr1[point] / 10) / Math.Pow(10, m_pdwCaliPolPwr1[point] / 10) + Math.Pow(10, m_pdwPolPwr2[point] / 10) / Math.Pow(10, m_pdwCaliPolPwr2[point] / 10)) / 2;
+                    m12 = (Math.Pow(10, m_pdwPolPwr1[point] / 10) / Math.Pow(10, m_pdwCaliPolPwr1[point] / 10) - Math.Pow(10, m_pdwPolPwr2[point] / 10) / Math.Pow(10, m_pdwCaliPolPwr2[point] / 10)) / 2;
+                    m13 = (Math.Pow(10, m_pdwPolPwr3[point] / 10) / Math.Pow(10, m_pdwCaliPolPwr3[point] / 2) - m11) / 2;
+                    m14 = (Math.Pow(10, m_pdwPolPwr4[point] / 10) / Math.Pow(10, m_pdwCaliPolPwr4[point]) / 2 - m11) / 2;
                     TMax = m11 + Math.Sqrt(m12 * m12 + m13 * m13 + m14 * m14);
                     if ((m12 * m12 - m13 * m13 - m14 * m14) < 0)
                     {
@@ -1529,8 +1494,12 @@ namespace AWGTestClient
                     {
                         TMin = m11 - Math.Sqrt(m12 * m12 - m13 * m13 - m14 * m14);
                     }
-                    pstAutoWaveform.m_pdwILMinArray[0, point] = -10 * Math.Log10(TMax);
-                    pstAutoWaveform.m_pdwILMaxArray[0, point] = -10 * Math.Log10(TMin);
+                    for (int ch = 0; ch < CHANNEL_COUNT; ch++)
+                    {
+                        pstAutoWaveform.m_pdwILMinArray[ch, point] = -10 * Math.Log10(TMax);
+                        pstAutoWaveform.m_pdwILMaxArray[ch, point] = -10 * Math.Log10(TMin);
+                    }
+                    pstAutoWaveform.m_pdwWavelengthArray[point] = m_pdwWave[point];
                 }
             }
             catch (Exception ex)
@@ -1543,7 +1512,7 @@ namespace AWGTestClient
         {
             string strTime = testTime.ToString("yyyy-MM-dd-hh-mm");
             string strStation = m_dwTestIndex.ToString().PadLeft(3, '0');
-            string strXLSName = string.Format("SU-{0}-{1}-{2}-{3}-T-{4}-{5}.dat", deviceInfo.m_EditSerialNumber, deviceInfo.m_strChipID.Substring(0, 2).PadLeft(3, '0'), deviceInfo.m_strChipID.Substring(2, 2).PadLeft(3, '0'), "S" + iStation.ToString().PadLeft(2, '0'), strStation, strTime);
+            string strXLSName = string.Format("SU-{0}-{1}-{2}-{3}-T-{4}-{5}.csv", deviceInfo.m_EditSerialNumber, deviceInfo.m_strChipID.Substring(0, 2).PadLeft(3, '0'), deviceInfo.m_strChipID.Substring(2, 2).PadLeft(3, '0'), "S" + iStation.ToString().PadLeft(2, '0'), strStation, strTime);
             strXLSName = sPath + strXLSName;
             if (File.Exists(strXLSName))
             {
@@ -1559,53 +1528,48 @@ namespace AWGTestClient
                 FileStream file = new FileStream(strXLSName, FileMode.Append);
                 StreamWriter sw = new StreamWriter(file);
 
-                sw.Write("JDS SWS PDL Measurements\r\n");
-                sw.Write(string.Format("Part serial no:\t{0}-{1}\r\n", deviceInfo.m_EditSerialNumber, deviceInfo.m_strChipID));
-                sw.Write(string.Format("Operator:\t{0}\r\n", deviceInfo.m_EditOperator));
-                //string strTemp = comboBoxOOption.Text;
-                sw.Write(string.Format("Test Type:\t{0}\r\n", deviceInfo.m_strTestType));
-                sw.Write(string.Format("Test Bench:\t{0}\r\n", 1));
-                sw.Write(string.Format("Date/Time:\t{0}\t{1}\r\n", testTime.ToString("MM/dd/yyyy"), testTime.ToString("HH:mm")));
-                sw.Write("Scale Factor:\t0.000\r\n");
-                sw.Write(string.Format("Comment:\t{0}\r\n", deviceInfo.m_strComment));
-                sw.Write(string.Format("Temperature (C):\t{0}\r\n", deviceInfo.m_strTemperature));
-                sw.Write(string.Format("Input:\t{0}\r\n", deviceInfo.m_strInput));
-                sw.Write(string.Format("Outputs:\t{0}\r\n", deviceInfo.m_strOutput));
-                sw.Write(string.Format("Mask Name:\t{0}\r\n", deviceInfo.m_strMaskName));
+                //sw.Write("JDS SWS PDL Measurements\r\n");
+                //sw.Write(string.Format("Part serial no:\t{0}-{1}\r\n", deviceInfo.m_EditSerialNumber, deviceInfo.m_strChipID));
+                //sw.Write(string.Format("Operator:\t{0}\r\n", deviceInfo.m_EditOperator));
+                ////string strTemp = comboBoxOOption.Text;
+                //sw.Write(string.Format("Test Type:\t{0}\r\n", deviceInfo.m_strTestType));
+                //sw.Write(string.Format("Test Bench:\t{0}\r\n", 1));
+                //sw.Write(string.Format("Date/Time:\t{0}\t{1}\r\n", testTime.ToString("MM/dd/yyyy"), testTime.ToString("HH:mm")));
+                //sw.Write("Scale Factor:\t0.000\r\n");
+                //sw.Write(string.Format("Comment:\t{0}\r\n", deviceInfo.m_strComment));
+                //sw.Write(string.Format("Temperature (C):\t{0}\r\n", deviceInfo.m_strTemperature));
+                //sw.Write(string.Format("Input:\t{0}\r\n", deviceInfo.m_strInput));
+                //sw.Write(string.Format("Outputs:\t{0}\r\n", deviceInfo.m_strOutput));
+                //sw.Write(string.Format("Mask Name:\t{0}\r\n", deviceInfo.m_strMaskName));
 
-                sw.Write("blank:\t\r\n");
-                sw.Write("\r\n");
-                sw.Write("\r\n");
-                sw.Write("\r\n");
-                sw.Write("---BEGIN DATA---\r\n");
-                sw.Write("\r\n");
+                //sw.Write("blank:\t\r\n");
+                //sw.Write("\r\n");
+                //sw.Write("\r\n");
+                //sw.Write("\r\n");
+                //sw.Write("---BEGIN DATA---\r\n");
+                //sw.Write("\r\n");
 
                 int dwSampleCount = pstAutoWaveform.m_dwSampleCount;
                 int dwChannelCount = CHANNEL_COUNT;
-                string strTemp = "Wavelength (nm)\t";
+                string strTemp = "Wavelength (nm),";
                 string str1 = "";
-                for (int dwChannelIndex = 0; dwChannelIndex < dwChannelCount; dwChannelIndex++)
-                {
-                    string mm = "";
-
-                    mm = (dwChannelIndex + 1).ToString().PadLeft(2, '0');
-
-                    str1 = string.Format("CH{0}_ILMIN\tCH{1}_ILMAX\t", mm, mm);
+                
+                    str1 = string.Format("ILMIN,ILMAX");
                     strTemp += str1;
-                }
+                
                 sw.Write(strTemp);
                 sw.Write("\r\n");
                 sw.Write("\r\n");
                 for (int dwIndex = 0; dwIndex < dwSampleCount; dwIndex++)
                 {
-                    strTemp = Math.Round(pstAutoWaveform.m_pdwWavelengthArray[dwIndex], 3).ToString("####.000") + "\t";
+                    strTemp = Math.Round(pstAutoWaveform.m_pdwWavelengthArray[dwIndex], 3).ToString("####.000") + ",";
                     
                         double dblILMin, dblILMax;
 
                         dblILMax = pstAutoWaveform.m_pdwILMaxArray[0, dwIndex];
                         dblILMin = pstAutoWaveform.m_pdwILMinArray[0, dwIndex];
 
-                        str1 = string.Format("{0}\t{1}\t", Math.Round(dblILMin, 3).ToString("####.000"), Math.Round(dblILMax, 3).ToString("####.000"));
+                        str1 = string.Format("{0},{1}", Math.Round(dblILMin, 3).ToString("####.000"), Math.Round(dblILMax, 3).ToString("####.000"));
                         strTemp += str1;
                    
                     sw.Write(strTemp);
