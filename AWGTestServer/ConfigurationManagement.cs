@@ -21,7 +21,20 @@ namespace AWGTestServer
             fileMap.ExeConfigFilename = configPath;
             cfg = ConfigurationManager.OpenMappedExeConfiguration(fileMap, ConfigurationUserLevel.None);
         }
-      
+        public string SocketIP
+        {
+            get
+            {
+                return cfg.AppSettings.Settings["SocketIP"].Value;
+            }
+        }
+        public string SocketPort
+        {
+            get
+            {
+                return cfg.AppSettings.Settings["SocketPort"].Value;
+            }
+        }
         public string K8164BGPIB
         {
             get

@@ -22,6 +22,7 @@ namespace AWGTestServer
 {
     public partial class Frm_AWGTestServer : Form
     {
+        ConfigurationManagement cfg;
         Brush mybsh = Brushes.Green;
         Inst_Ag_ILPDL_PD inst_Ag_ILPDL_PD;
         Thread threedStartTest;
@@ -29,8 +30,8 @@ namespace AWGTestServer
         int iStation = 999;
        
         string sRequestTestPath =Directory .GetCurrentDirectory() + @"\Config\Information\RequestTest.txt";
-        string strIP = "127.0.0.1";
-        string strPort = "3000";
+        string strIP;
+        string strPort;
         Dictionary<string, Socket> dic = new Dictionary<string, Socket>();
         Dictionary<int, string> dicStation = new Dictionary<int, string>();
         Queue<string> strAction = new Queue<string>();
@@ -50,8 +51,9 @@ namespace AWGTestServer
         private void Form1_Load(object sender, EventArgs e)
         {
             inst_Ag_ILPDL_PD = new Inst_Ag_ILPDL_PD(this);
-           // sLogPath = Util_GenerateFileName.GenWithTimestamp(@"Config\log", "log", "", "txt");
-           
+            cfg = new ConfigurationManagement();
+            strIP = cfg.SocketIP;
+            strPort = cfg.SocketPort;
             for (int i=1;i<9;i++)
                 SetStationIcon(i, false);
 
@@ -70,8 +72,7 @@ namespace AWGTestServer
             catch(Exception ex)
             {
                 MessageBox.Show($"Init Equipment Fail !!!{ex.Message} ");
-                //inst_Ag_ILPDL.CloseInstrument();
-                //inst_Ag_ILPDL.CloseEngineMgr();
+                ShowMsg($"Init Equipment Fail !!!{ex.Message} ", true);
                 KillProcess("AgServerILPDL");
             }
 
@@ -129,6 +130,7 @@ namespace AWGTestServer
                                     bUsing = true;
                                     ShowMsg(iStation + " DoReference Start...", false);
                                     bSuccess = inst_Ag_ILPDL_PD.DoReference(sStationSettingFilePath,iStation);
+                                    ShowMsg("Calibration Done!", false);
                                 }
                                 catch (Exception ex)
                                 {
@@ -149,12 +151,14 @@ namespace AWGTestServer
                                     bUsing = true;
                                     ShowMsg(iStation + " test Start...", false);
                                     string ErrorMsg = "";
-                                 //   inst_Ag_ILPDL.bTempTest = false;
-                                
                                     bSuccess = inst_Ag_ILPDL_PD.DoTest(iStation, ref ErrorMsg);
                                     if (ErrorMsg != "")
                                     {
                                         ShowMsg(ErrorMsg.ToString(), true);
+                                    }
+                                    else
+                                    {
+                                        ShowMsg("Test Done!", false);
                                     }
                                 }
                                 catch (Exception ex)

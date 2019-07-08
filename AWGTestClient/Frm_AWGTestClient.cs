@@ -53,6 +53,7 @@ namespace AWGTestClient
         static double[] _gpdblSweepRate = new double[13] { 0.5, 1.0, 2.0, 5.0, 10.0, 20.0, 40.0, 50.0, 80.0, 100.0, 150.0, 160.0, 200.0 };
         static double[] _gpdblWindowIL = new double[7] { 1270.0, 1310.0, 1490.0, 1550.0, 1577.0, 1625.0, 1650.0 };
         double m_dblStep;
+        int m_dwStepIndex = 0;
         double m_dwStartWavelength;
         double m_dwStopWavelength;
         double ITU_start;
@@ -1498,7 +1499,9 @@ namespace AWGTestClient
                     m_dwStartWavelength = double.Parse(specCommon.Sweep_start.ToString());
                     m_dwStopWavelength = double.Parse(specCommon.Sweep_end.ToString());
                     m_dblPower = double.Parse(specCommon.Laser_output_pwr.ToString());
-                    m_dblStep = double.Parse(specCommon.Sweep_step.ToString());
+                    // m_dblStep = double.Parse(specCommon.Sweep_step.ToString());
+                    m_dwStepIndex = int.Parse(specCommon.Sweep_step.ToString());
+                    m_dblStep = _gpdblSweepRate[m_dwStepIndex] * 0.3*Math.Pow(10,-3);
                     txtbSweepStep.Text = $"{m_dblStep}nm";
                     m_bLLog = specCommon.Llog;
                     ITU_start = specCommon.ITU_Start;
@@ -1640,16 +1643,7 @@ namespace AWGTestClient
                     MessageBox.Show(strMsg);
                 }
                 lastClassID = cond.Class_id;
-            }
-            ////bFunctionOK = SaveTestResult(sDirectory + "\\", m_stPLCTestResultData, m_stCriteria, deviceInfo, iStation, 0, CHANNEL_COUNT, bTETM, ref strResult);
-            //if (!bFunctionOK)
-            //{
-            //    strMsg = "Save Test Result Failed !!!";
-            //    ShowMsg(strMsg, false);
-            //    MessageBox.Show(strMsg);
-            //}
-
-            string strT = "";
+            }           
             int[] iPass = new int[23];
             string[] ParaName = new string[23];
 

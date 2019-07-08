@@ -131,11 +131,11 @@ namespace AWGTestServer
         /// 获取未放置产品时，4个偏振态下的光功率数组
         /// </summary>
         /// <param name="bWSIndex"></param>
-        public void SystemCalibration(int bWSIndex)//ongoing
+        public void SystemCalibration(int bWSIndex)
         {
             try
             {
-                StartReference(bWSIndex);//写什么????
+                StartReference(bWSIndex);
             }
             catch
             {
@@ -148,7 +148,6 @@ namespace AWGTestServer
             bool bSuccess = false;
             try
             {
-                // LoadReference(bWSIndex, sStationCalibrationFilePath);//??????
                 StartMeasurement(bWSIndex);
                 string strFileName = Directory.GetCurrentDirectory() + String.Format("\\Data\\RawData_Station{0}.csv", bWSIndex);
 
@@ -179,7 +178,6 @@ namespace AWGTestServer
                 File.Delete(strFileName);
            
             strNew.Append("WL,");
-        
             try
             {
                 for (dwPolIndex = 0; dwPolIndex < 4; dwPolIndex++)
@@ -384,11 +382,12 @@ namespace AWGTestServer
                 StartMeasurement(bWSIndex);
 
                string strFileName = Directory.GetCurrentDirectory() + String.Format("\\Data\\Cali_RawData_Station{0}.csv", bWSIndex);
-
+                frmAWGTest.ShowMsg("保存校准数据到本地...", false);
                 SaveAutoRawData(strFileName, pdwWavelength, bWSIndex);
             }
             catch(Exception ex)
             {
+                frmAWGTest.ShowMsg(ex.ToString(), true);
                 throw new Exception($"校准出错，{ex.Message}");
             }
         }
