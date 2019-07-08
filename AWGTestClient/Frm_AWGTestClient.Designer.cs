@@ -34,15 +34,6 @@
             this.buttonStopTest = new System.Windows.Forms.Button();
             this.buttonStartTest = new System.Windows.Forms.Button();
             this.buttonCalibration = new System.Windows.Forms.Button();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.textBox4 = new System.Windows.Forms.TextBox();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.radioButton4 = new System.Windows.Forms.RadioButton();
-            this.radioButton3 = new System.Windows.Forms.RadioButton();
-            this.radioButton2 = new System.Windows.Forms.RadioButton();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.comboBoxEx1 = new DevComponents.DotNetBar.Controls.ComboBoxEx();
             this.buttonX1 = new DevComponents.DotNetBar.ButtonX();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
@@ -67,6 +58,7 @@
             this.label34 = new System.Windows.Forms.Label();
             this.textBoxPartNum = new System.Windows.Forms.TextBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.txtbSweepStep = new System.Windows.Forms.TextBox();
             this.textBoxTestTemp = new System.Windows.Forms.TextBox();
             this.label19 = new System.Windows.Forms.Label();
             this.buttonGetTestCondition = new System.Windows.Forms.Button();
@@ -77,9 +69,6 @@
             this.textBoxStartWavelength = new System.Windows.Forms.TextBox();
             this.label13 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.radioButtonPDLDrawType = new System.Windows.Forms.RadioButton();
-            this.radioButtonILDrawType = new System.Windows.Forms.RadioButton();
             this.parametersList = new System.Windows.Forms.ListView();
             this.paramNameColumnHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.paramValueColumnHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -112,12 +101,9 @@
             this.Customer_PN = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.TestResult = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.btnTETMCalcu = new System.Windows.Forms.Button();
-            this.txtbSweepStep = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
-            this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
-            this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox5.SuspendLayout();
             this.SuspendLayout();
@@ -132,7 +118,7 @@
             this.groupBox1.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(2);
-            this.groupBox1.Size = new System.Drawing.Size(296, 159);
+            this.groupBox1.Size = new System.Drawing.Size(296, 188);
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "控制操作";
@@ -145,7 +131,7 @@
             this.listView2.Location = new System.Drawing.Point(175, 23);
             this.listView2.Margin = new System.Windows.Forms.Padding(2);
             this.listView2.Name = "listView2";
-            this.listView2.Size = new System.Drawing.Size(119, 124);
+            this.listView2.Size = new System.Drawing.Size(119, 158);
             this.listView2.TabIndex = 56;
             this.listView2.UseCompatibleStateImageBehavior = false;
             this.listView2.View = System.Windows.Forms.View.Details;
@@ -158,7 +144,7 @@
             // buttonStopTest
             // 
             this.buttonStopTest.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonStopTest.Location = new System.Drawing.Point(14, 118);
+            this.buttonStopTest.Location = new System.Drawing.Point(14, 140);
             this.buttonStopTest.Margin = new System.Windows.Forms.Padding(2);
             this.buttonStopTest.Name = "buttonStopTest";
             this.buttonStopTest.Size = new System.Drawing.Size(157, 30);
@@ -170,7 +156,7 @@
             // buttonStartTest
             // 
             this.buttonStartTest.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonStartTest.Location = new System.Drawing.Point(14, 73);
+            this.buttonStartTest.Location = new System.Drawing.Point(14, 83);
             this.buttonStartTest.Margin = new System.Windows.Forms.Padding(2);
             this.buttonStartTest.Name = "buttonStartTest";
             this.buttonStartTest.Size = new System.Drawing.Size(157, 30);
@@ -182,7 +168,7 @@
             // buttonCalibration
             // 
             this.buttonCalibration.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonCalibration.Location = new System.Drawing.Point(14, 22);
+            this.buttonCalibration.Location = new System.Drawing.Point(14, 26);
             this.buttonCalibration.Margin = new System.Windows.Forms.Padding(2);
             this.buttonCalibration.Name = "buttonCalibration";
             this.buttonCalibration.Size = new System.Drawing.Size(157, 30);
@@ -190,115 +176,6 @@
             this.buttonCalibration.Text = "校准操作";
             this.buttonCalibration.UseVisualStyleBackColor = true;
             this.buttonCalibration.Click += new System.EventHandler(this.buttonCalibration_Click_1);
-            // 
-            // groupBox2
-            // 
-            this.groupBox2.Controls.Add(this.textBox4);
-            this.groupBox2.Controls.Add(this.textBox3);
-            this.groupBox2.Controls.Add(this.textBox2);
-            this.groupBox2.Controls.Add(this.textBox1);
-            this.groupBox2.Controls.Add(this.radioButton4);
-            this.groupBox2.Controls.Add(this.radioButton3);
-            this.groupBox2.Controls.Add(this.radioButton2);
-            this.groupBox2.Controls.Add(this.radioButton1);
-            this.groupBox2.Location = new System.Drawing.Point(9, 173);
-            this.groupBox2.Margin = new System.Windows.Forms.Padding(2);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Padding = new System.Windows.Forms.Padding(2);
-            this.groupBox2.Size = new System.Drawing.Size(59, 18);
-            this.groupBox2.TabIndex = 5;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "设备信息";
-            this.groupBox2.Visible = false;
-            // 
-            // textBox4
-            // 
-            this.textBox4.BackColor = System.Drawing.SystemColors.MenuBar;
-            this.textBox4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox4.Location = new System.Drawing.Point(14, 34);
-            this.textBox4.Margin = new System.Windows.Forms.Padding(2);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(268, 23);
-            this.textBox4.TabIndex = 7;
-            // 
-            // textBox3
-            // 
-            this.textBox3.BackColor = System.Drawing.SystemColors.MenuBar;
-            this.textBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox3.Location = new System.Drawing.Point(14, 74);
-            this.textBox3.Margin = new System.Windows.Forms.Padding(2);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(268, 23);
-            this.textBox3.TabIndex = 6;
-            // 
-            // textBox2
-            // 
-            this.textBox2.BackColor = System.Drawing.SystemColors.MenuBar;
-            this.textBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox2.Location = new System.Drawing.Point(14, 114);
-            this.textBox2.Margin = new System.Windows.Forms.Padding(2);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(268, 23);
-            this.textBox2.TabIndex = 5;
-            // 
-            // textBox1
-            // 
-            this.textBox1.BackColor = System.Drawing.SystemColors.MenuBar;
-            this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox1.Location = new System.Drawing.Point(14, 154);
-            this.textBox1.Margin = new System.Windows.Forms.Padding(2);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(268, 23);
-            this.textBox1.TabIndex = 4;
-            // 
-            // radioButton4
-            // 
-            this.radioButton4.AutoSize = true;
-            this.radioButton4.Location = new System.Drawing.Point(14, 134);
-            this.radioButton4.Margin = new System.Windows.Forms.Padding(2);
-            this.radioButton4.Name = "radioButton4";
-            this.radioButton4.Size = new System.Drawing.Size(293, 16);
-            this.radioButton4.TabIndex = 3;
-            this.radioButton4.TabStop = true;
-            this.radioButton4.Text = " 光功率计 （Keysight N7745A + Keysight N7744)";
-            this.radioButton4.UseVisualStyleBackColor = true;
-            // 
-            // radioButton3
-            // 
-            this.radioButton3.AutoSize = true;
-            this.radioButton3.Location = new System.Drawing.Point(14, 94);
-            this.radioButton3.Margin = new System.Windows.Forms.Padding(2);
-            this.radioButton3.Name = "radioButton3";
-            this.radioButton3.Size = new System.Drawing.Size(203, 16);
-            this.radioButton3.TabIndex = 2;
-            this.radioButton3.TabStop = true;
-            this.radioButton3.Text = " 偏振控制仪 （Keysight N7786B)";
-            this.radioButton3.UseVisualStyleBackColor = true;
-            // 
-            // radioButton2
-            // 
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.BackColor = System.Drawing.SystemColors.Control;
-            this.radioButton2.Location = new System.Drawing.Point(14, 54);
-            this.radioButton2.Margin = new System.Windows.Forms.Padding(2);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(269, 16);
-            this.radioButton2.TabIndex = 1;
-            this.radioButton2.TabStop = true;
-            this.radioButton2.Text = " CL Band TLS (Keysight 8614B 1440~1640nm)";
-            this.radioButton2.UseVisualStyleBackColor = false;
-            // 
-            // radioButton1
-            // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Location = new System.Drawing.Point(14, 18);
-            this.radioButton1.Margin = new System.Windows.Forms.Padding(2);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(173, 16);
-            this.radioButton1.TabIndex = 0;
-            this.radioButton1.TabStop = true;
-            this.radioButton1.Text = " O Band TLS (1260~1370nm)";
-            this.radioButton1.UseVisualStyleBackColor = true;
             // 
             // comboBoxEx1
             // 
@@ -581,6 +458,14 @@
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "测试条件";
             // 
+            // txtbSweepStep
+            // 
+            this.txtbSweepStep.Enabled = false;
+            this.txtbSweepStep.Location = new System.Drawing.Point(103, 149);
+            this.txtbSweepStep.Name = "txtbSweepStep";
+            this.txtbSweepStep.Size = new System.Drawing.Size(142, 21);
+            this.txtbSweepStep.TabIndex = 64;
+            // 
             // textBoxTestTemp
             // 
             this.textBoxTestTemp.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -605,7 +490,7 @@
             // buttonGetTestCondition
             // 
             this.buttonGetTestCondition.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonGetTestCondition.Location = new System.Drawing.Point(171, 48);
+            this.buttonGetTestCondition.Location = new System.Drawing.Point(164, 49);
             this.buttonGetTestCondition.Margin = new System.Windows.Forms.Padding(2);
             this.buttonGetTestCondition.Name = "buttonGetTestCondition";
             this.buttonGetTestCondition.Size = new System.Drawing.Size(87, 25);
@@ -692,40 +577,6 @@
             this.label12.TabIndex = 46;
             this.label12.Text = "波长扫面范围(nm)";
             // 
-            // panel1
-            // 
-            this.panel1.Controls.Add(this.radioButtonPDLDrawType);
-            this.panel1.Controls.Add(this.radioButtonILDrawType);
-            this.panel1.Location = new System.Drawing.Point(72, 173);
-            this.panel1.Margin = new System.Windows.Forms.Padding(2);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(194, 26);
-            this.panel1.TabIndex = 44;
-            // 
-            // radioButtonPDLDrawType
-            // 
-            this.radioButtonPDLDrawType.AutoSize = true;
-            this.radioButtonPDLDrawType.Location = new System.Drawing.Point(106, 10);
-            this.radioButtonPDLDrawType.Margin = new System.Windows.Forms.Padding(2);
-            this.radioButtonPDLDrawType.Name = "radioButtonPDLDrawType";
-            this.radioButtonPDLDrawType.Size = new System.Drawing.Size(89, 16);
-            this.radioButtonPDLDrawType.TabIndex = 45;
-            this.radioButtonPDLDrawType.Text = "显示PDL图形";
-            this.radioButtonPDLDrawType.UseVisualStyleBackColor = true;
-            // 
-            // radioButtonILDrawType
-            // 
-            this.radioButtonILDrawType.AutoSize = true;
-            this.radioButtonILDrawType.Checked = true;
-            this.radioButtonILDrawType.Location = new System.Drawing.Point(14, 10);
-            this.radioButtonILDrawType.Margin = new System.Windows.Forms.Padding(2);
-            this.radioButtonILDrawType.Name = "radioButtonILDrawType";
-            this.radioButtonILDrawType.Size = new System.Drawing.Size(83, 16);
-            this.radioButtonILDrawType.TabIndex = 44;
-            this.radioButtonILDrawType.TabStop = true;
-            this.radioButtonILDrawType.Text = "显示IL图形";
-            this.radioButtonILDrawType.UseVisualStyleBackColor = true;
-            // 
             // parametersList
             // 
             this.parametersList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -759,7 +610,7 @@
             this.parametersList.Location = new System.Drawing.Point(9, 525);
             this.parametersList.Margin = new System.Windows.Forms.Padding(2);
             this.parametersList.Name = "parametersList";
-            this.parametersList.Size = new System.Drawing.Size(1258, 135);
+            this.parametersList.Size = new System.Drawing.Size(1228, 130);
             this.parametersList.TabIndex = 47;
             this.parametersList.UseCompatibleStateImageBehavior = false;
             this.parametersList.View = System.Windows.Forms.View.Details;
@@ -903,7 +754,7 @@
             this.pictureBox1.Location = new System.Drawing.Point(309, 206);
             this.pictureBox1.Margin = new System.Windows.Forms.Padding(2);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(957, 302);
+            this.pictureBox1.Size = new System.Drawing.Size(928, 302);
             this.pictureBox1.TabIndex = 46;
             this.pictureBox1.TabStop = false;
             // 
@@ -950,28 +801,18 @@
             this.btnTETMCalcu.UseVisualStyleBackColor = true;
             this.btnTETMCalcu.Click += new System.EventHandler(this.btnTETMCalcu_Click);
             // 
-            // txtbSweepStep
-            // 
-            this.txtbSweepStep.Enabled = false;
-            this.txtbSweepStep.Location = new System.Drawing.Point(103, 149);
-            this.txtbSweepStep.Name = "txtbSweepStep";
-            this.txtbSweepStep.Size = new System.Drawing.Size(142, 21);
-            this.txtbSweepStep.TabIndex = 64;
-            // 
             // Frm_AWGTestClient
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1217, 599);
+            this.ClientSize = new System.Drawing.Size(1248, 666);
             this.Controls.Add(this.btnTETMCalcu);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.listView1);
             this.Controls.Add(this.parametersList);
             this.Controls.Add(this.pictureBox1);
-            this.Controls.Add(this.panel1);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
-            this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -984,14 +825,10 @@
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Frm_AWGTestClient_FormClosed);
             this.Load += new System.EventHandler(this.Frm_AWGTestClient_Load);
             this.groupBox1.ResumeLayout(false);
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.groupBox5.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -1004,7 +841,6 @@
         private System.Windows.Forms.Button buttonStopTest;
         private System.Windows.Forms.Button buttonStartTest;
         private System.Windows.Forms.Button buttonCalibration;
-        private System.Windows.Forms.GroupBox groupBox2;
         //private DevComponents.DotNetBar.StyleManager styleManager1;
         private DevComponents.DotNetBar.Controls.ComboBoxEx comboBoxEx1;
         private DevComponents.DotNetBar.ButtonX buttonX1;
@@ -1027,14 +863,6 @@
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.ComboBox comboBoxCLOption;
         private System.Windows.Forms.ComboBox comboBoxOOption;
-        private System.Windows.Forms.TextBox textBox4;
-        private System.Windows.Forms.TextBox textBox3;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.RadioButton radioButton4;
-        private System.Windows.Forms.RadioButton radioButton3;
-        private System.Windows.Forms.RadioButton radioButton2;
-        private System.Windows.Forms.RadioButton radioButton1;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.TextBox textBoxPower;
@@ -1043,9 +871,6 @@
         private System.Windows.Forms.TextBox textBoxStartWavelength;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.RadioButton radioButtonPDLDrawType;
-        private System.Windows.Forms.RadioButton radioButtonILDrawType;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.ListView parametersList;
         private System.Windows.Forms.ColumnHeader paramNameColumnHeader;

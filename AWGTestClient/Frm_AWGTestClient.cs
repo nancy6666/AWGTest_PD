@@ -488,7 +488,6 @@ namespace AWGTestClient
             }
             testTime = DateTime.Now;
             parametersList.Items.Clear();
-            m_bRadioDrawType = radioButtonILDrawType.Checked;
             try
             {
                 m_bTestDone = false;
@@ -663,7 +662,7 @@ namespace AWGTestClient
                             goto Finished;
                         }
                         strFileRawData = $"{rootRawDataPath}\\Data\\Cali_RawData_Station{iStation}.csv";
-                        bFunctionOK = awgTestClient.ReadCaliRawData(strFileRawData);
+                         bFunctionOK = awgTestClient.ReadCaliRawData(strFileRawData);
                         if (!bFunctionOK)
                         {
                             strMsg = "Read Calibration Raw Data Failed !!!";
@@ -1561,16 +1560,15 @@ namespace AWGTestClient
 
             MaxChannel = specCommon.MaxChannel;
 
-            //m_dblStep = 12;
-            //double mm = (m_dwStopWavelength * 1000.0 - m_dwStartWavelength * 1000.0) / m_dblStep + 1;
-          
-            double mm = (m_dwStopWavelength - m_dwStartWavelength ) / m_dblStep + 1;
-            mm = Math.Ceiling(mm);
+            m_dblStep = 12;
+            double mm = (m_dwStopWavelength * 1000.0 - m_dwStartWavelength * 1000.0) / m_dblStep + 1;
+
+            //double mm = (m_dwStopWavelength - m_dwStartWavelength ) / m_dblStep + 1;
+            //mm = Math.Ceiling(mm);
             m_dwSamplePoint = int.Parse(mm.ToString());
           
             awgTestClient.m_dwSamplePoint = m_dwSamplePoint;
             m_dwChannelCounts = MaxChannel;
-            m_bRadioDrawType = radioButtonILDrawType.Checked;
             m_stPLCData.m_bILOrPDL = m_bRadioDrawType;
            
             m_stPLCData.m_pdwWavelengthArray = new double[m_dwSamplePoint];
