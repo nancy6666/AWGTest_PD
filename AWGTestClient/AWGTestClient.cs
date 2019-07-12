@@ -161,7 +161,6 @@ namespace AWGTestClient
                         double CWWLStart;
                         double CWWLEnd;
                         //根据Iswave决定使用波长还是频率
-
                         //波长  计算CW时，采用的测试数据的起止波长分别为中心波长加减 ITUStep/ 2
                         if (pstCriteria.IsWave)
                         {
@@ -215,7 +214,7 @@ namespace AWGTestClient
                         //第一通道的第一个测试值与MaxILMin的差值小于3时，左边的交叉点为起点，右边的交叉点为MaxILMin往下（temp - MaxILMin）dB的交叉点
                         if (iChannel == dwStartChannel & subs < 3)
                         {
-                            #region Algorithm for Aglient test scheme
+                            #region Cancel Algorithm for Aglient test scheme
                             //int indexRigtLess = Alg_PointSearch.FindLastValue(maxLossArrayCW, Alg_PointSearch.ComparisonOperator.LessThanOrEqualTo, MaxILMin + subs, MaxILIndex + 1, maxLossArrayCW.Length - 1);
                             //int indexRigtGreater = Alg_PointSearch.FindFirstValue(maxLossArrayCW, Alg_PointSearch.ComparisonOperator.GreaterThanOrEqualTo, MaxILMin + subs, MaxILIndex + 1, maxLossArrayCW.Length - 1);
                             //int indexRigtLessTM = Alg_PointSearch.FindLastValue(minLossArrayCW, Alg_PointSearch.ComparisonOperator.LessThanOrEqualTo, MaxILMin + subs, MaxILIndex + 1, maxLossArrayCW.Length - 1);
@@ -336,7 +335,7 @@ namespace AWGTestClient
                         }
                         if(CrossPoint.Contains(0) || CrossPoint1.Contains(0))
                         {
-                            frmAWGClient.ShowMsg($"通道{iChannel}在计算CW时没有交叉点！", false);
+                            //frmAWGClient.ShowMsg($"通道{iChannel}在计算CW时没有交叉点！", false);
                         }
                         pstResultData.m_dblCW[iChannel] = Math.Round((CrossPoint[0] + CrossPoint[1] + CrossPoint1[0] + CrossPoint1[1]) / 4, 3);
                     //    indexCW = Alg_PointSearch.FindFirstValue(pdwWaveArray, Alg_PointSearch.ComparisonOperator.GreaterThanOrEqualTo, pstResultData.m_dblCW[iChannel], 0, dwSamplePoint - 1);
@@ -1296,13 +1295,12 @@ namespace AWGTestClient
             m_pdwPolPwr4 = new double[m_dwSamplePoint];
 
             int lineNbr = 0;
-
             int dwIndex = 0;
-            window = Convert.ToInt32(4 / m_dwStep);
-            if (window / 2 == 0)
-            {
-                window++;
-            };
+            //window = Convert.ToInt32(4 / m_dwStep);
+            //if (window / 2 == 0)
+            //{
+            //    window++;
+            //};
             try
             {
                 using (CsvReader reader = new CsvReader())
@@ -1373,11 +1371,11 @@ namespace AWGTestClient
             int lineNbr = 0;
 
             int dwIndex = 0;
-            window = Convert.ToInt32(4 / m_dwStep);
-            if (window / 2 == 0)
-            {
-                window++;
-            };
+            //window = Convert.ToInt32(4 / m_dwStep);
+            //if (window / 2 == 0)
+            //{
+            //    window++;
+            //};
             try
             {
                 using (CsvReader reader = new CsvReader())
@@ -1450,8 +1448,8 @@ namespace AWGTestClient
                 {
                     m11 = (Math.Pow(10, m_pdwPolPwr1[point] / 10) / Math.Pow(10, m_pdwCaliPolPwr1[point] / 10) + Math.Pow(10, m_pdwPolPwr2[point] / 10) / Math.Pow(10, m_pdwCaliPolPwr2[point] / 10)) / 2;
                     m12 = (Math.Pow(10, m_pdwPolPwr1[point] / 10) / Math.Pow(10, m_pdwCaliPolPwr1[point] / 10) - Math.Pow(10, m_pdwPolPwr2[point] / 10) / Math.Pow(10, m_pdwCaliPolPwr2[point] / 10)) / 2;
-                    m13 = (Math.Pow(10, m_pdwPolPwr3[point] / 10) / Math.Pow(10, m_pdwCaliPolPwr3[point] / 2) - m11) / 2;
-                    m14 = (Math.Pow(10, m_pdwPolPwr4[point] / 10) / Math.Pow(10, m_pdwCaliPolPwr4[point]) / 2 - m11) / 2;
+                    m13 = Math.Pow(10, m_pdwPolPwr3[point] / 10) / Math.Pow(10, m_pdwCaliPolPwr3[point] / 10) - m11;
+                    m14 = Math.Pow(10, m_pdwPolPwr4[point] / 10) / Math.Pow(10, m_pdwCaliPolPwr4[point]) / 10 - m11 ;
                     TMax = m11 + Math.Sqrt(m12 * m12 + m13 * m13 + m14 * m14);
                     if ((m12 * m12 - m13 * m13 - m14 * m14) < 0)
                     {
@@ -1525,7 +1523,6 @@ namespace AWGTestClient
                     strTemp += str1;
                 
                 sw.Write(strTemp);
-                sw.Write("\r\n");
                 sw.Write("\r\n");
                 for (int dwIndex = 0; dwIndex < dwSampleCount; dwIndex++)
                 {

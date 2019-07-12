@@ -331,7 +331,7 @@ namespace AWGTestServer
                     //ShowMsg(ex.Message,true);
                     if (ex.ToString().Contains("关闭"))
                         bClose = true;
-                }
+                } 
             }
         }
         private void SendSocket(int iStat, string Msg)

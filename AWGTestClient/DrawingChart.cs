@@ -99,6 +99,7 @@ namespace SarchPMS.Business.Draw
         private int intCurveSize = 1; //曲线线条大小
         private int intFontSpace = 0; //intFontSpace 是字体大小和距离调整出来的一个比较适合的数字
         private int channel_number = 10;
+
         #region 公共属性
 
         /// <summary>
@@ -509,6 +510,7 @@ namespace SarchPMS.Business.Draw
             float fltY2 = fltY1;
             objGraphics.DrawLine(new Pen(new SolidBrush(AxisColor), 1), fltX1, fltY1, fltX2, fltY2);
 
+
             //画Y轴
             fltX1 = XSpace;
             fltY1 = Height - YSpace;
@@ -692,6 +694,7 @@ namespace SarchPMS.Business.Draw
                 CurvePointF[i] = new PointF(keys, values);
             }
             objGraphics.DrawCurve(CurvePen, CurvePointF, Tension);
+
         }
 
         /// <summary>

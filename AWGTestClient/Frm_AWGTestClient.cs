@@ -98,7 +98,7 @@ namespace AWGTestClient
         bool bRuning = false;
         string m_strOldSN;
         int m_dwTestIndex;
-        bool m_bRadioDrawType;
+        bool m_bRadioDrawType=true;
           
         CTestSpecCommon specCommon;
         int MaxChannel;
@@ -411,7 +411,19 @@ namespace AWGTestClient
                 MessageBox.Show("Pls get test condition at first!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+           string tszValue = INIOperationClass.INIGetStringValue(strTmplFileName, "Main", "TmplName", "XXX");
+            if (tszValue == "XXX")
+            {
+                MessageBox.Show("The calibration file name in client.ini is null! ", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
 
+            if (!tszValue.Contains(strTmplName) || !tszValue.Contains(strTestTemp))
+            {
+                string strMsg = $"Current PN {sPN} haven't been calibrated! Pls calibrate at first";
+                MessageBox.Show(strMsg, "Calibration", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
             m_bStop = false;
             listView1.Items.Clear();
             listView2.Items.Clear();
@@ -474,7 +486,7 @@ namespace AWGTestClient
             }
             if (!m_bCLBandRefDone)
             {
-                string tszValue = INIOperationClass.INIGetStringValue(strTmplFileName, "Main", "TmplName", "XXX");
+                 tszValue = INIOperationClass.INIGetStringValue(strTmplFileName, "Main", "TmplName", "XXX");
                 if (tszValue == "XXX")
                 {
                     MessageBox.Show("The calibration file name in client.ini is null!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -662,6 +674,8 @@ namespace AWGTestClient
                             ShowMsg(strMsg, false);
                             goto Finished;
                         }
+                        File.Copy(strFileRawData, $"{strFilePath}\\RawData.csv");
+
                         strFileRawData = $"{rootRawDataPath}\\Data\\Cali_RawData_Station{iStation}.csv";
                          bFunctionOK = awgTestClient.ReadCaliRawData(strFileRawData);
                         if (!bFunctionOK)
@@ -671,6 +685,8 @@ namespace AWGTestClient
                             ShowMsg(strMsg, false);
                             goto Finished;
                         }
+                        File.Copy(strFileRawData, $"{strFilePath}\\Cali_RawData.csv");
+
                         awgTestClient.GetILMinMax(ref m_stPLCData);
 
                         bFunctionOK = awgTestClient.SaveILMinMaxRawData(m_stPLCData, deviceInfo, iStation, testTime, m_dwTestIndex, strFilePath);
@@ -806,10 +822,10 @@ namespace AWGTestClient
                                 MessageBox.Show(strMsg);
                                 return;
                             }
-                            else
-                            {
-                                ShowMsg("Calulate ILPDL successfully!", true);
-                            }
+                            //else
+                            //{
+                            //    ShowMsg("Calulate ILPDL successfully!", true);
+                            //}
                             SpecPerClass uniformitySpec = new SpecPerClass();
                             foreach (var spec in specCommon.lstSpecPerClass)
                             {
@@ -936,7 +952,7 @@ namespace AWGTestClient
                         }
                         DateTime calculateDataEnd = DateTime.Now;
                         ts = calculateDataEnd.Subtract(filterDataEnd);
-                        ShowMsg($"Calculating test data costs {ts.Seconds}s", true);
+                        ShowMsg($"Calculating test data costs {ts.TotalSeconds}s", true);
 
                         #endregion
 
@@ -980,7 +996,7 @@ namespace AWGTestClient
                 }
                 DateTime finshedTest = DateTime.Now;
                 ts = finshedTest.Subtract(testStart);
-                ShowMsg($"The whole test process costs {ts.Seconds}s",true);
+                ShowMsg($"The whole test process costs {ts.TotalSeconds}s",true);
                ///保存测试数据到数据库
                 ///
                 if (MessageBox.Show("Save test result to Database?", "Information", MessageBoxButtons.YesNo) == DialogResult.Yes)
@@ -1281,10 +1297,10 @@ namespace AWGTestClient
         {
             this.Invoke(new ThreedShowResultDelegate(setParameterDetailRaw), new object[] { Msg, iPass });//, new object[] { iPass });
         }
-        private void DisplayPicture(double[,] RawData, double[] XData, string strTitle, string yAxisTest, string xAxisTest,bool bIL)
+        private void DisplayPicture(double[,] RawData, double[] XData, string strTitle, string xAxisTest, string yAxisTest,bool bIL)
         {
             DrawingCurve dc = new DrawingCurve();
-            pictureBox1.Image = dc.DrawImage(m_stPLCData.m_pdwILMaxArray, m_stPLCData.m_pdwWavelengthArray, "ILMax Plot", "Wavelength(nm)", "LossMax(dB)",bIL, pictureBox1.Width, pictureBox1.Height);
+            pictureBox1.Image = dc.DrawImage(RawData, XData, strTitle, xAxisTest, yAxisTest,bIL, pictureBox1.Width, pictureBox1.Height);
         }
         public void ClearInput()
         {
@@ -1298,9 +1314,9 @@ namespace AWGTestClient
          
             textBoxChipID.Text = "";
         }
-        public void DrawPicture(double[,] RawData, double[] XData, string strTitle, string yAxisTest, string xAxisTest, bool bIL)
+        public void DrawPicture(double[,] RawData, double[] XData, string strTitle, string xAxisTest, string yAxisTest, bool bIL)
         {
-            this.Invoke(new ThreedDrawPicture (DisplayPicture), new object[] { RawData, XData, strTitle, yAxisTest, xAxisTest,bIL });//, new object[] { iPass });
+            this.Invoke(new ThreedDrawPicture (DisplayPicture), new object[] { RawData, XData, strTitle, xAxisTest, yAxisTest,bIL });//, new object[] { iPass });
         }
 
         public void ShowMsg(string msg,bool bPass)
@@ -1563,11 +1579,11 @@ namespace AWGTestClient
 
             MaxChannel = specCommon.MaxChannel;
 
-            m_dblStep = 12;
-            double mm = (m_dwStopWavelength * 1000.0 - m_dwStartWavelength * 1000.0) / m_dblStep + 1;
+            //m_dblStep = 12;
+            //double mm = (m_dwStopWavelength * 1000.0 - m_dwStartWavelength * 1000.0) / m_dblStep + 1;
 
-            //double mm = (m_dwStopWavelength - m_dwStartWavelength ) / m_dblStep + 1;
-            //mm = Math.Ceiling(mm);
+            double mm = (m_dwStopWavelength - m_dwStartWavelength) / m_dblStep + 1;
+            mm = Math.Ceiling(mm);
             m_dwSamplePoint = int.Parse(mm.ToString());
           
             awgTestClient.m_dwSamplePoint = m_dwSamplePoint;
@@ -1600,7 +1616,6 @@ namespace AWGTestClient
                 ShowMsg(strMsg, false);
                 return;
             }
- 
             double dblTemperature = 0;
 
             deviceInfo.m_strTemperature = Math.Round(dblTemperature, 2).ToString();
