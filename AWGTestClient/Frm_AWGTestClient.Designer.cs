@@ -28,6 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
+            DevExpress.XtraCharts.XYDiagram xyDiagram1 = new DevExpress.XtraCharts.XYDiagram();
+            DevExpress.XtraCharts.Series series1 = new DevExpress.XtraCharts.Series();
+            DevExpress.XtraCharts.LineSeriesView lineSeriesView1 = new DevExpress.XtraCharts.LineSeriesView();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.listView2 = new System.Windows.Forms.ListView();
             this.columnHeader19 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -95,17 +98,20 @@
             this.columnHeader17 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.listView1 = new System.Windows.Forms.ListView();
             this.columnHeader18 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.lstviewTestResult = new System.Windows.Forms.ListView();
             this.Customer_PN = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.TestResult = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.btnTETMCalcu = new System.Windows.Forms.Button();
+            this.ILChart = new DevExpress.XtraCharts.ChartControl();
             this.groupBox1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ILChart)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(xyDiagram1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(series1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(lineSeriesView1)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -610,7 +616,7 @@
             this.parametersList.Location = new System.Drawing.Point(9, 525);
             this.parametersList.Margin = new System.Windows.Forms.Padding(2);
             this.parametersList.Name = "parametersList";
-            this.parametersList.Size = new System.Drawing.Size(1228, 130);
+            this.parametersList.Size = new System.Drawing.Size(1255, 130);
             this.parametersList.TabIndex = 47;
             this.parametersList.UseCompatibleStateImageBehavior = false;
             this.parametersList.View = System.Windows.Forms.View.Details;
@@ -745,19 +751,6 @@
             this.columnHeader18.Text = "Information";
             this.columnHeader18.Width = 600;
             // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.pictureBox1.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBox1.Location = new System.Drawing.Point(309, 206);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(2);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(928, 302);
-            this.pictureBox1.TabIndex = 46;
-            this.pictureBox1.TabStop = false;
-            // 
             // groupBox5
             // 
             this.groupBox5.Controls.Add(this.lstviewTestResult);
@@ -801,16 +794,40 @@
             this.btnTETMCalcu.UseVisualStyleBackColor = true;
             this.btnTETMCalcu.Click += new System.EventHandler(this.btnTETMCalcu_Click);
             // 
+            // ILChart
+            // 
+            this.ILChart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.ILChart.BorderOptions.Visibility = DevExpress.Utils.DefaultBoolean.True;
+            this.ILChart.CacheToMemory = true;
+            xyDiagram1.AxisX.Title.Text = "Wavelength (nm)";
+            xyDiagram1.AxisX.Title.Visibility = DevExpress.Utils.DefaultBoolean.True;
+            xyDiagram1.AxisX.VisibleInPanesSerializable = "-1";
+            xyDiagram1.AxisY.Title.Text = "ILMax (dB)";
+            xyDiagram1.AxisY.Title.Visibility = DevExpress.Utils.DefaultBoolean.True;
+            xyDiagram1.AxisY.VisibleInPanesSerializable = "-1";
+            this.ILChart.Diagram = xyDiagram1;
+            this.ILChart.Legend.AlignmentHorizontal = DevExpress.XtraCharts.LegendAlignmentHorizontal.Right;
+            this.ILChart.Legend.Name = "Default Legend";
+            this.ILChart.Location = new System.Drawing.Point(328, 207);
+            this.ILChart.Name = "ILChart";
+            series1.Name = "ILMax";
+            series1.View = lineSeriesView1;
+            this.ILChart.SeriesSerializable = new DevExpress.XtraCharts.Series[] {
+        series1};
+            this.ILChart.Size = new System.Drawing.Size(935, 302);
+            this.ILChart.TabIndex = 51;
+            // 
             // Frm_AWGTestClient
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1248, 666);
+            this.ClientSize = new System.Drawing.Size(1275, 666);
+            this.Controls.Add(this.ILChart);
             this.Controls.Add(this.btnTETMCalcu);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.listView1);
             this.Controls.Add(this.parametersList);
-            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox1);
@@ -829,8 +846,11 @@
             this.groupBox3.PerformLayout();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.groupBox5.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(xyDiagram1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(lineSeriesView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(series1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ILChart)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -871,7 +891,6 @@
         private System.Windows.Forms.TextBox textBoxStartWavelength;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.ListView parametersList;
         private System.Windows.Forms.ColumnHeader paramNameColumnHeader;
         private System.Windows.Forms.ColumnHeader paramValueColumnHeader;
@@ -911,6 +930,7 @@
         private System.Windows.Forms.ColumnHeader TestResult;
         private System.Windows.Forms.Button btnTETMCalcu;
         private System.Windows.Forms.TextBox txtbSweepStep;
+        private DevExpress.XtraCharts.ChartControl ILChart;
     }
 }
 

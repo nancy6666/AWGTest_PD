@@ -4,11 +4,14 @@ using System.Text;
 using System.Drawing;
 using System.Data;
 using System.Drawing.Drawing2D;
+using DevExpress.XtraCharts;
 
 namespace SarchPMS.Business.Draw
 {
     public class DrawingCurve
     {
+       
+
         /// <summary>
         /// 画曲线图
         /// </summary>
@@ -586,7 +589,7 @@ namespace SarchPMS.Business.Draw
                     //objGraphics.DrawLine(new Pen(new SolidBrush(AxisColor)), fltX1 + Scale, fltY1 + fltSliceHeight * 1.5f, fltX2 + Scale, fltY2 - fltSliceHeight * 1.5f);
                     //画网格虚线
                     Pen penDashed = new Pen(new SolidBrush(AxisColor));
-                    penDashed.DashStyle = DashStyle.Dash;
+                    penDashed.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
                     objGraphics.DrawLine(penDashed, fltX1 + Scale, fltY1, fltX2 + Scale, YSpace);
                     //这里显示X轴刻度
                     if (iSliceCount <= Keys.Length )
@@ -646,7 +649,7 @@ namespace SarchPMS.Business.Draw
                     //objGraphics.DrawLine(new Pen(new SolidBrush(AxisColor)), fltX1 - fltSliceWidth * 1.5f, fltY1 - Scale, fltX2 + fltSliceWidth * 1.5f, fltY2 - Scale);
                     //画网格虚线
                     Pen penDashed = new Pen(new SolidBrush(AxisColor));
-                    penDashed.DashStyle = DashStyle.Dash;
+                    penDashed.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
                     objGraphics.DrawLine(penDashed, XSpace, fltY1 - Scale, Width - XSpace, fltY2 - Scale);
                     //这里显示Y轴刻度
                     strSliceText = Convert.ToString(YSliceValue * iSliceCount + YSliceBegin);

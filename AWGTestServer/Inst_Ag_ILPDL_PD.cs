@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using TestSystem.TestLibrary.INI;
+using PM1906AHelper;
 
 namespace AWGTestServer
 {
@@ -15,15 +16,16 @@ namespace AWGTestServer
     {
         #region Properties
 
+       public IPowermeter PowerMeter;
         private StringBuilder logging = new StringBuilder();
         private StringBuilder data = new StringBuilder();
         ConfigurationManagement cfg;
         private Frm_AWGTestServer frmAWGTest;
+
         private K8164B k8164;
-        private UC872port uC872;
         private N7786B n7786;
         public const int PolarizerCount = 4;
-        public int[] m_dblSamplePoint_OneCircle=new int[8];
+        public int[] m_dblSamplePoint_OneCircle = new int[8];
 
         double[][] m_dblMeasureResult;
         double[] pdwWavelength;
@@ -41,7 +43,6 @@ namespace AWGTestServer
         public long[] m_lAWGRefFinishedEvent = new long[8];
         public long[] m_lAWGMeasureFinishedEvent = new long[8];
         private double[] Result = new double[8];
-     //   public bool bTempTest = false;
         #endregion
 
         double[] g_dblTemperature = new double[8];
@@ -55,28 +56,25 @@ namespace AWGTestServer
             {
                 cfg = new ConfigurationManagement();
                 k8164 = new K8164B(Convert.ToInt16(cfg.K8164BGPIB));//need to set the GPIB address
-                uC872 = new UC872port(cfg.UC872Com, Convert.ToInt32(cfg.UC872Rate));
                 n7786 = new N7786B(Convert.ToInt16(cfg.N7786BGPIB));//need to set the GPIB address
 
                 //设置光源K8164B
                 k8164.SetSweepMode(K8164B.SweepMode.CONT);
                 k8164.SetTriggerMode(K8164B.TriggerMode.STF);
                 k8164.SetInputTrigIgn();
-                //设置功率计UC872
-               // uC872.SetTiggerInput(UC872port.EnumTriggrerMode.Nextstep);
-                uC872.SetTiggerInput(UC872port.EnumTriggrerMode.Smeasure);
-                uC872.SetPulseType(UC872port.EnumPulseType.HIGH);
-                uC872.SetPowerUnit(UC872port.EnumPowerUnit.dB);
+                //设置功率计
+        
+                PowerMeter.SetParameters();
 
                 k8164.SetOutputActive(true);
                 System.Threading.Thread.Sleep(1000);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
         }
-        public bool DoReference(string sStationSettingFilePath,int bWSIndex)
+        public bool DoReference(string sStationSettingFilePath, int bWSIndex)
         {
             bool bSuccess = true;
             try
@@ -85,7 +83,7 @@ namespace AWGTestServer
 
                 SetTLSetting(sStationSettingFilePath, bWSIndex);
             }
-            
+
             catch (Exception e)
             {
                 frmAWGTest.ShowMsg(e.ToString(), true);
@@ -158,7 +156,7 @@ namespace AWGTestServer
                     ErrorMsg = "保存RawData错误";
                     MessageBox.Show(ErrorMsg);
                     return bSuccess;
-                }              
+                }
             }
             catch (Exception ex)
             {
@@ -176,7 +174,7 @@ namespace AWGTestServer
 
             if (File.Exists(strFileName))
                 File.Delete(strFileName);
-           
+
             strNew.Append("WL,");
             try
             {
@@ -190,17 +188,17 @@ namespace AWGTestServer
                 strNew.Clear();
                 for (dwIndex = 0; dwIndex < m_dblSamplePoint_OneCircle[bWSIndex]; dwIndex++)
                 {
-                    strNew.Append( Math.Round(pdwWavelength[dwIndex] , 3).ToString() + ",");
+                    strNew.Append(Math.Round(pdwWavelength[dwIndex], 3).ToString() + ",");
                     for (dwPolIndex = 0; dwPolIndex < PolarizerCount; dwPolIndex++)
                     {
                         double lTemp1;
                         lTemp1 = m_dblMeasureResult[dwPolIndex][dwIndex];
-                    
+
                         if (double.IsNaN(lTemp1))
                         {
                             lTemp1 = 65000;
                         }
-                        str1 = Math.Round(lTemp1, 2).ToString() + "," ;
+                        str1 = Math.Round(lTemp1, 2).ToString() + ",";
                         strNew.Append(str1);
                     }
                     strNew.Append("\r\n");
@@ -208,7 +206,7 @@ namespace AWGTestServer
                 using (StreamWriter writer = new StreamWriter(strFileName, true))
                     writer.WriteLine(strNew);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw new Exception($"保存测试数据到CSV文件出错，{ex.Message}");
             }
@@ -247,30 +245,25 @@ namespace AWGTestServer
                 //      System.Threading.ThreadPool.QueueUserWorkItem((o) =>
                 //         {
                 for (int i = 0; i < PolarizerCount; i++)
-                         {
+                {
 
-                             n7786.SetSOP(lstSopArray[i]);
-                             // AddLog("开始扫描");
-                             if (!StartSweep())
-                             {
-                                 throw new Exception("扫描失败");
-                             }
-                             //  AddLog("正在扫描");
-
-                             while (CheckIsSweeping())
-                             {
-                                 System.Threading.Thread.Sleep(100);
-                             }
-                             // ("扫描完成");
-
-                             if (!GetPowerMeterData(out m_dblMeasureResult[i], m_dblSamplePoint_OneCircle[bWSIndex]))
-                             {
-                                 throw new Exception("获取数据失败");
-
-                             }
-                         }
-                         // AddLog("扫描完成");
-                     //});
+                    n7786.SetSOP(lstSopArray[i]);
+                    // 开始扫描
+                    if (!StartSweep())
+                    {
+                        throw new Exception("扫描失败");
+                    }
+                    // 正在扫描
+                    while (CheckIsSweeping())
+                    {
+                        System.Threading.Thread.Sleep(100);
+                    }
+                    // 扫描完成
+                    if (!GetPowerMeterData(out m_dblMeasureResult[i], m_dblSamplePoint_OneCircle[bWSIndex]))
+                    {
+                        throw new Exception("获取测试结果失败");
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -278,7 +271,7 @@ namespace AWGTestServer
             }
         }
 
-        public bool IsLogging { set; get; } = false;
+      //  public bool IsLogging { set; get; } = false;
 
         /// <summary>
         /// 开始扫描
@@ -287,39 +280,37 @@ namespace AWGTestServer
         public bool StartSweep()
         {
             //功率计启动扫描
-
             data.Clear();
             try
             {
-                uC872.SetScanModeState("1", data);
+                //uC872.SetScanModeState("1", data);
 
-                var t = "";
-                uC872.Read(out t);
-                var text = "";
-                logging.Clear();
-                new TaskFactory().StartNew(() =>
-                {
-                    IsLogging = true;
-                    while (IsLogging)
-                    {
-                        uC872.Read(out text);
-                        if (!string.IsNullOrEmpty(text))
-                            logging.Append(text);
+                //var t = "";
+                //uC872.Read(out t);
+                //var text = "";
+                //logging.Clear();
+                //new TaskFactory().StartNew(() =>
+                //{
+                //    IsLogging = true;
+                //    while (IsLogging)
+                //    {
+                //        uC872.Read(out text);
+                //        if (!string.IsNullOrEmpty(text))
+                //            logging.Append(text);
 
-                        Thread.Sleep(100);
-                    }
-
-                });
-                data.Clear();
-                //光源启动扫描
-                while (!IsLogging)
-                {
-                }
+                //        Thread.Sleep(100);
+                //    }
+                //});
+                //data.Clear();
+                //while (!IsLogging)
+                //{
+                //}
+                PowerMeter.StartSweep();
                 //光源启动扫描
                 k8164.SetSweepState(K8164B.SweepState.STAR);
                 return true;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return false;
                 throw new Exception($"启动扫描出错，{ex.Message}");
@@ -327,52 +318,22 @@ namespace AWGTestServer
         }
 
         private const int channelCount = 1;
-        private const int byteLenght = 5;
+        //private const int byteLenght = 5;
         /// <summary>
         /// 获取功率计数据
         /// </summary>
         /// <param name="powers"></param>
         /// <returns></returns>
-        public bool GetPowerMeterData(out double[] powers,int desiredPoint)
+        public bool GetPowerMeterData( out double[] powers, int desiredPoint)
         {
-            var text = "";
-            if (logging.Length / byteLenght < desiredPoint)
+            try
             {
-                while (true)
-                {
-                    uC872.Read(out text);
-                    if (!string.IsNullOrEmpty(text))
-                        logging.Append(text);
-                    else
-                        break;
-                    Thread.Sleep(100);
-                }
-
+                PowerMeter.GetPowermeterData(out powers, desiredPoint);
             }
-            data.Clear();
-            uC872.SetScanModeState("0", data);
-         
-            powers = new double[desiredPoint];
-            var cache = logging.ToString();
-            var bytes = Encoding.GetEncoding("iso-8859-1").GetBytes(cache);
-            var receivelen = bytes.Length / byteLenght;
-
-            if (receivelen < desiredPoint)
+            catch (Exception ex)
             {
-                return false;
+                throw new Exception($"读取功率计的功率值出错！{ex.Message}");
             }
-            for (int i = 0; i < powers.Length; i++)
-            {
-                try
-                {
-                    powers[i] = Math.Round(BitConverter.ToSingle(bytes, i * byteLenght), 3);
-                }
-                catch (Exception)
-                {
-                    return false;
-                }
-            }
-
             return true;
         }
         private void StartReference(int bWSIndex)
@@ -395,7 +356,7 @@ namespace AWGTestServer
         /// <summary>
         /// 检查是否正在扫描
         /// </summary>
-        /// <returns></returns>
+        /// <returns>true:正在扫描；false:扫描终止</returns>
         public bool CheckIsSweeping()
         {
           var  data= k8164.ReadSweepStatus();
@@ -404,7 +365,6 @@ namespace AWGTestServer
             {
                 return true;
             }
-            IsLogging = false;
             return false;
         }
 
@@ -414,20 +374,15 @@ namespace AWGTestServer
         /// <param name="bWSIndex">机台号</param>
         public void SetDevicesParameters(int bWSIndex)
         {
-            var data = new StringBuilder();
-            var aveTime = 0.1D; //功率计平均时间，根据需求修改
-            var cw = Math.Round((m_dblAWGStopWavelength[bWSIndex] - m_dblAWGStartWavelength[bWSIndex]) / 2D, 3);
+            var cw = (m_dblAWGStopWavelength[bWSIndex] + m_dblAWGStartWavelength[bWSIndex]) / 2D;
 
             try
             {
                 //设置功率计波长
-                uC872.SetWavelength(cw);
+                PowerMeter.SetWavelength(Convert.ToInt32(cw));
 
                 //设置功率计扫描设置
-                data.Clear();
-                uC872.SetScanModeState("1");//进入扫描模式
-                uC872.SetAveTime(aveTime);
-                uC872.SetScanModeState("0");//退出扫描模式
+                PowerMeter.SetParameters();
 
                 //设置光源扫描设置
                 k8164.SetOutputPower(this.m_dblAWGTLSPower[bWSIndex], K8164B.PowerUnit.DBM);
@@ -437,18 +392,16 @@ namespace AWGTestServer
                 k8164.SetStopWave(m_dblAWGStopWavelength[bWSIndex], K8164B.WaveUnit.NM);
                 k8164.SetSweepSpeed(m_dblAWGSweepRate);
                 k8164.SetSweepStep(m_dblAWGStepWavelength[bWSIndex]);
-                
-             
+
                 var err = k8164.GetConfigurationErr();
                 if (!err.Contains("OK"))
                 {
                     throw new Exception($"Tunable laser setting error,{err}");
                 }
-            
 
                 k8164.SetOutputActive(true);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw new Exception($"设备设置出错，{ex.Message}");
             }

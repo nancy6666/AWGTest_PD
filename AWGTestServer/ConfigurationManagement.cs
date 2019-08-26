@@ -49,6 +49,20 @@ namespace AWGTestServer
                 return cfg.AppSettings.Settings["N7786BGPIB"].Value;
             }
         }
+        public string PM1906Com
+        {
+            get
+            {
+                return cfg.AppSettings.Settings["PM1906Com"].Value;
+            }
+        }
+        public string PM1906Rate
+        {
+            get
+            {
+                return cfg.AppSettings.Settings["PM1906Rate"].Value;
+            }
+        }
         public string UC872Com
         {
             get
@@ -61,6 +75,20 @@ namespace AWGTestServer
             get
             {
                 return cfg.AppSettings.Settings["UC872Rate"].Value;
+            }
+        }
+        public string PowerMeterType
+        {
+            get
+            {
+                return cfg.AppSettings.Settings["PowerMeterType"].Value;
+            }
+        }
+        public string PM1906_Range
+        {
+            get
+            {
+                return cfg.AppSettings.Settings["PM1906_Range"].Value;
             }
         }
     }

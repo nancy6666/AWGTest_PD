@@ -1446,6 +1446,13 @@ namespace AWGTestClient
                 //功率由dBm转换成mW 10^(P/10)
                 for (int point = 0; point < m_dwSamplePoint; point++)
                 {
+                    if(m_pdwCaliPolPwr1[point]<m_pdwPolPwr1[point]|| m_pdwCaliPolPwr2[point] < m_pdwPolPwr2[point]|| m_pdwCaliPolPwr3[point] < m_pdwPolPwr3[point]|| m_pdwCaliPolPwr4[point] < m_pdwPolPwr4[point])
+                    {
+                        string errMsg = String.Format("校准功率小于产品功率，请确认校准时接线是否准确！");
+                        frmAWGClient.ShowMsg(errMsg, false);
+                        MessageBox.Show(errMsg, "Test Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
                     m11 = (Math.Pow(10, m_pdwPolPwr1[point] / 10) / Math.Pow(10, m_pdwCaliPolPwr1[point] / 10) + Math.Pow(10, m_pdwPolPwr2[point] / 10) / Math.Pow(10, m_pdwCaliPolPwr2[point] / 10)) / 2;
                     m12 = (Math.Pow(10, m_pdwPolPwr1[point] / 10) / Math.Pow(10, m_pdwCaliPolPwr1[point] / 10) - Math.Pow(10, m_pdwPolPwr2[point] / 10) / Math.Pow(10, m_pdwCaliPolPwr2[point] / 10)) / 2;
                     m13 = Math.Pow(10, m_pdwPolPwr3[point] / 10) / Math.Pow(10, m_pdwCaliPolPwr3[point] / 10) - m11;

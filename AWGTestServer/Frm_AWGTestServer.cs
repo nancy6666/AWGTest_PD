@@ -43,6 +43,7 @@ namespace AWGTestServer
         bool[] bReference = new bool[8];
         delegate void ThreedShowMsgDelegate(string Message, bool bFail);
         delegate void ThreedClearListView();
+        
         public Frm_AWGTestServer()
         {
             InitializeComponent();
@@ -59,6 +60,14 @@ namespace AWGTestServer
 
             iStation = 0;
 
+            if (cfg.PowerMeterType.Contains("UC872"))
+            {
+               inst_Ag_ILPDL_PD.PowerMeter = new UC872port(cfg.UC872Com, Convert.ToInt32(cfg.UC872Rate));
+            }
+            else
+            {
+                inst_Ag_ILPDL_PD.PowerMeter = new MyPM1906A(cfg.PM1906Com, Convert.ToInt32(cfg.PM1906Rate));
+            }
             try
             {
                 inst_Ag_ILPDL_PD.InitI();

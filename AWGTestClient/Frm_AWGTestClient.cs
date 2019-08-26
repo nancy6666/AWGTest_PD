@@ -32,6 +32,8 @@ using Newtonsoft.Json;
 //using SufeiUtil;
 //using SufeiUtil.Common;
 using Newtonsoft.Json.Converters;
+using DevExpress.XtraCharts;
+
 namespace AWGTestClient
 {
 
@@ -335,7 +337,7 @@ namespace AWGTestClient
             awgTestClient.SaveTLSSeting("TLS Setting", m_dwStartWavelength , m_dwStopWavelength, m_dblPower,
                 m_dblStep, m_dwOutput, m_bLLog ? 1 : 0, iStation);
 
-            MessageBox.Show("Pls access optical fiber for calibration!!!");
+            MessageBox.Show("请确认光纤插入功率计前端的法兰，注意此时不接产品!!!");
             string strMsg = "calibrating，pls wait . . .";
             ShowMsg(strMsg, true);
             server_ret = 0;
@@ -1287,7 +1289,7 @@ namespace AWGTestClient
 
                 if (!File.Exists(strFilePathName))
                 {
-                    MessageBox.Show("There is no calibration file!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show($"There is no Reference file {strFilePathName}!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return false;
                 }
             }
@@ -1299,8 +1301,26 @@ namespace AWGTestClient
         }
         private void DisplayPicture(double[,] RawData, double[] XData, string strTitle, string xAxisTest, string yAxisTest,bool bIL)
         {
-            DrawingCurve dc = new DrawingCurve();
-            pictureBox1.Image = dc.DrawImage(RawData, XData, strTitle, xAxisTest, yAxisTest,bIL, pictureBox1.Width, pictureBox1.Height);
+            //DrawingCurve dc = new DrawingCurve();
+            //pictureBox1.Image = dc.DrawImage(RawData, XData, strTitle, xAxisTest, yAxisTest,bIL, pictureBox1.Width, pictureBox1.Height);
+            DrawLineDev(RawData, XData);
+        }
+        public void DrawLineDev(double[,] Rawdata,double[] XData)
+        {
+            try
+            {
+                Series ILWave = this.ILChart.Series[0];
+                ILWave.Points.Clear();
+                
+                for(int i=0;i<m_dwSamplePoint;i++)
+                {
+                    ILWave.Points.Add(new SeriesPoint(XData[i],Rawdata[0,i]));
+                }
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
         }
         public void ClearInput()
         {
@@ -1337,10 +1357,8 @@ namespace AWGTestClient
             textBoxTemperature.Text = msg;
         }
       
-      
         void ShowMsgg(string msg,bool bPass)
         {
-            //txtLog.AppendText(msg + "\r\n\r\n");
             listView1.BeginUpdate();
             try
             {
@@ -1515,9 +1533,9 @@ namespace AWGTestClient
                     m_dwStartWavelength = double.Parse(specCommon.Sweep_start.ToString());
                     m_dwStopWavelength = double.Parse(specCommon.Sweep_end.ToString());
                     m_dblPower = double.Parse(specCommon.Laser_output_pwr.ToString());
-                    // m_dblStep = double.Parse(specCommon.Sweep_step.ToString());
-                    m_dwStepIndex = int.Parse(specCommon.Sweep_step.ToString());
-                    m_dblStep = _gpdblSweepRate[m_dwStepIndex] * 0.3*Math.Pow(10,-3);
+                    m_dblStep = double.Parse(specCommon.Sweep_step.ToString());
+                   // m_dwStepIndex = int.Parse(specCommon.Sweep_step.ToString());
+                  //  m_dblStep = _gpdblSweepRate[m_dwStepIndex] * 0.3*Math.Pow(10,-3);
                     txtbSweepStep.Text = $"{m_dblStep}nm";
                     m_bLLog = specCommon.Llog;
                     ITU_start = specCommon.ITU_Start;

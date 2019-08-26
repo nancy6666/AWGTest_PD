@@ -10,12 +10,14 @@ using System.Collections.Concurrent;
 
 namespace AWGTestServer.Instruments
 {
-    class UC872port
+    class UC872port:IPowermeter
     {
         #region Properties
 
         SerialPort port;
         private StringBuilder data = new StringBuilder();
+        private StringBuilder logging = new StringBuilder();
+
         public bool IsConnected
         {
             get
@@ -26,6 +28,7 @@ namespace AWGTestServer.Instruments
         }
 
         public string ErrorString { get; private set; }
+        bool IPowermeter.IsConnected { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         private Mutex _mux = new Mutex();
         public enum EnumTriggrerMode
@@ -232,7 +235,7 @@ namespace AWGTestServer.Instruments
             port.WriteLine($"Sens : F : P : L {point},{interval}");
         }
 
-        public void SetWavelength(double cw)
+        public void SetWavelength(int cw)
         {
             if (!UC8721_SendCommand($"METER: POW1: WAVE {cw}"))
                 throw new Exception("设置功率计波长出错");
@@ -324,158 +327,7 @@ namespace AWGTestServer.Instruments
                 _mux.ReleaseMutex();
             }
         }
-        //public double[] ReadResult(int PointDesired)
-        //{
-        //    #region
-        //    // 串口读取超时时间，单位ms
-        //    //const int READ_TIMEOUT = 2000;
-
-        //    //byte[] byteResult=new byte[PointDesired*2];
-        //    //double[] dbResult = new double[PointDesired];
-        //    //int byteReceived = 0;
-        //    //bool isTimeout = false;
-
-        //    //Stopwatch sw = new Stopwatch();
-
-        //    //port.WriteLine("Sense : F : R?");
-
-        //    //sw.Start();
-
-        //    //while (true)
-        //    //{
-        //    //    Thread.Sleep(100);
-
-        //    //    var byteInBuffer = port.BytesToRead;
-        //    //    port.Read(byteResult, byteReceived, byteInBuffer);
-        //    //    byteReceived += byteInBuffer;
-
-        //    //    // 接收到足够的数据点。
-        //    //    // 一次Trigger采样一个数据点，一个数据点两个字节，因此 PointDesired * 2
-        //    //    if (PointDesired * 2 <= byteReceived)
-        //    //        break;
-
-        //    //    // 如果接受到数据，复位超时定时器
-        //    //    if(byteInBuffer > 0)
-        //    //        sw.Restart();
-
-        //    //    // 判断是否接受超时
-        //    //    if(sw.ElapsedMilliseconds > READ_TIMEOUT)
-        //    //    {
-        //    //        isTimeout = true;
-        //    //        break;
-        //    //    }
-        //    //}
-
-        //    //sw.Stop();
-
-        //    //if (isTimeout)
-        //    //    throw new TimeoutException($"没有接收到足够的采样点，期望{PointDesired * 2}字节，实际读取{byteReceived}字节。");
-        //    //for (int i = 0; i < PointDesired; i++)
-        //    //{
-        //    //    string str1 = arrData[i * 2].ToString("X");
-        //    //    str1 = Converters.HexToDec(str1);
-        //    //    double temp1 = double.Parse(str1);
-        //    //    string str2 = arrData[i * 2 + 1].ToString("X");
-        //    //    str2 = Converters.HexToDec(str2);
-        //    //    double temp2 = double.Parse(str2);
-        //    //    double y = ((((temp2 - 128) * 128) + temp1) - 10000) / 100;
-        //    //    dbResult[i] = y;
-        //    //}
-        //    #endregion
-        //    int len = 2 * PointDesired;
-        //    byte[] arrData = new byte[len];
-        //    double[] dbResult = new double[PointDesired];
-        //    byte[] buf = new byte[len];
-        //    int iCount = 0;
-        //    List<byte> bufList = new List<byte>();
-            
-        //    try
-        //    {
-        //        _mux.WaitOne();
-        //        if (CheckPortValid() == false)
-        //            throw new Exception("UC872端口不存在或者已被打开！");
-        //        port.DiscardInBuffer();
-        //        port.DiscardOutBuffer();
-        //        string strout = @"Sense : F : R?";
-        //        port.Write(strout);
-        //        DateTime startTime = DateTime.Now;
-        //        Thread.Sleep(300);
-
-        //        #region 
-        //        //while (port.BytesToRead <= 0 && (DateTime.Now - startTime).TotalSeconds < 600)
-        //        //{
-        //        //    Thread.Sleep(2);
-        //        //}
-
-        //        //while ( (DateTime.Now - startTime).TotalSeconds < 2)
-        //        //{
-        //        //    if (port.BytesToRead > 0)
-        //        //    {
-        //        //        startTime = DateTime.Now;
-        //        //        buf = new byte[port.BytesToRead];
-        //        //        iCount += port.Read(buf, 0, buf.Length);
-        //        //        bufList.AddRange(buf);
-        //        //    }
-        //        //    Thread.Sleep(2);
-        //        //}
-        //        //if (bufList.Count != len)
-        //        //{
-        //        //    throw new Exception("功率计返回数据长度不正确！");
-        //        //}
-        //        #endregion
-        //        while (port.BytesToRead <= 0 && (DateTime.Now - startTime).TotalSeconds < 10)
-        //        {
-        //            Thread.Sleep(2);
-        //        }
-
-        //        if (port.BytesToRead > 0)
-        //        {
-        //            while (iCount < len && (DateTime.Now - startTime).TotalSeconds < 10)
-        //            {
-        //                if (port.BytesToRead > 0)
-        //                {
-        //                    startTime = DateTime.Now;
-        //                    buf = new byte[port.BytesToRead];
-        //                    iCount += port.Read(buf, 0, buf.Length);
-        //                    bufList.AddRange(buf);
-
-        //                    if (iCount >= len)
-        //                    {
-        //                        arrData = bufList.ToArray();
-        //                    }
-        //                }
-        //                Thread.Sleep(2);
-        //            }
-        //        }
-        //        else
-        //        {
-        //            //arrData = bufList.ToArray();
-        //            for (int i = 0; i < PointDesired; i++)
-        //            {
-        //                string str1 = arrData[i * 2].ToString("X");
-        //                str1 = Converters.HexToDec(str1);
-        //                double temp1 = double.Parse(str1);
-        //                string str2 = arrData[i * 2 + 1].ToString("X");
-        //                str2 = Converters.HexToDec(str2);
-        //                double temp2 = double.Parse(str2);
-        //                double y = ((((temp2 - 128) * 128) + temp1) - 10000) / 100;
-        //                dbResult[i] = y;
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new Exception($"读取功率计的功率出错！{ex.Message}");
-        //    }
-        //    finally
-        //    {
-        //        _mux.ReleaseMutex();
-                
-        //    }
-        //    return dbResult;
-        //}
-
-        
+       
         public bool Write(string command)
         {
             if (!IsConnected)
@@ -625,6 +477,95 @@ namespace AWGTestServer.Instruments
             if (data.Length > 0)
                 System.Diagnostics.Debug.WriteLine(BitConverter.ToString(Encoding.GetEncoding("iso-8859-1").GetBytes(data.ToString()), 0));
             return false;
+        }
+
+        public void SetParameters()
+        {
+            SetTiggerInput(UC872port.EnumTriggrerMode.Smeasure);
+            SetPulseType(UC872port.EnumPulseType.HIGH);
+            SetPowerUnit(UC872port.EnumPowerUnit.dB);
+
+            var aveTime = 0.1D; //功率计平均时间，根据需求修改
+                                
+            SetScanModeState("1");//进入扫描模式
+            SetAveTime(aveTime);
+            SetScanModeState("0");//退出扫描模式
+        }
+
+        public bool IsLogging { set; get; } = false;
+        public void StartSweep()
+        {
+            //功率计启动扫描
+            data.Clear();
+            try
+            {
+               SetScanModeState("1", data);
+                var text = "";
+                logging.Clear();
+                new TaskFactory().StartNew(() =>
+                {
+                    IsLogging = true;
+                    while (IsLogging)
+                    {
+                        Read(out text);
+                        if (!string.IsNullOrEmpty(text))
+                            logging.Append(text);
+
+                        Thread.Sleep(100);
+                    }
+                });
+                data.Clear();
+                while (!IsLogging)
+                {
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        private const int byteLenght = 5;
+
+        public void GetPowermeterData(out double[] powers, int desiredPoint)
+        {
+            IsLogging = false;
+            var text = "";
+            if (logging.Length / byteLenght < desiredPoint)
+            {
+                while (true)
+                {
+                    Read(out text);
+                    if (!string.IsNullOrEmpty(text))
+                        logging.Append(text);
+                    else
+                        break;
+                    Thread.Sleep(100);
+                }
+
+            }
+            data.Clear();
+            SetScanModeState("0", data);
+
+            powers = new double[desiredPoint];
+            var cache = logging.ToString();
+            var bytes = Encoding.GetEncoding("iso-8859-1").GetBytes(cache);
+            var receivelen = bytes.Length / byteLenght;
+
+            if (receivelen < desiredPoint)
+            {
+                throw new Exception("功率计UC872接受到的数据比预期的少");
+            }
+            for (int i = 0; i < powers.Length; i++)
+            {
+                try
+                {
+                    powers[i] = Math.Round(BitConverter.ToSingle(bytes, i * byteLenght), 3);
+                }
+                catch (Exception)
+                {
+                }
+            }
+
         }
         #endregion
     }
