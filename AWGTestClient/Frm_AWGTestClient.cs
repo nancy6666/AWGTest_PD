@@ -55,7 +55,7 @@ namespace AWGTestClient
         static double[] _gpdblSweepRate = new double[13] { 0.5, 1.0, 2.0, 5.0, 10.0, 20.0, 40.0, 50.0, 80.0, 100.0, 150.0, 160.0, 200.0 };
         static double[] _gpdblWindowIL = new double[7] { 1270.0, 1310.0, 1490.0, 1550.0, 1577.0, 1625.0, 1650.0 };
         double m_dblStep;
-        int m_dwStepIndex = 0;
+     
         double m_dwStartWavelength;
         double m_dwStopWavelength;
         double ITU_start;
@@ -66,7 +66,7 @@ namespace AWGTestClient
         int m_dwOutputPortCounts;
         int m_dwChannelCounts;
         double m_dblPower;
-       // double m_dwStep;
+       
         int m_dwOutput;
         bool m_bLLog;
         
@@ -219,11 +219,7 @@ namespace AWGTestClient
             this.parametersList.Columns[15].Width = iWidth2;
             this.parametersList.Columns[16].Width = iWidth2;
             this.parametersList.Columns[17].Width = iWidth2;
-            this.parametersList.Columns[18].Width = iWidth2;
-            this.parametersList.Columns[19].Width = iWidth2;
-            this.parametersList.Columns[20].Width = iWidth2;
-            this.parametersList.Columns[21].Width = iWidth2;
-            this.parametersList.Columns[22].Width = iWidth2;
+           
         }
         private void ReceiveMsg()
         {
@@ -688,7 +684,8 @@ namespace AWGTestClient
                             goto Finished;
                         }
                         File.Copy(strFileRawData, $"{strFilePath}\\Cali_RawData.csv");
-
+                       
+                        //获取ILMin和ILMax的数组
                         awgTestClient.GetILMinMax(ref m_stPLCData);
 
                         bFunctionOK = awgTestClient.SaveILMinMaxRawData(m_stPLCData, deviceInfo, iStation, testTime, m_dwTestIndex, strFilePath);
@@ -1134,64 +1131,13 @@ namespace AWGTestClient
             m_stCriteria.m_dblItuWL = new double[iLen];
         }
 
-        private void GetTestResultOld(ref string[] paraName, ref int[] iPass, int iChan)
-        {
-            paraName = new string[] {(iChan+1).ToString (), m_stCriteria.m_dblItuWL[iChan].ToString("###0.000"), m_stPLCTestResultData.m_dblCW[iChan].ToString("###0.000"), m_stPLCTestResultData.m_dblPDW[iChan].ToString("###0.000"), m_stPLCTestResultData.m_dblShift[iChan].ToString("###0.000"),
-                    m_stPLCTestResultData.m_dblILMin[iChan].ToString("###0.00"),m_stPLCTestResultData.m_dblILMax[iChan].ToString("###0.00"),m_stPLCTestResultData.m_dblILITU[iChan].ToString("###0.00"),m_stPLCTestResultData.m_dblRipple[iChan].ToString("###0.00"),m_stPLCTestResultData.m_dblPDLITU[iChan].ToString("###0.00"),
-                    m_stPLCTestResultData.m_dblPDLCRT[iChan].ToString("###0.00"),m_stPLCTestResultData.m_dblPDLMax[iChan].ToString("###0.00"),m_stPLCTestResultData.m_dblBW05dB[iChan].ToString("###0.000"),m_stPLCTestResultData.m_dblBW1dB[iChan].ToString("###0.000"),m_stPLCTestResultData.m_dblBW3dB[iChan].ToString("###0.000"),
-                    m_stPLCTestResultData.m_dblBW20dB[iChan].ToString("###0.000"),m_stPLCTestResultData.m_dblBW25dB[iChan].ToString("###0.000"),m_stPLCTestResultData.m_dblBW30dB[iChan].ToString("###0.000"),m_stPLCTestResultData.m_dblAXLeft[iChan].ToString("###0.00"),m_stPLCTestResultData.m_dblAXRight[iChan].ToString("###0.00"),
-                    m_stPLCTestResultData.m_dblNX[iChan].ToString("###0.00"), m_stPLCTestResultData.m_dblTX[iChan].ToString("###0.00"), m_stPLCTestResultData.m_dblTXAX[iChan].ToString("###0.00")};
-            if ((m_stCriteria.m_bCW == true) && m_stPLCTestResultData.m_dblCW[iChan] > m_stCriteria.m_dblCWCriterion)
-                iPass[2] = 0;
-            if ((m_stCriteria.m_bPDW == true) && m_stPLCTestResultData.m_dblPDW[iChan] > m_stCriteria.m_dblPDWCriterion)
-                iPass[3] = 0;
-            if ((m_stCriteria.m_bShift == true) && m_stPLCTestResultData.m_dblShift[iChan] > m_stCriteria.m_dblShiftCriterion)
-                iPass[4] = 0;
-            if ((m_stCriteria.m_bILMin == true) && m_stPLCTestResultData.m_dblILMin[iChan] > m_stCriteria.m_dblILMinCriterion)
-                iPass[5] = 0;
-            if ((m_stCriteria.m_bILMax == true) && m_stPLCTestResultData.m_dblILMax[iChan] > m_stCriteria.m_dblILMaxCriterion)
-                iPass[6] = 0;
-            if ((m_stCriteria.m_bILITU == true) && m_stPLCTestResultData.m_dblILITU[iChan] > m_stCriteria.m_dblILITUCriterion)
-                iPass[7] = 0;
-            if ((m_stCriteria.m_bRipple == true) && m_stPLCTestResultData.m_dblRipple[iChan] > m_stCriteria.m_dblRippleCriterion)
-                iPass[8] = 0;
-            if ((m_stCriteria.m_bPDLITU == true) && m_stPLCTestResultData.m_dblPDLITU[iChan] > m_stCriteria.m_dblPDLITUCriterion)
-                iPass[9] = 0;
-            if ((m_stCriteria.m_bPDLCRT == true) && m_stPLCTestResultData.m_dblPDLCRT[iChan] > m_stCriteria.m_dblPDLCRTCriterion)
-                iPass[10] = 0;
-            if (m_stCriteria.m_bPDLMax == true && m_stPLCTestResultData.m_dblPDLMax[iChan] > m_stCriteria.m_dblPDLMaxCriterion)
-                iPass[11] = 0;
-            if (m_stCriteria.m_bBW05dB == true && m_stPLCTestResultData.m_dblBW05dB[iChan] < m_stCriteria.m_dblBW05dBCriterion)
-                iPass[12] = 0;
-            if (m_stCriteria.m_bBW1dB == true && m_stPLCTestResultData.m_dblBW1dB[iChan] < m_stCriteria.m_dblBW1dBCriterion)
-                iPass[13] = 0;
-            if (m_stCriteria.m_bBW3dB == true && m_stPLCTestResultData.m_dblBW3dB[iChan] < m_stCriteria.m_dblBW3dBCriterion)
-                iPass[14] = 0;
-            if (m_stCriteria.m_bBW20dB == true && m_stPLCTestResultData.m_dblBW20dB[iChan] < m_stCriteria.m_dblBW20dBCriterion)
-                iPass[15] = 0;
-            if (m_stCriteria.m_bBW25dB == true && m_stPLCTestResultData.m_dblBW25dB[iChan] < m_stCriteria.m_dblBW25dBCriterion)
-                iPass[16] = 0;
-            if (m_stCriteria.m_bBW30dB == true && m_stPLCTestResultData.m_dblBW30dB[iChan] < m_stCriteria.m_dblBW30dBCriterion)
-                iPass[17] = 0;
-            if ((m_stCriteria.m_bAXLeft == true) && m_stPLCTestResultData.m_dblAXLeft[iChan] < m_stCriteria.m_dblAXLeftCriterion && iChan!=0)
-                iPass[18] = 0;
-            if (m_stCriteria.m_bAXRight == true && m_stPLCTestResultData.m_dblAXRight[iChan] < m_stCriteria.m_dblAXRightCriterion && iChan != MaxChannel-1)
-                iPass[19] = 0;
-            if (m_stCriteria.m_bNX == true && m_stPLCTestResultData.m_dblNX[iChan] < m_stCriteria.m_dblNXCriterion)
-                iPass[20] = 0;
-            if (m_stCriteria.m_bTX == true && m_stPLCTestResultData.m_dblTX[iChan] < m_stCriteria.m_dblTXCriterion)
-                iPass[21] = 0;
-            if (m_stCriteria.m_bTXAX == true && m_stPLCTestResultData.m_dblTXAX[iChan] < m_stCriteria.m_dblTXAXCriterion)
-                iPass[22] = 0;
-        }
-
+        
         private void GetTestResult(ref string[] paraName, ref int[] iPass, CTestSpecCommon specCommon ,int lastClassID,int iChan)
         {
             paraName = new string[] {(iChan+1).ToString (), m_stCriteria.m_dblItuWL[iChan].ToString("###0.000"), m_stPLCTestResultData.m_dblCW[iChan].ToString("###0.000"), m_stPLCTestResultData.m_dblPDW[iChan].ToString("###0.000"), m_stPLCTestResultData.m_dblShift[iChan].ToString("###0.000"),
                     m_stPLCTestResultData.m_dblILMin[iChan].ToString("###0.00"),m_stPLCTestResultData.m_dblILMax[iChan].ToString("###0.00"),m_stPLCTestResultData.m_dblILITU[iChan].ToString("###0.00"),m_stPLCTestResultData.m_dblRipple[iChan].ToString("###0.00"),m_stPLCTestResultData.m_dblPDLITU[iChan].ToString("###0.00"),
                     m_stPLCTestResultData.m_dblPDLCRT[iChan].ToString("###0.00"),m_stPLCTestResultData.m_dblPDLMax[iChan].ToString("###0.00"),m_stPLCTestResultData.m_dblBW05dB[iChan].ToString("###0.000"),m_stPLCTestResultData.m_dblBW1dB[iChan].ToString("###0.000"),m_stPLCTestResultData.m_dblBW3dB[iChan].ToString("###0.000"),
-                    m_stPLCTestResultData.m_dblBW20dB[iChan].ToString("###0.000"),m_stPLCTestResultData.m_dblBW25dB[iChan].ToString("###0.000"),m_stPLCTestResultData.m_dblBW30dB[iChan].ToString("###0.000"),m_stPLCTestResultData.m_dblAXLeft[iChan].ToString("###0.00"),m_stPLCTestResultData.m_dblAXRight[iChan].ToString("###0.00"),
-                    m_stPLCTestResultData.m_dblNX[iChan].ToString("###0.00"), m_stPLCTestResultData.m_dblTX[iChan].ToString("###0.00"), m_stPLCTestResultData.m_dblTXAX[iChan].ToString("###0.00")};
+                    m_stPLCTestResultData.m_dblBW20dB[iChan].ToString("###0.000"),m_stPLCTestResultData.m_dblBW25dB[iChan].ToString("###0.000"),m_stPLCTestResultData.m_dblBW30dB[iChan].ToString("###0.000")};
 
             crosstalkSpec = specCommon.GetCrosstalkSpecBySpecClassAndChannel(lastClassID, iChan+1);
             wavelengthSpec = specCommon.GetWavelengthSpecBySpecClassAndChannel(lastClassID, iChan+1);
@@ -1234,16 +1180,16 @@ namespace AWGTestClient
                 iPass[16] = 0;
             //if (m_stPLCTestResultData.m_dblBW30dB[iChan] < passbandSpec.At_30db_min || m_stPLCTestResultData.m_dblBW20dB[iChan] > passbandSpec.At_20db_max)
             //    iPass[17] = 0;
-            if (m_stPLCTestResultData.m_dblAXLeft[iChan] < crosstalkSpec.Ax_n_min || m_stPLCTestResultData.m_dblAXLeft[iChan] > crosstalkSpec.Ax_n_max)
-                iPass[18] = 0;
-            if (m_stPLCTestResultData.m_dblAXRight[iChan] < crosstalkSpec.Ax_p_min || m_stPLCTestResultData.m_dblAXRight[iChan] > crosstalkSpec.Ax_p_max)
-                iPass[19] = 0;
-            if (m_stPLCTestResultData.m_dblNX[iChan] < crosstalkSpec.Nx_min || m_stPLCTestResultData.m_dblNX[iChan] > crosstalkSpec.Nx_max)
-                iPass[20] = 0;
-            if (m_stPLCTestResultData.m_dblTX[iChan] < crosstalkSpec.Tx_min || m_stPLCTestResultData.m_dblTX[iChan] > crosstalkSpec.Tx_max)
-                iPass[21] = 0;
-            if (m_stPLCTestResultData.m_dblTXAX[iChan] < crosstalkSpec.Tax_min || m_stPLCTestResultData.m_dblTXAX[iChan] > crosstalkSpec.Tax_max)
-                iPass[22] = 0;
+            //if (m_stPLCTestResultData.m_dblAXLeft[iChan] < crosstalkSpec.Ax_n_min || m_stPLCTestResultData.m_dblAXLeft[iChan] > crosstalkSpec.Ax_n_max)
+            //    iPass[18] = 0;
+            //if (m_stPLCTestResultData.m_dblAXRight[iChan] < crosstalkSpec.Ax_p_min || m_stPLCTestResultData.m_dblAXRight[iChan] > crosstalkSpec.Ax_p_max)
+            //    iPass[19] = 0;
+            //if (m_stPLCTestResultData.m_dblNX[iChan] < crosstalkSpec.Nx_min || m_stPLCTestResultData.m_dblNX[iChan] > crosstalkSpec.Nx_max)
+            //    iPass[20] = 0;
+            //if (m_stPLCTestResultData.m_dblTX[iChan] < crosstalkSpec.Tx_min || m_stPLCTestResultData.m_dblTX[iChan] > crosstalkSpec.Tx_max)
+            //    iPass[21] = 0;
+            //if (m_stPLCTestResultData.m_dblTXAX[iChan] < crosstalkSpec.Tax_min || m_stPLCTestResultData.m_dblTXAX[iChan] > crosstalkSpec.Tax_max)
+            //    iPass[22] = 0;
         }
 
         public bool CheckInputInfo()
@@ -1572,7 +1518,8 @@ namespace AWGTestClient
 
             OpenFileDialog dlg = new OpenFileDialog();
             dlg.InitialDirectory = Directory.GetCurrentDirectory() + "\\Data";
-            dlg.FileName = "RawData_Station.csv"; // Default file name
+            dlg.Title = "请选择参与计算的文件";
+
             dlg.DefaultExt = ".csv"; // Default file extension
             dlg.Filter = "All File (.*)*.*|*.*"; // Filter files by extension 
 
@@ -1677,12 +1624,12 @@ namespace AWGTestClient
                 }
                 lastClassID = cond.Class_id;
             }           
-            int[] iPass = new int[23];
-            string[] ParaName = new string[23];
+            int[] iPass = new int[18];
+            string[] ParaName = new string[18];
 
             for (int i = 0; i < MaxChannel; i++)
             {
-                for (int k = 0; k < 23; k++)
+                for (int k = 0; k < 18; k++)
                     iPass[k] = 1;
                 GetTestResult(ref ParaName, ref iPass, specCommon, lastClassID, i);
 
@@ -1691,6 +1638,80 @@ namespace AWGTestClient
 
             ShowMsg("Calculate Finished !!!", true);
         }
+
+        private void btnILArrayCal_Click(object sender, EventArgs e)
+        {
+            bool bFunctionOK;
+            string strMsg;
+            string strFileRawData;
+            double mm = (m_dwStopWavelength - m_dwStartWavelength) / m_dblStep + 1;
+            mm = Math.Ceiling(mm);
+            m_dwSamplePoint = int.Parse(mm.ToString());
+
+            awgTestClient.m_dwSamplePoint = m_dwSamplePoint;
+            m_dwChannelCounts = MaxChannel;
+            m_stPLCData.m_pdwILMaxArray = new double[MaxChannel, m_dwSamplePoint];
+            m_stPLCData.m_pdwILMinArray = new double[MaxChannel, m_dwSamplePoint];
+            m_stPLCData.m_pdwWavelengthArray = new double[m_dwSamplePoint];
+            m_stPLCData.m_dwChannelCount = MaxChannel;
+            m_dwChannelCounts = MaxChannel;
+            m_dwInputPortCounts = 1;
+            m_dwOutputPortCounts = MaxChannel;
+            m_stPLCData.m_dwSampleCount = m_dwSamplePoint;
+            FolderBrowserDialog dlg = new FolderBrowserDialog();
+            dlg.Description = "请选择RawData所在文件夹";
+            
+            // == Process open file dialog box results 
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                if (string.IsNullOrEmpty(dlg.SelectedPath))
+                {
+                   MessageBox.Show(this, "文件夹路径不能为空", "提示");
+                    return;
+                }
+            }
+            else
+                return;
+            string sDirectory = dlg.SelectedPath;
+
+             strFileRawData = $"{sDirectory}\\RawData.csv";
+            bFunctionOK = awgTestClient.ReadRawData(strFileRawData);
+            if (!bFunctionOK)
+            {
+                strMsg = "Read Raw Data Failed !!!";
+                MessageBox.Show(strMsg);
+                ShowMsg(strMsg, false);
+            }
+
+            strFileRawData = $"{sDirectory}\\Cali_RawData.csv";
+            bFunctionOK = awgTestClient.ReadCaliRawData(strFileRawData);
+            if (!bFunctionOK)
+            {
+                strMsg = "Read Calibration Raw Data Failed !!!";
+                MessageBox.Show(strMsg);
+                ShowMsg(strMsg, false);
+            }
+
+            awgTestClient.GetILMinMax(ref m_stPLCData);
+            deviceInfo.m_EditSerialNumber = "B82303-23";
+            
+            deviceInfo.m_strChipID = "0101";
+          
+            iStation = 1;
+            string strSavePath = $"{sDirectory}\\";
+             bFunctionOK = awgTestClient.SaveILMinMaxRawData(m_stPLCData, deviceInfo, iStation, testTime, m_dwTestIndex, strSavePath);
+            if (!bFunctionOK)
+            {
+                strMsg = "Save ILMax ILMin Data Failed !!!";
+                ShowMsg(strMsg, false);
+                bRuning = false;
+                MessageBox.Show(strMsg);
+               
+            }
+        }
+
+        
+
         public bool SaveTestResult(string sDirectory, tagPLCData pstResultData, CTestDataCommon testCommon, testConditionStruct testCondition , DeviceInfo deviceInfo, int iStation, int dwStartChannel, int dwEndChannel, bool bUseTETM, ref string strResult)
         {
             double dblSpecWL;

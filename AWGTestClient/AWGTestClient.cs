@@ -15,9 +15,11 @@ namespace AWGTestClient
     {
         public int m_dwSamplePoint;
         public double m_dwStep;
-        static double[] _gpdblSweepRate = new double[13] { 0.5, 1.0, 2.0, 5.0, 10.0, 20.0, 40.0, 50.0, 80.0, 100.0, 150.0, 160.0, 200.0 };
-        static double[] _gpdblWindowIL = new double[7] { 1270.0, 1310.0, 1490.0, 1550.0, 1577.0, 1625.0, 1650.0 };
-      
+        /// <summary>
+        /// decrease the data to get cross point in ILMax Array to caculate cw, 
+        /// </summary>
+        public const double IL_SUBS = 1.8;
+
         public int CHANNEL_COUNT = 10;
         tagAutoWaveform m_stPLCData;
         tagPLCData m_stPLCTestResultData;      
@@ -210,92 +212,10 @@ namespace AWGTestClient
                         double[] CrossPoint = new double[2];
                         double[] CrossPoint1 = new double[2];
                         double temp = pdwMaxLossArray[0] < pdwMinLossArray[0] ? pdwMaxLossArray[0] : pdwMinLossArray[0];
-                        double subs = temp - MaxILMin;
-                        //第一通道的第一个测试值与MaxILMin的差值小于3时，左边的交叉点为起点，右边的交叉点为MaxILMin往下（temp - MaxILMin）dB的交叉点
-                        if (iChannel == dwStartChannel & subs < 3)
-                        {
-                            #region Cancel Algorithm for Aglient test scheme
-                            //int indexRigtLess = Alg_PointSearch.FindLastValue(maxLossArrayCW, Alg_PointSearch.ComparisonOperator.LessThanOrEqualTo, MaxILMin + subs, MaxILIndex + 1, maxLossArrayCW.Length - 1);
-                            //int indexRigtGreater = Alg_PointSearch.FindFirstValue(maxLossArrayCW, Alg_PointSearch.ComparisonOperator.GreaterThanOrEqualTo, MaxILMin + subs, MaxILIndex + 1, maxLossArrayCW.Length - 1);
-                            //int indexRigtLessTM = Alg_PointSearch.FindLastValue(minLossArrayCW, Alg_PointSearch.ComparisonOperator.LessThanOrEqualTo, MaxILMin + subs, MaxILIndex + 1, maxLossArrayCW.Length - 1);
-                            //int indexRigtGreaterTM = Alg_PointSearch.FindFirstValue(minLossArrayCW, Alg_PointSearch.ComparisonOperator.GreaterThanOrEqualTo, MaxILMin + subs, MaxILIndex + 1, maxLossArrayCW.Length - 1);
 
-                            //int j = 1;
-
-                            //while (indexRigtGreater == -1 || indexRigtLess == -1|| indexRigtGreaterTM == -1 || indexRigtLessTM == -1)
-                            //{
-                            //    //若遍历到整个测试数组的最后一个数还是没有交叉点，则右边的交叉点为当前遍历数组的最后一个索引endIndex - startIndex
-                            //    if ( endIndex==(dwSamplePoint-1))
-                            //    {
-                            //        if (indexRigtGreater == -1)
-                            //            indexRigtGreater = endIndex - startIndex;
-                            //        if (indexRigtLess == -1)
-                            //            indexRigtLess = endIndex - startIndex;
-                            //        if (indexRigtGreaterTM == -1)
-                            //            indexRigtGreaterTM = endIndex - startIndex;
-                            //        if (indexRigtLessTM == -1)
-                            //            indexRigtLessTM = endIndex - startIndex;
-                            //        break;
-                            //    }
-                            //    endIndex +=  500 * j;
-
-                            //    if (endIndex >= dwSamplePoint)
-                            //    {
-                            //        endIndex = dwSamplePoint - 1;
-                            //    }
-                            //    maxLossArrayCW = new double[endIndex - startIndex + 1];
-                            //    minLossArrayCW = new double[endIndex - startIndex + 1];
-                            //    waveArrayCW = new double[endIndex - startIndex + 1];
-                            //    for (int i = 0; i <= endIndex - startIndex; i++)
-                            //    {
-                            //        maxLossArrayCW[i] = pdwMaxLossArray[i + startIndex];
-                            //        minLossArrayCW[i] = pdwMinLossArray[i + startIndex];
-                            //        waveArrayCW[i] = pdwWaveArray[i + startIndex];
-                            //    }
-                            //    MaxILIndex = Alg_PointSearch.FindFirstIndexOfMinValueInArray(maxLossArrayCW);
-                            //    indexRigtLess = Alg_PointSearch.FindLastValue(maxLossArrayCW, Alg_PointSearch.ComparisonOperator.LessThanOrEqualTo, MaxILMin + subs, MaxILIndex + 1, maxLossArrayCW.Length - 1);
-                            //    indexRigtGreater = Alg_PointSearch.FindFirstValue(maxLossArrayCW, Alg_PointSearch.ComparisonOperator.GreaterThanOrEqualTo, MaxILMin + subs, MaxILIndex + 1, maxLossArrayCW.Length - 1);
-                            //    indexRigtLessTM = Alg_PointSearch.FindLastValue(minLossArrayCW, Alg_PointSearch.ComparisonOperator.LessThanOrEqualTo, MaxILMin + subs, MaxILIndex + 1, maxLossArrayCW.Length - 1);
-                            //    indexRigtGreaterTM = Alg_PointSearch.FindFirstValue(minLossArrayCW, Alg_PointSearch.ComparisonOperator.GreaterThanOrEqualTo, MaxILMin + subs, MaxILIndex + 1, maxLossArrayCW.Length - 1);
-
-                            //    j++;
-                            //}
-                            //double WaveRightLess = waveArrayCW[indexRigtLess];
-                            //double WaveRightGreater = waveArrayCW[indexRigtGreater];
-                            //double WaveRightLessTM = waveArrayCW[indexRigtLessTM];
-                            //double WaveRightGreaterTM = waveArrayCW[indexRigtGreaterTM];
-
-                            //double IL3 = maxLossArrayCW[indexRigtLess];
-                            //double IL4 = maxLossArrayCW[indexRigtGreater];
-                            //double IL3TM = maxLossArrayCW[indexRigtLessTM];
-                            //double IL4TM = maxLossArrayCW[indexRigtGreaterTM];
-
-                            //double waveRightILMax = 0;
-                            //double waveRightILMaxTM = 0;
-
-                            //if (IL3 != IL4)
-                            //    waveRightILMax = LinearInterpolateAlgorithm.Calculate(IL3, IL4, WaveRightLess, WaveRightGreater, MaxILMin + subs);
-                            //else
-                            //    waveRightILMax = WaveRightLess;
-                            //if (IL3TM != IL4TM)
-                            //    waveRightILMaxTM = LinearInterpolateAlgorithm.Calculate(IL3TM, IL4TM, WaveRightLess, WaveRightGreater, MaxILMin + subs);
-                            //else
-                            //    waveRightILMaxTM = WaveRightLessTM;
-
-                            //CrossPoint[0] = pdwWaveArray[0];
-                            //CrossPoint[1] = waveRightILMax;
-                            //CrossPoint1[0] = pdwWaveArray[0];
-                            //CrossPoint1[1] = waveRightILMaxTM;
-                            #endregion
-
-                            CrossPoint = GetCrossPointCW(maxLossArrayCW, waveArrayCW, MaxILMin + subs, MaxILIndex);
-                            CrossPoint1 = GetCrossPointCW(minLossArrayCW, waveArrayCW, MaxILMin + subs, MaxILIndex);
-                        }
-                        else
-                        {
-                            //根据前面得到的测试数组，计算交叉点
-                            CrossPoint = GetCrossPointCW(maxLossArrayCW, waveArrayCW, MaxILMin + 3, MaxILIndex);
-                            CrossPoint1 = GetCrossPointCW(minLossArrayCW, waveArrayCW, MaxILMin + 3, MaxILIndex);
+                        //根据前面得到的测试数组，计算交叉点
+                        CrossPoint = GetCrossPointCW(maxLossArrayCW, waveArrayCW, MaxILMin + IL_SUBS, MaxILIndex);
+                        CrossPoint1 = GetCrossPointCW(minLossArrayCW, waveArrayCW, MaxILMin + IL_SUBS, MaxILIndex);
 
                             #region Cancel 若没有交叉点，则扩大测试数组的范围，一次增加400个数据，直到找到为止
                             //int j = 1;
@@ -332,7 +252,7 @@ namespace AWGTestClient
                             //    j++;
                             //}
                             #endregion
-                        }
+                        //}
                         if(CrossPoint.Contains(0) || CrossPoint1.Contains(0))
                         {
                             //frmAWGClient.ShowMsg($"通道{iChannel}在计算CW时没有交叉点！", false);
@@ -456,61 +376,18 @@ namespace AWGTestClient
                         pstResultData.m_dblBW3dB[iChannel] = Math.Round((CrossPoint[1] - CrossPoint[0]), 3);
 
                         CrossPoint = GetCrossPointForPassBand(maxLossArrayCW, waveArrayCW, MaxILMin + 20, MaxILIndex, pstResultData.m_dblCW[iChannel]);
-                        //while (CrossPoint.Contains(0) && waveArrayCW[0] != pdwWaveArray[0] && waveArrayCW.Last() != pdwWaveArray.Last())
-                        //{
-                            
-                        //}
+                       
                         pstResultData.m_dblBW20dB[iChannel] = Math.Round((CrossPoint[1] - CrossPoint[0]), 3);
-                        try
-                        {
+                      
                             CrossPoint = GetCrossPointForPassBand(maxLossArrayCW, waveArrayCW, dwMaxLossMin[iChannel] + 25, MaxILIndex, pstResultData.m_dblCW[iChannel]);
-                            int k25 = 1;
-                            while (CrossPoint.Contains(0) && waveArrayCW[0] != pdwWaveArray[0] && waveArrayCW.Last() != pdwWaveArray.Last())
-                            {
-                                startIndex -= 500 * k25;
-                                endIndex += 500 * k25;
-                                if (startIndex < 0)
-                                {
-                                    startIndex = 0;
-                                }
-                                if (endIndex > dwSamplePoint)
-                                {
-                                    endIndex = dwSamplePoint - 1;
-                                }
-                                maxLossArrayCW = new double[endIndex - startIndex + 1];
-
-                                waveArrayCW = new double[endIndex - startIndex + 1];
-                                for (int i = 0; i <= endIndex - startIndex; i++)
-                                {
-                                    maxLossArrayCW[i] = pdwMaxLossArray[i + startIndex];
-
-                                    waveArrayCW[i] = pdwWaveArray[i + startIndex];
-                                }
-                                MaxILIndex = Alg_PointSearch.FindFirstIndexOfMinValueInArray(maxLossArrayCW);
-                                CrossPoint = GetCrossPointForPassBand(maxLossArrayCW, waveArrayCW, MaxILMin + 25, MaxILIndex, pstResultData.m_dblCW[iChannel]);
-                                k25++;
-                            }
-
+                           
                             pstResultData.m_dblBW25dB[iChannel] = Math.Round((CrossPoint[1] - CrossPoint[0]), 3);
-                        }
-                        catch
-                        {
-                            pstResultData.m_dblBW25dB[iChannel] = -999;
-                        };
-                        try
-                        {
+                       
+                       
                             CrossPoint = GetCrossPointForPassBand(maxLossArrayCW, waveArrayCW, dwMaxLossMin[iChannel] + 30, MaxILIndex, pstResultData.m_dblCW[iChannel]);
-                            //int k30 = 1;
-                            //while (CrossPoint.Contains(0) && waveArrayCW[0] != pdwWaveArray[0] && waveArrayCW.Last() != pdwWaveArray.Last())
-                            //{
-                            //   
-                            //}
+                          
                             pstResultData.m_dblBW30dB[iChannel] = Math.Round((CrossPoint[1] - CrossPoint[0]), 3);
-                        }
-                        catch
-                        {
-                            pstResultData.m_dblBW30dB[iChannel] = -999;
-                        };
+                      
                         #endregion
 
                        #region Cancel  CrossTalk
@@ -1456,7 +1333,7 @@ namespace AWGTestClient
                     m11 = (Math.Pow(10, m_pdwPolPwr1[point] / 10) / Math.Pow(10, m_pdwCaliPolPwr1[point] / 10) + Math.Pow(10, m_pdwPolPwr2[point] / 10) / Math.Pow(10, m_pdwCaliPolPwr2[point] / 10)) / 2;
                     m12 = (Math.Pow(10, m_pdwPolPwr1[point] / 10) / Math.Pow(10, m_pdwCaliPolPwr1[point] / 10) - Math.Pow(10, m_pdwPolPwr2[point] / 10) / Math.Pow(10, m_pdwCaliPolPwr2[point] / 10)) / 2;
                     m13 = Math.Pow(10, m_pdwPolPwr3[point] / 10) / Math.Pow(10, m_pdwCaliPolPwr3[point] / 10) - m11;
-                    m14 = Math.Pow(10, m_pdwPolPwr4[point] / 10) / Math.Pow(10, m_pdwCaliPolPwr4[point]) / 10 - m11 ;
+                    m14 = Math.Pow(10, m_pdwPolPwr4[point] / 10) / Math.Pow(10, m_pdwCaliPolPwr4[point] / 10) - m11;
                     TMax = m11 + Math.Sqrt(m12 * m12 + m13 * m13 + m14 * m14);
                     if ((m12 * m12 - m13 * m13 - m14 * m14) < 0)
                     {

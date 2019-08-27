@@ -91,11 +91,6 @@
             this.columnHeader10 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader11 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader12 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader13 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader14 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader15 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader16 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader17 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.listView1 = new System.Windows.Forms.ListView();
             this.columnHeader18 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.groupBox5 = new System.Windows.Forms.GroupBox();
@@ -104,6 +99,7 @@
             this.TestResult = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.btnTETMCalcu = new System.Windows.Forms.Button();
             this.ILChart = new DevExpress.XtraCharts.ChartControl();
+            this.btnILArrayCal = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -606,14 +602,9 @@
             this.columnHeader9,
             this.columnHeader10,
             this.columnHeader11,
-            this.columnHeader12,
-            this.columnHeader13,
-            this.columnHeader14,
-            this.columnHeader15,
-            this.columnHeader16,
-            this.columnHeader17});
+            this.columnHeader12});
             this.parametersList.GridLines = true;
-            this.parametersList.Location = new System.Drawing.Point(9, 525);
+            this.parametersList.Location = new System.Drawing.Point(10, 525);
             this.parametersList.Margin = new System.Windows.Forms.Padding(2);
             this.parametersList.Name = "parametersList";
             this.parametersList.Size = new System.Drawing.Size(1255, 130);
@@ -624,11 +615,11 @@
             // paramNameColumnHeader
             // 
             this.paramNameColumnHeader.Text = "CH";
-            this.paramNameColumnHeader.Width = 30;
             // 
             // paramValueColumnHeader
             // 
             this.paramValueColumnHeader.Text = "SpecWL";
+            this.paramValueColumnHeader.Width = 78;
             // 
             // paramUnitColumnHeader
             // 
@@ -646,92 +637,67 @@
             // paramStatusColumnHeader
             // 
             this.paramStatusColumnHeader.Text = "IL Min";
-            this.paramStatusColumnHeader.Width = 45;
+            this.paramStatusColumnHeader.Width = 61;
             // 
             // columnHeader1
             // 
             this.columnHeader1.Text = "IL Max";
-            this.columnHeader1.Width = 45;
+            this.columnHeader1.Width = 61;
             // 
             // columnHeader2
             // 
             this.columnHeader2.Text = "IL@ITU";
-            this.columnHeader2.Width = 45;
+            this.columnHeader2.Width = 64;
             // 
             // columnHeader3
             // 
             this.columnHeader3.Text = "Ripple";
-            this.columnHeader3.Width = 45;
+            this.columnHeader3.Width = 66;
             // 
             // columnHeader4
             // 
             this.columnHeader4.Text = "PDL@ITU";
-            this.columnHeader4.Width = 45;
+            this.columnHeader4.Width = 61;
             // 
             // columnHeader5
             // 
             this.columnHeader5.Text = "PDL@CRT";
-            this.columnHeader5.Width = 45;
+            this.columnHeader5.Width = 68;
             // 
             // columnHeader6
             // 
             this.columnHeader6.Text = "PDL Max";
-            this.columnHeader6.Width = 45;
+            this.columnHeader6.Width = 61;
             // 
             // columnHeader7
             // 
             this.columnHeader7.Text = "BW@0.5dB";
-            this.columnHeader7.Width = 45;
+            this.columnHeader7.Width = 68;
             // 
             // columnHeader8
             // 
             this.columnHeader8.Text = "BW@1dB";
-            this.columnHeader8.Width = 45;
+            this.columnHeader8.Width = 70;
             // 
             // columnHeader9
             // 
             this.columnHeader9.Text = "BW@3dB";
-            this.columnHeader9.Width = 45;
+            this.columnHeader9.Width = 70;
             // 
             // columnHeader10
             // 
             this.columnHeader10.Text = "BW@20dB";
-            this.columnHeader10.Width = 45;
+            this.columnHeader10.Width = 69;
             // 
             // columnHeader11
             // 
             this.columnHeader11.Text = "BW@25dB";
-            this.columnHeader11.Width = 45;
+            this.columnHeader11.Width = 67;
             // 
             // columnHeader12
             // 
             this.columnHeader12.Text = "BW@30dB";
-            this.columnHeader12.Width = 45;
-            // 
-            // columnHeader13
-            // 
-            this.columnHeader13.Text = "AX-";
-            this.columnHeader13.Width = 45;
-            // 
-            // columnHeader14
-            // 
-            this.columnHeader14.Text = "AX+";
-            this.columnHeader14.Width = 45;
-            // 
-            // columnHeader15
-            // 
-            this.columnHeader15.Text = "NX";
-            this.columnHeader15.Width = 45;
-            // 
-            // columnHeader16
-            // 
-            this.columnHeader16.Text = "TX";
-            this.columnHeader16.Width = 45;
-            // 
-            // columnHeader17
-            // 
-            this.columnHeader17.Text = "TX-AX";
-            this.columnHeader17.Width = 45;
+            this.columnHeader12.Width = 76;
             // 
             // listView1
             // 
@@ -818,11 +784,23 @@
             this.ILChart.Size = new System.Drawing.Size(935, 302);
             this.ILChart.TabIndex = 51;
             // 
+            // btnILArrayCal
+            // 
+            this.btnILArrayCal.Location = new System.Drawing.Point(1116, 84);
+            this.btnILArrayCal.Name = "btnILArrayCal";
+            this.btnILArrayCal.Size = new System.Drawing.Size(75, 34);
+            this.btnILArrayCal.TabIndex = 52;
+            this.btnILArrayCal.Text = "ILArray Caculate";
+            this.btnILArrayCal.UseVisualStyleBackColor = true;
+            this.btnILArrayCal.Visible = false;
+            this.btnILArrayCal.Click += new System.EventHandler(this.btnILArrayCal_Click);
+            // 
             // Frm_AWGTestClient
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1275, 666);
+            this.Controls.Add(this.btnILArrayCal);
             this.Controls.Add(this.ILChart);
             this.Controls.Add(this.btnTETMCalcu);
             this.Controls.Add(this.groupBox5);
@@ -910,11 +888,6 @@
         private System.Windows.Forms.ColumnHeader columnHeader10;
         private System.Windows.Forms.ColumnHeader columnHeader11;
         private System.Windows.Forms.ColumnHeader columnHeader12;
-        private System.Windows.Forms.ColumnHeader columnHeader13;
-        private System.Windows.Forms.ColumnHeader columnHeader14;
-        private System.Windows.Forms.ColumnHeader columnHeader15;
-        private System.Windows.Forms.ColumnHeader columnHeader16;
-        private System.Windows.Forms.ColumnHeader columnHeader17;
         private System.Windows.Forms.ListView listView1;
         private System.Windows.Forms.ColumnHeader columnHeader18;
         private System.Windows.Forms.ListView listView2;
@@ -931,6 +904,7 @@
         private System.Windows.Forms.Button btnTETMCalcu;
         private System.Windows.Forms.TextBox txtbSweepStep;
         private DevExpress.XtraCharts.ChartControl ILChart;
+        private System.Windows.Forms.Button btnILArrayCal;
     }
 }
 
