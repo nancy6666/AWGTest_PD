@@ -60,14 +60,6 @@ namespace AWGTestServer
 
             iStation = 0;
 
-            if (cfg.PowerMeterType.Contains("UC872"))
-            {
-               inst_Ag_ILPDL_PD.PowerMeter = new UC872port(cfg.UC872Com, Convert.ToInt32(cfg.UC872Rate));
-            }
-            else
-            {
-                inst_Ag_ILPDL_PD.PowerMeter = new MyPM1906A(cfg.PM1906Com, Convert.ToInt32(cfg.PM1906Rate));
-            }
             try
             {
                 inst_Ag_ILPDL_PD.InitI();
@@ -77,6 +69,7 @@ namespace AWGTestServer
                     if (File.Exists(sStationSettingFilePath))
                         inst_Ag_ILPDL_PD.GetTLSetting(sStationSettingFilePath, i);
                 }
+                ShowMsg($"Init Equipment Successfully!", false);
             }
             catch(Exception ex)
             {

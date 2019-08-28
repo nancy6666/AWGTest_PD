@@ -16,7 +16,6 @@ namespace AWGTestServer
     {
         #region Properties
 
-       public IPowermeter PowerMeter;
         private StringBuilder logging = new StringBuilder();
         private StringBuilder data = new StringBuilder();
         ConfigurationManagement cfg;
@@ -27,8 +26,6 @@ namespace AWGTestServer
         public const int PolarizerCount = 4;
         public int[] m_dblSamplePoint_OneCircle = new int[8];
 
-        double[][] m_dblMeasureResult;
-        double[] pdwWavelength;
         public double[] m_dblAWGStartWavelength = new double[8];
         public double[] m_dblAWGStopWavelength = new double[8];
         public double[] m_dblAWGStepWavelength = new double[8];
@@ -62,10 +59,7 @@ namespace AWGTestServer
                 k8164.SetSweepMode(K8164B.SweepMode.CONT);
                 k8164.SetTriggerMode(K8164B.TriggerMode.STF);
                 k8164.SetInputTrigIgn();
-                //设置功率计
-        
-                PowerMeter.SetParameters();
-
+             
                 k8164.SetOutputActive(true);
                 System.Threading.Thread.Sleep(1000);
             }
@@ -147,16 +141,6 @@ namespace AWGTestServer
             try
             {
                 StartMeasurement(bWSIndex);
-                string strFileName = Directory.GetCurrentDirectory() + String.Format("\\Data\\RawData_Station{0}.csv", bWSIndex);
-
-                bSuccess = SaveAutoRawData(strFileName, pdwWavelength, bWSIndex);
-
-                if (!bSuccess)
-                {
-                    ErrorMsg = "保存RawData错误";
-                    MessageBox.Show(ErrorMsg);
-                    return bSuccess;
-                }
             }
             catch (Exception ex)
             {
@@ -166,53 +150,7 @@ namespace AWGTestServer
             return bSuccess;
         }
 
-        private bool SaveAutoRawData(string strFileName, double[] pdwWavelength, int bWSIndex)
-        {
-            StringBuilder strNew = new StringBuilder();
-            string str1 = "";
-            int dwPolIndex, dwIndex;
-
-            if (File.Exists(strFileName))
-                File.Delete(strFileName);
-
-            strNew.Append("WL,");
-            try
-            {
-                for (dwPolIndex = 0; dwPolIndex < 4; dwPolIndex++)
-                {
-                    str1 = string.Format("Power_{0},", dwPolIndex);
-                    strNew.Append(str1);
-                }
-                using (StreamWriter writer = new StreamWriter(strFileName, true))
-                    writer.WriteLine(strNew);
-                strNew.Clear();
-                for (dwIndex = 0; dwIndex < m_dblSamplePoint_OneCircle[bWSIndex]; dwIndex++)
-                {
-                    strNew.Append(Math.Round(pdwWavelength[dwIndex], 3).ToString() + ",");
-                    for (dwPolIndex = 0; dwPolIndex < PolarizerCount; dwPolIndex++)
-                    {
-                        double lTemp1;
-                        lTemp1 = m_dblMeasureResult[dwPolIndex][dwIndex];
-
-                        if (double.IsNaN(lTemp1))
-                        {
-                            lTemp1 = 65000;
-                        }
-                        str1 = Math.Round(lTemp1, 2).ToString() + ",";
-                        strNew.Append(str1);
-                    }
-                    strNew.Append("\r\n");
-                }
-                using (StreamWriter writer = new StreamWriter(strFileName, true))
-                    writer.WriteLine(strNew);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"保存测试数据到CSV文件出错，{ex.Message}");
-            }
-            return true;
-        }
-
+      
         public bool GetGraphWavelength(ref double[] pdwWLData, int bWSIndex)
         {
             int point;
@@ -224,9 +162,7 @@ namespace AWGTestServer
         }
         private void StartMeasurement(int bWSIndex)
         {
-            pdwWavelength = new double[m_dblSamplePoint_OneCircle[bWSIndex]];
-            m_dblMeasureResult = new double[PolarizerCount][];
-            GetGraphWavelength(ref pdwWavelength, bWSIndex);
+      
             //四个偏振态
 
             //启动光源扫描(4次)
@@ -258,11 +194,6 @@ namespace AWGTestServer
                     {
                         System.Threading.Thread.Sleep(100);
                     }
-                    // 扫描完成
-                    if (!GetPowerMeterData(out m_dblMeasureResult[i], m_dblSamplePoint_OneCircle[bWSIndex]))
-                    {
-                        throw new Exception("获取测试结果失败");
-                    }
                 }
             }
             catch (Exception ex)
@@ -279,11 +210,9 @@ namespace AWGTestServer
         /// <returns></returns>
         public bool StartSweep()
         {
-            //功率计启动扫描
             data.Clear();
             try
             {
-                PowerMeter.StartSweep();
                 //光源启动扫描
                 k8164.SetSweepState(K8164B.SweepState.STAR);
                 return true;
@@ -296,33 +225,12 @@ namespace AWGTestServer
         }
 
         private const int channelCount = 1;
-        //private const int byteLenght = 5;
-        /// <summary>
-        /// 获取功率计数据
-        /// </summary>
-        /// <param name="powers"></param>
-        /// <returns></returns>
-        public bool GetPowerMeterData( out double[] powers, int desiredPoint)
-        {
-            try
-            {
-                PowerMeter.GetPowermeterData(out powers, desiredPoint);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"读取功率计的功率值出错！{ex.Message}");
-            }
-            return true;
-        }
+       
         private void StartReference(int bWSIndex)
         {
             try
             {
                 StartMeasurement(bWSIndex);
-
-               string strFileName = Directory.GetCurrentDirectory() + String.Format("\\Data\\Cali_RawData_Station{0}.csv", bWSIndex);
-                frmAWGTest.ShowMsg("保存校准数据到本地...", false);
-                SaveAutoRawData(strFileName, pdwWavelength, bWSIndex);
             }
             catch(Exception ex)
             {
@@ -352,16 +260,8 @@ namespace AWGTestServer
         /// <param name="bWSIndex">机台号</param>
         public void SetDevicesParameters(int bWSIndex)
         {
-            var cw = (m_dblAWGStopWavelength[bWSIndex] + m_dblAWGStartWavelength[bWSIndex]) / 2D;
-
             try
             {
-                //设置功率计波长
-                PowerMeter.SetWavelength(Convert.ToInt32(cw));
-
-                //设置功率计扫描设置
-                PowerMeter.SetParameters();
-
                 //设置光源扫描设置
                 k8164.SetOutputPower(this.m_dblAWGTLSPower[bWSIndex], K8164B.PowerUnit.DBM);
                 k8164.SetSweepRep();

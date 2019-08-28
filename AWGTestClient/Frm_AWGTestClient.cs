@@ -318,9 +318,7 @@ namespace AWGTestClient
             {
                 diaResult = DialogResult.Yes;
             }
-            //m_strCLBandRefDescription = awgTestClient.GetSeting(strTmplFileName, "Reference Name", "Ref Name", "XXX");
-            //textBoxCLBandDesp.Text = m_strCLBandRefDescription;
-
+          
             if (diaResult == DialogResult.Yes)
             {
                 Thread threadStartCalibration = new Thread(new ThreadStart(DoCalibration));
@@ -333,8 +331,15 @@ namespace AWGTestClient
         {
             awgTestClient.SaveTLSSeting("TLS Setting", m_dwStartWavelength , m_dwStopWavelength, m_dblPower,
                 m_dblStep, m_dwOutput, m_bLLog ? 1 : 0, iStation);
-
-            aWGTest.StartSweep();
+            try
+            {
+                aWGTest.StartSweep();
+            }
+            catch(Exception ex)
+            {
+                ShowMsg(ex.Message, false);
+                throw ex;
+            }
 
             #region calibration NO.1 powermeter
 
@@ -406,6 +411,7 @@ namespace AWGTestClient
             }
             catch(Exception ex)
             {
+                ShowMsg(ex.Message, false);
                 throw ex;
             }
             strMsg = "Read and Calibration Data OK!";
@@ -653,25 +659,25 @@ namespace AWGTestClient
                         int iLen = dwEndChannel - dwStartChannel + 1;
                         IniArray(iLen);
 
-                        string strTemp = string.Format("按 光功率监测按钮 将转移到功率监测GUI\n\n按 忽略按钮 将忽略样品 {0} - {1} 通道测试\n\n按 继续按钮 将继续进行测试操作", dwStartChannel, dwEndChannel);
-
-                        strTemp = string.Format("Testing sample Channel {0} - {1}", dwStartChannel, dwEndChannel);
-                        string strMessage = "";
+                      
+                       string strTemp = string.Format("Testing sample Channel {0} - {1}", dwStartChannel, dwEndChannel);
+                       
                         ShowMsg(strTemp, true);
-                        if (m_dwOutputPortCounts <= MaxChannel)
-                            strMessage = string.Format("Pls connect entering port of Channle {0} of the sample under test to output port of Aglient N7786B\n\n Connect output port of Channel {1} - {2} to input port of Agilent N7786B", dwInputPortIndex + 1,
-                               dwStartChannel - m_dwInputPortCounts * dwInputPortIndex, dwEndChannel - m_dwInputPortCounts * dwInputPortIndex);
-                        else
-                            strMessage = string.Format("Pls connect input port of Channel {0} to output port of Agilent N7786B\n\n Connect output port of Channel {1} - {2} to input port of Agilent N7786B", dwInputPortIndex + 1,
-                               dwStartChannel, dwEndChannel);
-                        MessageBox.Show(strMessage, "Test", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                      
                         string strMsg = "Testing，pls wait . . .";
                          testStart = DateTime.Now;
 
                         ShowMsg(strMsg, true);
                         server_ret = 0;
-
-                        aWGTest.StartSweep();
+                        try
+                        {
+                            aWGTest.StartSweep();
+                        }
+                        catch(Exception ex)
+                        {
+                            ShowMsg($"启动功率计扫描状态出错{ex.Message}", false);
+                            throw new Exception($"启动功率计扫描状态出错{ex.Message}");
+                        }
 
                         SendMsg("test " + iStation);
                         int iCount = 0;
@@ -710,8 +716,8 @@ namespace AWGTestClient
                         }
                         DateTime testEnd = DateTime.Now;
                         ts = testEnd.Subtract(testStart);
-                        strMsg = $"CLBand TLS test . OK! Costs {ts.TotalSeconds}s";
-                        ShowMsg(strMsg, true);
+                      
+                        ShowMsg($"CLBand TLS test . OK! Costs {ts.TotalSeconds}s", true);
                        
                         //创建RawData的文件夹 用于存放所有的RawData文件
 
@@ -735,6 +741,7 @@ namespace AWGTestClient
                         }
                         catch(Exception ex)
                         {
+                            ShowMsg($"从功率计读取数据出错{ex.Message}", false);
                             throw ex;
                         }
 
@@ -743,12 +750,14 @@ namespace AWGTestClient
                         File.Copy(strCaliFile, $"{strFilePath}\\Cali_RawData.csv");
 
                         //获取ILMin和ILMax的数组
+                        ShowMsg("Calculate ILMax ILMin Data...", true);
                         try
                         {
                             aWGTest.GetILMinMax(ref m_stPLCData);
                         }
                         catch(Exception ex)
                         {
+                            ShowMsg(ex.Message, false);
                             throw ex;
                         }
 
@@ -777,7 +786,6 @@ namespace AWGTestClient
                         ts = readRawDataEnd.Subtract(testEnd);
                         ShowMsg($"Reading raw data costs {ts.TotalSeconds}s",true);
 
-                        
 
                         ShowMsg("Draw Picture...", true);
                         DrawPicture(m_stPLCData.m_pdwILMaxArray, m_stPLCData.m_pdwWavelengthArray, "ILMax Plot", "Wavelength(nm)", "LossMax(dB)", m_bRadioDrawType);
