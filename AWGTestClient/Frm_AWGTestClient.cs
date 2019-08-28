@@ -37,12 +37,12 @@ using DevExpress.XtraCharts;
 namespace AWGTestClient
 {
 
-
     public partial class Frm_AWGTestClient : Office2007Form
     {
         [DllImport("User32.dll", CharSet = CharSet.Auto)]
         public static extern int GetWindowThreadProcessId(IntPtr hwnd, out int ID);
         CConfigurationManagement cfg = new CConfigurationManagement();
+        IAWGTest aWGTest;
 
         public Frm_AWGTestClient()
         {
@@ -64,7 +64,7 @@ namespace AWGTestClient
         CDatabase db;
         int m_dwInputPortCounts;
         int m_dwOutputPortCounts;
-        int m_dwChannelCounts;
+       
         double m_dblPower;
        
         int m_dwOutput;
@@ -161,7 +161,10 @@ namespace AWGTestClient
             comboBoxOOption.Items.Add("Bonding");
             comboBoxOOption.Items.Add("Final Assembly");
 
-          
+            cbxProductType.Items.Add("Mux");
+            cbxProductType.Items.Add("Demux");
+
+            cbxProductType.SelectedIndex = -1;
             comboBoxCLOption.SelectedIndex = 0;
             comboBoxOOption.SelectedIndex = 0;
 
@@ -328,17 +331,98 @@ namespace AWGTestClient
         }
         private void DoCalibration()
         {
-            bool bFunctionOK = false;
-
             awgTestClient.SaveTLSSeting("TLS Setting", m_dwStartWavelength , m_dwStopWavelength, m_dblPower,
                 m_dblStep, m_dwOutput, m_bLLog ? 1 : 0, iStation);
 
-            MessageBox.Show("请确认光纤插入功率计前端的法兰，注意此时不接产品!!!");
-            string strMsg = "calibrating，pls wait . . .";
+            aWGTest.StartSweep();
+
+            #region calibration NO.1 powermeter
+
+            MessageBox.Show("请将光纤接入第1个功率计，注意此时不接产品!!!");
+            string strMsg = "calibrating Powermeter No.1，pls wait . . .";
             ShowMsg(strMsg, true);
+            if (!SendCalibrationMsg())
+            {
+                bRuning = false;
+                return;
+            }
+            strMsg = "Powermeter NO.1 calibration OK!";
+            ShowMsg(strMsg, true);
+            #endregion
+
+            #region calibration NO.2 powermeter
+
+            MessageBox.Show("请将光纤接入第2个功率计，注意此时不接产品!!!");
+             strMsg = "calibrating Powermeter No.2，pls wait . . .";
+            ShowMsg(strMsg, true);
+            if (!SendCalibrationMsg())
+            {
+                bRuning = false;
+                return;
+            }
+            strMsg = "Powermeter NO.2 calibration OK!";
+            ShowMsg(strMsg, true);
+            #endregion
+
+            #region calibration NO.3 powermeter
+
+            MessageBox.Show("请将光纤接入第3个功率计，注意此时不接产品!!!");
+            strMsg = "calibrating Powermeter No.3，pls wait . . .";
+            ShowMsg(strMsg, true);
+            if (!SendCalibrationMsg())
+            {
+                bRuning = false;
+                return;
+            }
+            strMsg = "Powermeter NO.3 calibration OK!";
+            ShowMsg(strMsg, true);
+            #endregion
+
+            #region calibration NO.4 powermeter
+
+            MessageBox.Show("请将光纤接入第4个功率计，注意此时不接产品!!!");
+            strMsg = "calibrating Powermeter No.4，pls wait . . .";
+            ShowMsg(strMsg, true);
+            if (!SendCalibrationMsg())
+            {
+                bRuning = false;
+                return;
+            }
+            strMsg = "Powermeter NO.4 calibration OK!";
+            ShowMsg(strMsg, true);
+            #endregion
+
+            EnableTestButton(true);
+
+            awgTestClient.SaveSeting(strTmplFileName, "Main", "TmplName", strTmplName + " " + strTestTemp);
+            this.Invoke(new ThreedEnableButtonDelegate(EnableCalibrationButton), new object[] { true });
+            this.Invoke(new ThreedEnableButtonDelegate(EnableTestButton), new object[] { true });
+            m_bCLBandRefDone = true;
+
+            string strFileName = Directory.GetCurrentDirectory() + String.Format($"\\Data\\Cali_RawData.csv");
+            try
+            {
+                aWGTest.ReadSaveCaliData(strFileName);
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+            strMsg = "Read and Calibration Data OK!";
+            ShowMsg(strMsg, true);
+
+            m_strOldSN = "";
+            m_dwTestIndex = 0;
+            bRuning = false;
+        }
+
+        private bool SendCalibrationMsg()
+        {
+            string strMsg;
+            bool bFunctionOK = false;
             server_ret = 0;
             string llog = m_bLLog ? "1" : "0";
-            SendMsg("Zero " + iStation + ";" + m_dwStartWavelength  + ";" + m_dwStopWavelength  + ";" + m_dblStep + ";" + m_dblPower + ";" + m_dwOutput + ";" + llog);
+            SendMsg("Zero " + iStation + ";" + m_dwStartWavelength + ";" + m_dwStopWavelength + ";" + m_dblStep + ";" + m_dblPower + ";" + m_dwOutput + ";" + llog);
             int iCount = 0;
 
             while (true)
@@ -346,8 +430,7 @@ namespace AWGTestClient
                 if (m_bStop)
                     break;
                 System.Threading.Thread.Sleep(1000);
-                strMsg = strMsg + (" . ");
-                ShowMsg(strMsg, true);
+               
                 iCount++;
                 if (server_ret == 5)
                 {
@@ -356,7 +439,7 @@ namespace AWGTestClient
                 }
                 if (server_ret == 6)
                 {
-                    strMsg = "CLBand TLS calibration error，pls calibrate again";
+                    strMsg = "Calibration error，pls calibrate again";
                     ShowMsg(strMsg, false);
                     MessageBox.Show(strMsg);
                     break;
@@ -372,26 +455,11 @@ namespace AWGTestClient
             if (!bFunctionOK)
             {
                 bRuning = false;
-                return;
+                return false;
             }
-            EnableTestButton(true);
-            strMsg = "TLS calibration . OK!";
-            ShowMsg(strMsg, true);
-            awgTestClient.SaveSeting(strTmplFileName, "Main", "TmplName", strTmplName + " " + strTestTemp);
-            this.Invoke(new ThreedEnableButtonDelegate(EnableCalibrationButton), new object[] { true });
-            this.Invoke(new ThreedEnableButtonDelegate(EnableTestButton), new object[] { true });
-            m_bCLBandRefDone = true;
-
-            double mm = (m_dwStopWavelength - m_dwStartWavelength) / m_dblStep + 1;
-            mm = Math.Ceiling(mm);
-            m_dwSamplePoint = int.Parse(mm.ToString());
-         
-            awgTestClient.m_dwSamplePoint = m_dwSamplePoint;          
-            m_strOldSN = "";
-            m_dwTestIndex = 0;
-            bRuning = false;
+            return true;
+       
         }
-
         private void buttonStopTest_Click(object sender, EventArgs e)
         {
             m_bStop = true;
@@ -492,10 +560,7 @@ namespace AWGTestClient
                 }
 
                 m_bCLBandRefDone = true;
-                double mm = (m_dwStopWavelength  - m_dwStartWavelength) / m_dblStep + 1;
-                mm = Math.Ceiling(mm);
-                m_dwSamplePoint = int.Parse(mm.ToString());
-                awgTestClient.m_dwSamplePoint = m_dwSamplePoint;
+              
             }
             testTime = DateTime.Now;
             parametersList.Items.Clear();
@@ -515,7 +580,7 @@ namespace AWGTestClient
                 m_stPLCData.m_pdwILMinArray = new double[MaxChannel, m_dwSamplePoint];
                 m_stPLCData.m_pdwWavelengthArray = new double[m_dwSamplePoint];
                 m_stPLCData.m_dwChannelCount = MaxChannel;
-                m_dwChannelCounts = MaxChannel;
+              
                 m_dwInputPortCounts = 1;
                 m_dwOutputPortCounts = MaxChannel;
 
@@ -528,7 +593,7 @@ namespace AWGTestClient
                 m_stPLCTestResultData.m_bLambdaLog = m_bLLog;
 
                 m_stPLCTestResultData.m_dwSamplePoint = m_dwSamplePoint;
-                m_stPLCTestResultData.m_dwChannelCount = m_dwChannelCounts;
+                m_stPLCTestResultData.m_dwChannelCount = MaxChannel;
 
                 awgTestClient.m_dwStep = m_dblStep;
 
@@ -606,7 +671,8 @@ namespace AWGTestClient
                         ShowMsg(strMsg, true);
                         server_ret = 0;
 
-                        string llog = m_bLLog ? "1" : "0";
+                        aWGTest.StartSweep();
+
                         SendMsg("test " + iStation);
                         int iCount = 0;
                         while (true)
@@ -646,9 +712,7 @@ namespace AWGTestClient
                         ts = testEnd.Subtract(testStart);
                         strMsg = $"CLBand TLS test . OK! Costs {ts.TotalSeconds}s";
                         ShowMsg(strMsg, true);
-                        // 测试完成后从Server端读取RawData;
-                        ShowMsg("Read Raw Data...", true);
-
+                       
                         //创建RawData的文件夹 用于存放所有的RawData文件
 
                         string strTime = testTime.ToString("yyyy-MM-dd-hh-mm");
@@ -662,31 +726,31 @@ namespace AWGTestClient
                         {
                             Directory.CreateDirectory(strFilePath);
                         }
-                        string rootRawDataPath = cfg.RawDataPath;
-                        string strFileRawData = $"{rootRawDataPath}\\Data\\RawData_Station{iStation}.csv";
-                        bFunctionOK = awgTestClient.ReadRawData(strFileRawData);
-                        if (!bFunctionOK)
-                        {
-                            strMsg = "Read Raw Data Failed !!!";
-                            MessageBox.Show(strMsg);
-                            ShowMsg(strMsg, false);
-                            goto Finished;
-                        }
-                        File.Copy(strFileRawData, $"{strFilePath}\\RawData.csv");
-
-                        strFileRawData = $"{rootRawDataPath}\\Data\\Cali_RawData_Station{iStation}.csv";
-                         bFunctionOK = awgTestClient.ReadCaliRawData(strFileRawData);
-                        if (!bFunctionOK)
-                        {
-                            strMsg = "Read Calibration Raw Data Failed !!!";
-                            MessageBox.Show(strMsg);
-                            ShowMsg(strMsg, false);
-                            goto Finished;
-                        }
-                        File.Copy(strFileRawData, $"{strFilePath}\\Cali_RawData.csv");
                        
+                        // 测试完成后从功率计读取并保存RawData;
+                        ShowMsg("Read Test Data...", true);
+                        try
+                        {
+                            aWGTest.ReadSaveTestPower($"{strFilePath}\\RawData.csv");
+                        }
+                        catch(Exception ex)
+                        {
+                            throw ex;
+                        }
+
+                       string strCaliFile = Directory.GetCurrentDirectory() + String.Format($"\\Data\\Cali_RawData.csv");
+                       
+                        File.Copy(strCaliFile, $"{strFilePath}\\Cali_RawData.csv");
+
                         //获取ILMin和ILMax的数组
-                        awgTestClient.GetILMinMax(ref m_stPLCData);
+                        try
+                        {
+                            aWGTest.GetILMinMax(ref m_stPLCData);
+                        }
+                        catch(Exception ex)
+                        {
+                            throw ex;
+                        }
 
                         bFunctionOK = awgTestClient.SaveILMinMaxRawData(m_stPLCData, deviceInfo, iStation, testTime, m_dwTestIndex, strFilePath);
                         if (!bFunctionOK)
@@ -709,7 +773,6 @@ namespace AWGTestClient
                             goto Finished;
                         }
                        
-
                         DateTime readRawDataEnd = DateTime.Now;
                         ts = readRawDataEnd.Subtract(testEnd);
                         ShowMsg($"Reading raw data costs {ts.TotalSeconds}s",true);
@@ -1450,22 +1513,24 @@ namespace AWGTestClient
             }
 
         }
-        private void comboBoxProductType_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
+      
         private void buttonGetTestCondition_Click(object sender, EventArgs e)
         {
             strTmplName = textBoxPartNum.Text;
             strTestTemp = textBoxTestTemp.Text;
             SqlCommand cmd;
             db = new CDatabase();
+            if (strTmplName == "" || strTestTemp=="")
+            {
+                MessageBox.Show("请输入PN，测试温度", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
             if(!Regex.IsMatch(strTmplName,cfg.PNNameFormat))
             {
                 MessageBox.Show("The fomart of PN is error!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+           
             if (db.Open(out cmd))
             {
                 try
@@ -1490,6 +1555,11 @@ namespace AWGTestClient
                     awgTestClient.CHANNEL_COUNT = MaxChannel;
                    
                     referenceData = new double[MaxChannel];
+                    double mm = (m_dwStopWavelength - m_dwStartWavelength) / m_dblStep + 1;
+                    mm = Math.Ceiling(mm);
+                    m_dwSamplePoint = int.Parse(mm.ToString());
+
+                    awgTestClient.m_dwSamplePoint = m_dwSamplePoint;
                 }
                 catch (Exception ex)
                 {
@@ -1499,6 +1569,35 @@ namespace AWGTestClient
                 finally
                 {
                     db.Close();
+                }
+            }
+            if (cbxProductType.SelectedIndex == -1)
+            {
+                MessageBox.Show("请选择产品类型！", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            else
+            {
+                try
+                {
+                    if (cbxProductType.Items.ToString().ToUpper().Contains("MUX"))
+                    {
+                        aWGTest = new MuxTest();
+                    }
+                    else if (cbxProductType.Items.ToString().ToUpper().Contains("DEMUX"))
+                    {
+                        aWGTest = new DemuxTest();
+                    }
+                    aWGTest.InitPowermeter((m_dwStartWavelength+m_dwStopWavelength)/2);
+                    aWGTest.StopWavelength = m_dwStopWavelength;
+                    aWGTest.StartWavelength = m_dwStartWavelength;
+                    aWGTest.StepWavelength = m_dblStep;
+                    aWGTest.SamplingPoint = m_dwSamplePoint;
+                    aWGTest.MaxChannel = MaxChannel;
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception($"功率计初始化出错{ex.Message}");
                 }
             }
         }
@@ -1542,33 +1641,30 @@ namespace AWGTestClient
 
             testTime = DateTime.Now;
 
-            MaxChannel = specCommon.MaxChannel;
-
-            //m_dblStep = 12;
-            //double mm = (m_dwStopWavelength * 1000.0 - m_dwStartWavelength * 1000.0) / m_dblStep + 1;
+           
 
             double mm = (m_dwStopWavelength - m_dwStartWavelength) / m_dblStep + 1;
             mm = Math.Ceiling(mm);
             m_dwSamplePoint = int.Parse(mm.ToString());
           
             awgTestClient.m_dwSamplePoint = m_dwSamplePoint;
-            m_dwChannelCounts = MaxChannel;
+           // m_dwChannelCounts = MaxChannel;
             m_stPLCData.m_bILOrPDL = m_bRadioDrawType;
            
             m_stPLCData.m_pdwWavelengthArray = new double[m_dwSamplePoint];
-            m_stPLCData.m_dwChannelCount = m_dwChannelCounts;
+            m_stPLCData.m_dwChannelCount = MaxChannel;
           
             m_stPLCData.m_pdwILMinArray = new double[MaxChannel, m_dwSamplePoint];
             m_stPLCData.m_pdwILMaxArray = new double[MaxChannel, m_dwSamplePoint];
-            m_stPLCData.m_dwSampleCount = m_dwSamplePoint;
+            m_stPLCData.m_dwSampleCount = MaxChannel;
 
             m_stPLCTestResultData.m_dblStartWL = m_dwStartWavelength;
             m_stPLCTestResultData.m_dblStopWL = m_dwStopWavelength;
             m_stPLCTestResultData.m_dblStep = m_dblStep;
             int dwStartChannel = 1;
-            int dwEndChannel = m_dwChannelCounts;
+            int dwEndChannel = MaxChannel;
 
-            int iLen = m_dwChannelCounts;
+            int iLen = MaxChannel;
             IniArray(iLen);
 
             string strMsg = "";
@@ -1649,12 +1745,12 @@ namespace AWGTestClient
             m_dwSamplePoint = int.Parse(mm.ToString());
 
             awgTestClient.m_dwSamplePoint = m_dwSamplePoint;
-            m_dwChannelCounts = MaxChannel;
+           
             m_stPLCData.m_pdwILMaxArray = new double[MaxChannel, m_dwSamplePoint];
             m_stPLCData.m_pdwILMinArray = new double[MaxChannel, m_dwSamplePoint];
             m_stPLCData.m_pdwWavelengthArray = new double[m_dwSamplePoint];
             m_stPLCData.m_dwChannelCount = MaxChannel;
-            m_dwChannelCounts = MaxChannel;
+           
             m_dwInputPortCounts = 1;
             m_dwOutputPortCounts = MaxChannel;
             m_stPLCData.m_dwSampleCount = m_dwSamplePoint;

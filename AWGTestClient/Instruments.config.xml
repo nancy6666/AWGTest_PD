@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+  <appSettings>
+    <add key="UC872Com" value="COM12"/>
+    <add key="UC872Rate" value="115200"/>
+    <add key="PM1906Com1" value="COM1"/>
+    <add key="PM1906Com2" value="COM2"/>
+    <add key="PM1906Com3" value="COM3"/>
+    <add key="PM1906Com4" value="COM4"/>
+    <add key="PM1906Rate" value="115200"/>
+    <add key="PowerMeterType" value="PM1906A"/>
+    <add key="PM1906_Range" value ="Range4"/>
+  </appSettings>
+</configuration>

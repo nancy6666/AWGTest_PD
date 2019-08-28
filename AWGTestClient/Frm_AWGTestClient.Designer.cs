@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DevExpress.XtraCharts.XYDiagram xyDiagram1 = new DevExpress.XtraCharts.XYDiagram();
-            DevExpress.XtraCharts.Series series1 = new DevExpress.XtraCharts.Series();
-            DevExpress.XtraCharts.LineSeriesView lineSeriesView1 = new DevExpress.XtraCharts.LineSeriesView();
+            DevExpress.XtraCharts.XYDiagram xyDiagram2 = new DevExpress.XtraCharts.XYDiagram();
+            DevExpress.XtraCharts.Series series2 = new DevExpress.XtraCharts.Series();
+            DevExpress.XtraCharts.LineSeriesView lineSeriesView2 = new DevExpress.XtraCharts.LineSeriesView();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.listView2 = new System.Windows.Forms.ListView();
             this.columnHeader19 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -100,14 +100,16 @@
             this.btnTETMCalcu = new System.Windows.Forms.Button();
             this.ILChart = new DevExpress.XtraCharts.ChartControl();
             this.btnILArrayCal = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
+            this.cbxProductType = new System.Windows.Forms.ComboBox();
             this.groupBox1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.groupBox5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ILChart)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(xyDiagram1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(series1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(lineSeriesView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(xyDiagram2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(series2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(lineSeriesView2)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -439,6 +441,8 @@
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.cbxProductType);
+            this.groupBox4.Controls.Add(this.label3);
             this.groupBox4.Controls.Add(this.txtbSweepStep);
             this.groupBox4.Controls.Add(this.textBoxTestTemp);
             this.groupBox4.Controls.Add(this.label19);
@@ -463,9 +467,9 @@
             // txtbSweepStep
             // 
             this.txtbSweepStep.Enabled = false;
-            this.txtbSweepStep.Location = new System.Drawing.Point(103, 149);
+            this.txtbSweepStep.Location = new System.Drawing.Point(101, 162);
             this.txtbSweepStep.Name = "txtbSweepStep";
-            this.txtbSweepStep.Size = new System.Drawing.Size(142, 21);
+            this.txtbSweepStep.Size = new System.Drawing.Size(144, 21);
             this.txtbSweepStep.TabIndex = 64;
             // 
             // textBoxTestTemp
@@ -474,7 +478,7 @@
             this.textBoxTestTemp.Location = new System.Drawing.Point(102, 49);
             this.textBoxTestTemp.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxTestTemp.Name = "textBoxTestTemp";
-            this.textBoxTestTemp.Size = new System.Drawing.Size(58, 23);
+            this.textBoxTestTemp.Size = new System.Drawing.Size(143, 23);
             this.textBoxTestTemp.TabIndex = 62;
             // 
             // label19
@@ -492,7 +496,7 @@
             // buttonGetTestCondition
             // 
             this.buttonGetTestCondition.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonGetTestCondition.Location = new System.Drawing.Point(164, 49);
+            this.buttonGetTestCondition.Location = new System.Drawing.Point(171, 74);
             this.buttonGetTestCondition.Margin = new System.Windows.Forms.Padding(2);
             this.buttonGetTestCondition.Name = "buttonGetTestCondition";
             this.buttonGetTestCondition.Size = new System.Drawing.Size(87, 25);
@@ -506,7 +510,7 @@
             this.label16.AutoSize = true;
             this.label16.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.label16.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label16.Location = new System.Drawing.Point(5, 152);
+            this.label16.Location = new System.Drawing.Point(5, 162);
             this.label16.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(53, 12);
@@ -517,7 +521,7 @@
             // 
             this.textBoxPower.Enabled = false;
             this.textBoxPower.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxPower.Location = new System.Drawing.Point(102, 113);
+            this.textBoxPower.Location = new System.Drawing.Point(102, 133);
             this.textBoxPower.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxPower.Name = "textBoxPower";
             this.textBoxPower.Size = new System.Drawing.Size(143, 23);
@@ -528,7 +532,7 @@
             this.label14.AutoSize = true;
             this.label14.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.label14.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label14.Location = new System.Drawing.Point(5, 118);
+            this.label14.Location = new System.Drawing.Point(0, 140);
             this.label14.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(83, 12);
@@ -539,7 +543,7 @@
             // 
             this.textBoxStopWavelength.Enabled = false;
             this.textBoxStopWavelength.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxStopWavelength.Location = new System.Drawing.Point(187, 81);
+            this.textBoxStopWavelength.Location = new System.Drawing.Point(187, 106);
             this.textBoxStopWavelength.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxStopWavelength.Name = "textBoxStopWavelength";
             this.textBoxStopWavelength.Size = new System.Drawing.Size(58, 23);
@@ -549,10 +553,10 @@
             // 
             this.textBoxStartWavelength.Enabled = false;
             this.textBoxStartWavelength.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxStartWavelength.Location = new System.Drawing.Point(102, 83);
+            this.textBoxStartWavelength.Location = new System.Drawing.Point(102, 106);
             this.textBoxStartWavelength.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxStartWavelength.Name = "textBoxStartWavelength";
-            this.textBoxStartWavelength.Size = new System.Drawing.Size(58, 23);
+            this.textBoxStartWavelength.Size = new System.Drawing.Size(65, 23);
             this.textBoxStartWavelength.TabIndex = 48;
             // 
             // label13
@@ -572,7 +576,7 @@
             this.label12.AutoSize = true;
             this.label12.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.label12.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label12.Location = new System.Drawing.Point(5, 88);
+            this.label12.Location = new System.Drawing.Point(-2, 117);
             this.label12.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(101, 12);
@@ -766,21 +770,21 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ILChart.BorderOptions.Visibility = DevExpress.Utils.DefaultBoolean.True;
             this.ILChart.CacheToMemory = true;
-            xyDiagram1.AxisX.Title.Text = "Wavelength (nm)";
-            xyDiagram1.AxisX.Title.Visibility = DevExpress.Utils.DefaultBoolean.True;
-            xyDiagram1.AxisX.VisibleInPanesSerializable = "-1";
-            xyDiagram1.AxisY.Title.Text = "ILMax (dB)";
-            xyDiagram1.AxisY.Title.Visibility = DevExpress.Utils.DefaultBoolean.True;
-            xyDiagram1.AxisY.VisibleInPanesSerializable = "-1";
-            this.ILChart.Diagram = xyDiagram1;
+            xyDiagram2.AxisX.Title.Text = "Wavelength (nm)";
+            xyDiagram2.AxisX.Title.Visibility = DevExpress.Utils.DefaultBoolean.True;
+            xyDiagram2.AxisX.VisibleInPanesSerializable = "-1";
+            xyDiagram2.AxisY.Title.Text = "ILMax (dB)";
+            xyDiagram2.AxisY.Title.Visibility = DevExpress.Utils.DefaultBoolean.True;
+            xyDiagram2.AxisY.VisibleInPanesSerializable = "-1";
+            this.ILChart.Diagram = xyDiagram2;
             this.ILChart.Legend.AlignmentHorizontal = DevExpress.XtraCharts.LegendAlignmentHorizontal.Right;
             this.ILChart.Legend.Name = "Default Legend";
             this.ILChart.Location = new System.Drawing.Point(328, 207);
             this.ILChart.Name = "ILChart";
-            series1.Name = "ILMax";
-            series1.View = lineSeriesView1;
+            series2.Name = "ILMax";
+            series2.View = lineSeriesView2;
             this.ILChart.SeriesSerializable = new DevExpress.XtraCharts.Series[] {
-        series1};
+        series2};
             this.ILChart.Size = new System.Drawing.Size(935, 302);
             this.ILChart.TabIndex = 51;
             // 
@@ -794,6 +798,23 @@
             this.btnILArrayCal.UseVisualStyleBackColor = true;
             this.btnILArrayCal.Visible = false;
             this.btnILArrayCal.Click += new System.EventHandler(this.btnILArrayCal_Click);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(6, 83);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(53, 12);
+            this.label3.TabIndex = 65;
+            this.label3.Text = "产品类型";
+            // 
+            // cbxProductType
+            // 
+            this.cbxProductType.FormattingEnabled = true;
+            this.cbxProductType.Location = new System.Drawing.Point(101, 77);
+            this.cbxProductType.Name = "cbxProductType";
+            this.cbxProductType.Size = new System.Drawing.Size(65, 20);
+            this.cbxProductType.TabIndex = 66;
             // 
             // Frm_AWGTestClient
             // 
@@ -825,9 +846,9 @@
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
             this.groupBox5.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(xyDiagram1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(lineSeriesView1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(series1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(xyDiagram2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(lineSeriesView2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(series2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ILChart)).EndInit();
             this.ResumeLayout(false);
 
@@ -905,6 +926,8 @@
         private System.Windows.Forms.TextBox txtbSweepStep;
         private DevExpress.XtraCharts.ChartControl ILChart;
         private System.Windows.Forms.Button btnILArrayCal;
+        private System.Windows.Forms.ComboBox cbxProductType;
+        private System.Windows.Forms.Label label3;
     }
 }
 

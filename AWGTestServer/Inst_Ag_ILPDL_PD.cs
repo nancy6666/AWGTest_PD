@@ -283,28 +283,6 @@ namespace AWGTestServer
             data.Clear();
             try
             {
-                //uC872.SetScanModeState("1", data);
-
-                //var t = "";
-                //uC872.Read(out t);
-                //var text = "";
-                //logging.Clear();
-                //new TaskFactory().StartNew(() =>
-                //{
-                //    IsLogging = true;
-                //    while (IsLogging)
-                //    {
-                //        uC872.Read(out text);
-                //        if (!string.IsNullOrEmpty(text))
-                //            logging.Append(text);
-
-                //        Thread.Sleep(100);
-                //    }
-                //});
-                //data.Clear();
-                //while (!IsLogging)
-                //{
-                //}
                 PowerMeter.StartSweep();
                 //光源启动扫描
                 k8164.SetSweepState(K8164B.SweepState.STAR);

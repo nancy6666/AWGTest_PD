@@ -8,13 +8,13 @@ using PM1906AHelper;
 using PM1906AHelper.Core;
 using PM1906AHelper.Calibration;
 
-namespace AWGTestServer.Instruments
+namespace AWGTestClient.Instruments
 {
     class MyPM1906A : IPowermeter
     {
         PM1906A pm;
         SerialPort port;
-        ConfigurationManagement cfg = new ConfigurationManagement();
+        ConfigurationInstruments cfg = new ConfigurationInstruments();
         private bool _isConnected;
         public bool IsConnected
         {
@@ -30,29 +30,11 @@ namespace AWGTestServer.Instruments
 
         public MyPM1906A(string PortName, int BaudRate)
         {
-            try
-            {
-                if (pm != null)
-                {
-                    try
-                    {
-                        pm.Close();
-                    }
-                    catch
-                    {
-
-                    }
-                }
                 pm = new PM1906A(PortName, BaudRate);
 
                 pm.Open();
 
                 this.IsConnected = true;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
         }
 
         public void SetWavelength(int wave)
@@ -80,7 +62,7 @@ namespace AWGTestServer.Instruments
             }
         }
 
-        public void SetParameters()
+        public void SetParameters(double cw)
         {
             string strRange = cfg.PM1906_Range.ToUpper();
             var range = new PM1906AHelper.Core.RangeEnum();
@@ -101,13 +83,13 @@ namespace AWGTestServer.Instruments
             }
             pm.SetRange(range);
             pm.SetUnit(PM1906AHelper.Core.UnitEnum.dBm);
+            pm.SetWavelength(Convert.ToInt32(cw));
          
         }
         public void StartSweep()
         {
             pm.Trigger_CleanBuffer();
             pm.Trigger_Start();
-            
         }
     }
 }
