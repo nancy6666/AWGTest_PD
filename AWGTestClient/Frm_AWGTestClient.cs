@@ -354,7 +354,7 @@ namespace AWGTestClient
             strMsg = "Powermeter NO.1 calibration OK!";
             ShowMsg(strMsg, true);
             #endregion
-
+            /* 待功率计的信号线全部串联好，再enable
             #region calibration NO.2 powermeter
 
             MessageBox.Show("请将光纤接入第2个功率计，注意此时不接产品!!!");
@@ -396,7 +396,7 @@ namespace AWGTestClient
             strMsg = "Powermeter NO.4 calibration OK!";
             ShowMsg(strMsg, true);
             #endregion
-
+            */
             EnableTestButton(true);
 
             awgTestClient.SaveSeting(strTmplFileName, "Main", "TmplName", strTmplName + " " + strTestTemp);
@@ -1588,20 +1588,22 @@ namespace AWGTestClient
             {
                 try
                 {
-                    if (cbxProductType.Items.ToString().ToUpper().Contains("MUX"))
+                    if (cbxProductType.SelectedItem.ToString().ToUpper().Contains("MUX"))
                     {
                         aWGTest = new MuxTest();
                     }
-                    else if (cbxProductType.Items.ToString().ToUpper().Contains("DEMUX"))
+                    else if (cbxProductType.SelectedItem.ToString().ToUpper().Contains("DEMUX"))
                     {
                         aWGTest = new DemuxTest();
                     }
-                    aWGTest.InitPowermeter((m_dwStartWavelength+m_dwStopWavelength)/2);
                     aWGTest.StopWavelength = m_dwStopWavelength;
                     aWGTest.StartWavelength = m_dwStartWavelength;
                     aWGTest.StepWavelength = m_dblStep;
                     aWGTest.SamplingPoint = m_dwSamplePoint;
                     aWGTest.MaxChannel = MaxChannel;
+
+                    aWGTest.InitPowermeter((m_dwStartWavelength+m_dwStopWavelength/2));
+                    ShowMsg("Initial Powermeters Successfully!", true);
                 }
                 catch (Exception ex)
                 {

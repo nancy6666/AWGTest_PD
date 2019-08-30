@@ -11,7 +11,7 @@ namespace AWGTestClient
     {
         ConfigurationInstruments cfg = new ConfigurationInstruments();
         public List<IPowermeter> lstPowermeter = new List<IPowermeter>();
-        public List<string> lstPowermeterComs = new List<string>();
+        public List<string> lstPowermeterComs;
        
         public IPowermeter PowerMeter;
       
@@ -21,34 +21,30 @@ namespace AWGTestClient
 
         public double[] wavelengthArray;
 
-        public double StepWavelength { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public double StartWavelength { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public double StopWavelength { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public int SamplingPoint { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public double MaxChannel { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public double StepWavelength { get;set;}
+        public double StartWavelength {get;set;}
+        public double StopWavelength { get;set;}
+        public int SamplingPoint { get;set;}
+        public double MaxChannel { get; set; }
 
         #region Public Methods
 
-        public void CaculateILArray()
-        {
-            throw new NotImplementedException();
-        }
-
         public void InitPowermeter(double cw)
         {
+            lstPowermeterComs = new List<string>();
             lstPowermeterComs.Add(cfg.PM1906Com1);
-            lstPowermeterComs.Add(cfg.PM1906Com2);
-            lstPowermeterComs.Add(cfg.PM1906Com3);
-            lstPowermeterComs.Add(cfg.PM1906Com4);
-           
+            //lstPowermeterComs.Add(cfg.PM1906Com2);
+            //lstPowermeterComs.Add(cfg.PM1906Com3);
+            //lstPowermeterComs.Add(cfg.PM1906Com4);
+
             if (cfg.PowerMeterType.Contains("PM1906A"))
             {
-                for (int i = 0; i < 4; i++)
+                foreach (var com in lstPowermeterComs)
                 {
-                    PowerMeter = new MyPM1906A(lstPowermeterComs[i], cfg.PM1906Rate);
+                    PowerMeter = new MyPM1906A(com, cfg.PM1906Rate);
                     lstPowermeter.Add(PowerMeter);
                     PowerMeter.SetParameters(cw);
-                }             
+                }
             }
             GetGraphWavelength();
         }
@@ -187,6 +183,7 @@ namespace AWGTestClient
         /// </summary>
         private void GetGraphWavelength()
         {
+            wavelengthArray = new double[SamplingPoint];
             int point;
             for (point = 0x00; point < SamplingPoint; point++)
             {

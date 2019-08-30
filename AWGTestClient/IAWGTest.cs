@@ -14,10 +14,11 @@ namespace AWGTestClient
         double MaxChannel { get; set; }
         int SamplingPoint { get; set; }
         void InitPowermeter(double cw);
+      
         void ReadSaveCaliData(string strFileName);
         void StartSweep();
         void ReadSaveTestPower(string strFilePath);
         void GetILMinMax(ref tagAutoWaveform pstAutoWaveform);
-        void CaculateILArray();
+
     }
 }
