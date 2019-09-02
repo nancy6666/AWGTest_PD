@@ -5,31 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AWGTestClient.Instruments;
+using TestSystem.TestLibrary.Utilities;
+
 namespace AWGTestClient
 {
     class CAWGTestBase : IAWGTest
     {
-        ConfigurationInstruments cfg = new ConfigurationInstruments();
-        public List<IPowermeter> lstPowermeter = new List<IPowermeter>();
-        public List<string> lstPowermeterComs;
-       
-        public IPowermeter PowerMeter;
-      
-        public List<double[]> lstCaliResult;
-
-        public List<double[]> lstMeasureResult;
-
-        public double[] wavelengthArray;
-
-        public double StepWavelength { get;set;}
-        public double StartWavelength {get;set;}
-        public double StopWavelength { get;set;}
-        public int SamplingPoint { get;set;}
-        public double MaxChannel { get; set; }
-
-        #region Public Methods
-
-        public void InitPowermeter(double cw)
+        public CAWGTestBase ()
         {
             lstPowermeterComs = new List<string>();
             lstPowermeterComs.Add(cfg.PM1906Com1);
@@ -43,10 +25,44 @@ namespace AWGTestClient
                 {
                     PowerMeter = new MyPM1906A(com, cfg.PM1906Rate);
                     lstPowermeter.Add(PowerMeter);
-                    PowerMeter.SetParameters(cw);
                 }
             }
-            GetGraphWavelength();
+        }
+
+        ConfigurationInstruments cfg = new ConfigurationInstruments();
+        public List<IPowermeter> lstPowermeter = new List<IPowermeter>();
+        public List<string> lstPowermeterComs;
+       
+        public IPowermeter PowerMeter;
+      
+        public List<double[]> lstCaliResult;
+
+        public List<double[]> lstMeasureResult;
+
+        public double[] wavelengthArray;
+        private Frm_AWGTestClient frmAWGClient=new Frm_AWGTestClient() ;
+
+        public double StepWavelength { get;set;}
+
+        public double StartWavelength {get;set;}
+
+        public double StopWavelength { get;set;}
+
+        public int SamplingPoint { get;set;}
+
+        public double MaxChannel { get; set; }
+
+        
+
+        #region Public Methods
+
+        public void InitPowermeter()
+        {
+           
+                foreach (var pm in lstPowermeter)
+                {
+                    PowerMeter.SetParameters((int)(StopWavelength + StartWavelength) / 2);
+                }
         }
         /// <summary>
         /// 读取所有功率计的校准数据并保存
@@ -57,7 +73,7 @@ namespace AWGTestClient
             try
             {
                 lstCaliResult = new List<double[]>();
-                foreach(var pm in lstPowermeter)
+                foreach (var pm in lstPowermeter)
                 {
                     //获取到的是一个通道下4个偏正态的数据，所以需要用SplitArray将powers分成4个数组
                     pm.GetPowermeterData(out double[] powers, this.SamplingPoint*4);
@@ -87,13 +103,92 @@ namespace AWGTestClient
         /// </summary>
         public void StartSweep()
         {
-            foreach(var pm in lstPowermeter)
+            GetGraphWavelength();
+            foreach (var pm in lstPowermeter)
             {
                 pm.StartSweep();
             }
           
         }
 
+        /// <summary>
+        /// 读取校准的RawData
+        /// </summary>
+        /// <param name="strFilePathName"></param>
+        /// <returns></returns>
+        public void ReadCaliRawData(string strFilePathName)
+        {
+         
+            int dataRowNum = 0;
+
+            string[] lineElems;
+            int columnCount = 0;
+            lstCaliResult = new List<double[]>();
+            double[][] caliData;
+
+            try
+            {
+                using (CsvReader reader = new CsvReader())
+                {
+                   
+                    reader.OpenFile(strFilePathName);
+
+                    // read the 1st line
+                    lineElems = reader.GetLine();
+
+                    lineElems = reader.GetLine();
+                    if (lineElems.Length < 1)
+                    {
+                        frmAWGClient.ShowMsg($"There is no cali data in {strFilePathName}", false);
+                        return;
+                    }
+                    //计算数据的列数columnNum，不包含wavelength那一列
+                    for (int col = 1; col < lineElems.Length; col++)
+                    {
+                        if (lineElems[col] != null & lineElems[col] != "")
+                        {
+                            columnCount++;
+                        }
+                    }
+                    caliData = new double[columnCount][];
+                    for (int col = 0; col < columnCount; col++)
+                    {
+                        caliData[col] = new double[SamplingPoint];
+                    }
+
+                    do
+                    {
+                        try
+                        {
+                            for (int col = 0; col < columnCount; col++)
+                            {
+                                //从第二列开始读，第一列为波长
+                                caliData[col][dataRowNum] = double.Parse(lineElems[col + 1]);
+                            }
+                            dataRowNum++;
+                            if (dataRowNum >= this.SamplingPoint)
+                                break;
+                        }
+                        catch (Exception ex)
+                        {
+                            string errMsg = String.Format("Invalid line in  file: '{0}', line {1}",
+                                strFilePathName, dataRowNum);
+                            throw new Exception(errMsg, ex);
+                        }
+                    }
+                    while ((lineElems = reader.GetLine()) != null);
+
+                    lstCaliResult.AddRange(caliData);
+                   
+                }
+            }
+            catch (Exception ex)
+            {
+                string errMsg = String.Format("Invalid line in  file: '{0}', line {1}", strFilePathName, dataRowNum + 1);
+                //throw new Exception(errMsg, er);
+                frmAWGClient.ShowMsg(errMsg + "  " + ex.ToString(), false);
+            }
+        }
         /// <summary>
         /// 根据测试值和校准值计算ILMinArray和ILMaxArray
         /// </summary>
@@ -141,7 +236,7 @@ namespace AWGTestClient
             try
             {
                 //表头加上偏正态索引polIndex和通道索引ch
-                for (int ch = 0; ch < MaxChannel; ch++)
+                for (int ch = 0; ch < lstPowermeter.Count; ch++)
                 {
                     for (int polIndex = 0; polIndex < 4; polIndex++)
                     {

@@ -18,7 +18,7 @@ namespace AWGTestClient
         /// <summary>
         /// decrease the data to get cross point in ILMax Array to caculate cw, 
         /// </summary>
-        public const double IL_SUBS = 1.8;
+        public const double IL_SUBS = 1.5;
 
         public int CHANNEL_COUNT = 10;
         tagAutoWaveform m_stPLCData;
@@ -1356,8 +1356,8 @@ namespace AWGTestClient
                 throw new Exception($"计算ILMin和ILMax出错，{ex.Message}");
             }
         }
-      
-        public bool SaveILMinMaxRawData(tagAutoWaveform pstAutoWaveform,DeviceInfo deviceInfo, int iStation, DateTime testTime, int m_dwTestIndex, string sPath)
+
+        public bool SaveILMinMaxRawData(tagAutoWaveform pstAutoWaveform, DeviceInfo deviceInfo, int iStation, DateTime testTime, int m_dwTestIndex, string sPath)
         {
             string strTime = testTime.ToString("yyyy-MM-dd-hh-mm");
             string strStation = m_dwTestIndex.ToString().PadLeft(3, '0');
@@ -1374,60 +1374,43 @@ namespace AWGTestClient
 
             try
             {
-                FileStream file = new FileStream(strXLSName, FileMode.Append);
-                StreamWriter sw = new StreamWriter(file);
-
-                //sw.Write("JDS SWS PDL Measurements\r\n");
-                //sw.Write(string.Format("Part serial no:\t{0}-{1}\r\n", deviceInfo.m_EditSerialNumber, deviceInfo.m_strChipID));
-                //sw.Write(string.Format("Operator:\t{0}\r\n", deviceInfo.m_EditOperator));
-                ////string strTemp = comboBoxOOption.Text;
-                //sw.Write(string.Format("Test Type:\t{0}\r\n", deviceInfo.m_strTestType));
-                //sw.Write(string.Format("Test Bench:\t{0}\r\n", 1));
-                //sw.Write(string.Format("Date/Time:\t{0}\t{1}\r\n", testTime.ToString("MM/dd/yyyy"), testTime.ToString("HH:mm")));
-                //sw.Write("Scale Factor:\t0.000\r\n");
-                //sw.Write(string.Format("Comment:\t{0}\r\n", deviceInfo.m_strComment));
-                //sw.Write(string.Format("Temperature (C):\t{0}\r\n", deviceInfo.m_strTemperature));
-                //sw.Write(string.Format("Input:\t{0}\r\n", deviceInfo.m_strInput));
-                //sw.Write(string.Format("Outputs:\t{0}\r\n", deviceInfo.m_strOutput));
-                //sw.Write(string.Format("Mask Name:\t{0}\r\n", deviceInfo.m_strMaskName));
-
-                //sw.Write("blank:\t\r\n");
-                //sw.Write("\r\n");
-                //sw.Write("\r\n");
-                //sw.Write("\r\n");
-                //sw.Write("---BEGIN DATA---\r\n");
-                //sw.Write("\r\n");
-
-                int dwSampleCount = pstAutoWaveform.m_dwSampleCount;
-                int dwChannelCount = CHANNEL_COUNT;
-                string strTemp = "Wavelength (nm),";
-                string str1 = "";
-                
-                    str1 = string.Format("ILMIN,ILMAX");
-                    strTemp += str1;
-                
-                sw.Write(strTemp);
-                sw.Write("\r\n");
-                for (int dwIndex = 0; dwIndex < dwSampleCount; dwIndex++)
+                using (FileStream file = new FileStream(strXLSName, FileMode.Append))
                 {
-                    strTemp = Math.Round(pstAutoWaveform.m_pdwWavelengthArray[dwIndex], 3).ToString("####.000") + ",";
-                    
-                        double dblILMin, dblILMax;
+                    using (StreamWriter sw = new StreamWriter(file))
 
-                        dblILMax = pstAutoWaveform.m_pdwILMaxArray[0, dwIndex];
-                        dblILMin = pstAutoWaveform.m_pdwILMinArray[0, dwIndex];
+                    {
+                        int dwSampleCount = pstAutoWaveform.m_dwSampleCount;
+                        int dwChannelCount = CHANNEL_COUNT;
+                        string strTemp = "Wavelength (nm),";
+                        string str1 = "";
 
-                        str1 = string.Format("{0},{1}", Math.Round(dblILMin, 3).ToString("####.000"), Math.Round(dblILMax, 3).ToString("####.000"));
+                        str1 = string.Format("ILMIN,ILMAX");
                         strTemp += str1;
-                   
-                    sw.Write(strTemp);
-                    sw.Write("\r\n");
-                }
 
-                sw.Flush();
-                sw.Close();
-                file.Close();
-                return true;
+                        sw.Write(strTemp);
+                        sw.Write("\r\n");
+                        for (int dwIndex = 0; dwIndex < dwSampleCount; dwIndex++)
+                        {
+                            strTemp = Math.Round(pstAutoWaveform.m_pdwWavelengthArray[dwIndex], 3).ToString("####.000") + ",";
+
+                            double dblILMin, dblILMax;
+
+                            dblILMax = pstAutoWaveform.m_pdwILMaxArray[0, dwIndex];
+                            dblILMin = pstAutoWaveform.m_pdwILMinArray[0, dwIndex];
+
+                            str1 = string.Format("{0},{1}", Math.Round(dblILMin, 3).ToString("####.000"), Math.Round(dblILMax, 3).ToString("####.000"));
+                            strTemp += str1;
+
+                            sw.Write(strTemp);
+                            sw.Write("\r\n");
+                        }
+
+                        sw.Flush();
+                        sw.Close();
+                        file.Close();
+                        return true;
+                    }
+                }
             }
             catch (Exception ex)
             {

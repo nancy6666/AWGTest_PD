@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using PM1906AHelper;
 using PM1906AHelper.Core;
 using PM1906AHelper.Calibration;
+using System.Threading;
 
 namespace AWGTestClient.Instruments
 {
@@ -16,6 +17,7 @@ namespace AWGTestClient.Instruments
         SerialPort port;
         ConfigurationInstruments cfg = new ConfigurationInstruments();
         private bool _isConnected;
+
         public bool IsConnected
         {
             set
@@ -37,15 +39,17 @@ namespace AWGTestClient.Instruments
                 this.IsConnected = true;
         }
 
-        public void SetWavelength(int wave)
-        {
-            pm.SetWavelength(wave);
-        }
         public void GetPowermeterData(out double[] powers, int desiredPoint)
         {
             try
             {
+                pm.Trigger_Stop();
+                Thread.Sleep(20);
+
+                var idn = pm.IDN();
+
                 var len = pm.Trigger_GetUsedBuffLen();
+
                 if (len != desiredPoint)
                 {
                     throw new Exception("获取到的数据，与预期的数量不同！");
@@ -58,11 +62,11 @@ namespace AWGTestClient.Instruments
             }
             finally
             {
-                pm.Trigger_Stop();
+                
             }
         }
 
-        public void SetParameters(double cw)
+        public void SetParameters(int cw)
         {
             string strRange = cfg.PM1906_Range.ToUpper();
             var range = new PM1906AHelper.Core.RangeEnum();
@@ -81,10 +85,16 @@ namespace AWGTestClient.Instruments
                     range = PM1906AHelper.Core.RangeEnum.RANGE4;
                     break;
             }
+
             pm.SetRange(range);
+            Thread.Sleep(20);
+
             pm.SetUnit(PM1906AHelper.Core.UnitEnum.dBm);
-            pm.SetWavelength(Convert.ToInt32(cw));
-         
+            Thread.Sleep(20);
+
+            pm.SetWavelength(cw);
+            Thread.Sleep(20);
+
         }
         public void StartSweep()
         {

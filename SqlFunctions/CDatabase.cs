@@ -8,7 +8,7 @@ using System.Data;
 
 namespace SqlFunctions
 {
-    public class CDatabase
+    public class CDatabase : IDisposable
     {
         SqlConnection conn;
 
@@ -69,14 +69,14 @@ namespace SqlFunctions
         private void ExecuteRawSQL(string Expression)
         {
             // try to open the connection
-            try
-            {
-                conn.Open();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Unable to open SQL Server connection, {ex.Message}");
-            }
+            //try
+            //{
+            //    conn.Open();
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw new Exception($"Unable to open SQL Server connection, {ex.Message}");
+            //}
 
             // try to execute query 
             try
@@ -105,6 +105,11 @@ namespace SqlFunctions
         {
             string sql = $"insert into dbo.MES_TEST_DATA (post_json,create_by) values('{post_json}','{created_by}')";
             ExecuteRawSQL(sql);
+        }
+
+        public void Dispose()
+        {
+            this.Close();
         }
         #endregion
     }

@@ -15,9 +15,10 @@ namespace AWGTestClient.Instruments
             get;
         }
        
-        void SetParameters(double cw);
+        void SetParameters(int cw);
+
         void StartSweep();
+
         void GetPowermeterData(out double[] powers, int desiredPoint);
-        void SetWavelength(int wave);
     }
 }

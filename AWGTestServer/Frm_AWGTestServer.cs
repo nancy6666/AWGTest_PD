@@ -153,13 +153,15 @@ namespace AWGTestServer
                                     bUsing = true;
                                     ShowMsg(iStation + " test Start...", false);
                                     string ErrorMsg = "";
-                                    bSuccess = inst_Ag_ILPDL_PD.DoTest(iStation, ref ErrorMsg);
+                                   inst_Ag_ILPDL_PD.DoTest(iStation, ref ErrorMsg);
                                     if (ErrorMsg != "")
                                     {
+                                        server_ret = "8";
                                         ShowMsg(ErrorMsg.ToString(), true);
                                     }
                                     else
                                     {
+                                        server_ret = "7";
                                         ShowMsg("Test Done!", false);
                                     }
                                 }
@@ -169,10 +171,7 @@ namespace AWGTestServer
                                     ShowMsg(ex.ToString(), true);
                                 }
 
-                                if (bSuccess)
-                                    server_ret = "7";
-                                else
-                                    server_ret = "8";
+                              
                                 bufferr = Encoding.UTF8.GetBytes(server_ret);
                                 dic[strName].Send(bufferr);
                                 bUsing = false;

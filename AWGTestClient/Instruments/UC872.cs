@@ -479,7 +479,7 @@ namespace AWGTestClient.Instruments
             return false;
         }
 
-        public void SetParameters(double cw)
+        public void SetParameters(int cw)
         {
             SetTiggerInput(UC872port.EnumTriggrerMode.Smeasure);
             SetPulseType(UC872port.EnumPulseType.HIGH);

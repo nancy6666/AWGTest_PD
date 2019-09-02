@@ -9,16 +9,26 @@ namespace AWGTestClient
     interface IAWGTest
     {
         double StepWavelength { get; set; }
+
         double StartWavelength { get; set; }
+
         double StopWavelength { get; set; }
+
         double MaxChannel { get; set; }
+
         int SamplingPoint { get; set; }
-        void InitPowermeter(double cw);
+
+        void InitPowermeter();
       
         void ReadSaveCaliData(string strFileName);
+
         void StartSweep();
+
         void ReadSaveTestPower(string strFilePath);
+
         void GetILMinMax(ref tagAutoWaveform pstAutoWaveform);
+
+         void ReadCaliRawData(string strFilePathName);
 
     }
 }

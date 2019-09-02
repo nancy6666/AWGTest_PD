@@ -42,7 +42,7 @@ namespace AWGTestClient
         [DllImport("User32.dll", CharSet = CharSet.Auto)]
         public static extern int GetWindowThreadProcessId(IntPtr hwnd, out int ID);
         CConfigurationManagement cfg = new CConfigurationManagement();
-        IAWGTest aWGTest;
+        IAWGTest awgTest;
 
         public Frm_AWGTestClient()
         {
@@ -333,7 +333,7 @@ namespace AWGTestClient
                 m_dblStep, m_dwOutput, m_bLLog ? 1 : 0, iStation);
             try
             {
-                aWGTest.StartSweep();
+                awgTest.StartSweep();
             }
             catch(Exception ex)
             {
@@ -407,7 +407,7 @@ namespace AWGTestClient
             string strFileName = Directory.GetCurrentDirectory() + String.Format($"\\Data\\Cali_RawData.csv");
             try
             {
-                aWGTest.ReadSaveCaliData(strFileName);
+                awgTest.ReadSaveCaliData(strFileName);
             }
             catch(Exception ex)
             {
@@ -586,7 +586,7 @@ namespace AWGTestClient
                 m_stPLCData.m_pdwILMinArray = new double[MaxChannel, m_dwSamplePoint];
                 m_stPLCData.m_pdwWavelengthArray = new double[m_dwSamplePoint];
                 m_stPLCData.m_dwChannelCount = MaxChannel;
-              
+                m_stPLCData.m_dwSampleCount = m_dwSamplePoint;
                 m_dwInputPortCounts = 1;
                 m_dwOutputPortCounts = MaxChannel;
 
@@ -622,7 +622,6 @@ namespace AWGTestClient
             int dwTestChannelCount = 0x00;          
             string strFilePath = "";
             SqlCommand cmd;
-            db = new CDatabase();
             bool bFunctionOK = false;
             CTestDataCommon testcommon = new CTestDataCommon();
             testConditionStruct testCondition = new testConditionStruct();
@@ -630,496 +629,523 @@ namespace AWGTestClient
             int lastClassID=0;
             try
             {
-                db.Open(out cmd);
-                testStart = new DateTime();
-                TimeSpan ts;
-                for (int dwInputPortIndex = 0x00; dwInputPortIndex < m_dwInputPortCounts; dwInputPortIndex++)
+                using (CDatabase db = new CDatabase())
                 {
-                    if (m_bStop)
-                        goto Finished;
-                    for (int dwOutputPortIndex = 0x00; dwOutputPortIndex < m_dwOutputPortCounts;)
+                    db.Open(out cmd);
+                    testStart = new DateTime();
+                    TimeSpan ts;
+                    for (int dwInputPortIndex = 0x00; dwInputPortIndex < m_dwInputPortCounts; dwInputPortIndex++)
                     {
                         if (m_bStop)
-                            break;
-                        if (m_dwOutputPortCounts <= MaxChannel)
-                        {
-                            dwStartChannel = 1 + m_dwOutputPortCounts * dwInputPortIndex;
-                            dwEndChannel = m_dwOutputPortCounts + m_dwOutputPortCounts * dwInputPortIndex;
-                        }
-                        else
-                        {
-                            dwStartChannel = dwEndChannel + 1;
-
-                            if ((m_dwOutputPortCounts - dwTestChannelCount) < MaxChannel)
-                                dwEndChannel = dwStartChannel + m_dwOutputPortCounts - dwTestChannelCount - 1;
-                            else
-                                dwEndChannel = dwStartChannel + MaxChannel - 1;
-                        }
-
-                        int iLen = dwEndChannel - dwStartChannel + 1;
-                        IniArray(iLen);
-
-                      
-                       string strTemp = string.Format("Testing sample Channel {0} - {1}", dwStartChannel, dwEndChannel);
-                       
-                        ShowMsg(strTemp, true);
-                      
-                        string strMsg = "Testing，pls wait . . .";
-                         testStart = DateTime.Now;
-
-                        ShowMsg(strMsg, true);
-                        server_ret = 0;
-                        try
-                        {
-                            aWGTest.StartSweep();
-                        }
-                        catch(Exception ex)
-                        {
-                            ShowMsg($"启动功率计扫描状态出错{ex.Message}", false);
-                            throw new Exception($"启动功率计扫描状态出错{ex.Message}");
-                        }
-
-                        SendMsg("test " + iStation);
-                        int iCount = 0;
-                        while (true)
+                            goto Finished;
+                        for (int dwOutputPortIndex = 0x00; dwOutputPortIndex < m_dwOutputPortCounts;)
                         {
                             if (m_bStop)
                                 break;
-                            System.Threading.Thread.Sleep(500);
-                            strMsg = strMsg + (" . ");
-                            ShowMsg(strMsg, true);
-                            iCount++;
-                            if (server_ret == 7)
+                            if (m_dwOutputPortCounts <= MaxChannel)
                             {
-                                bFunctionOK = true;
-                                break;
+                                dwStartChannel = 1 + m_dwOutputPortCounts * dwInputPortIndex;
+                                dwEndChannel = m_dwOutputPortCounts + m_dwOutputPortCounts * dwInputPortIndex;
                             }
-                            if (server_ret == 8)
+                            else
                             {
-                                strMsg = "CLBand TLS test error，pls try again";
-                                ShowMsg(strMsg, false);
-                                MessageBox.Show(strMsg);
-                                break;
-                            }
-                            if (iCount > 600)
-                            {
-                                strMsg = "Operation overtime,pls confirm running status of Server!";
-                                ShowMsg(strMsg, false);
-                                MessageBox.Show(strMsg);
-                                break;
-                            }
-                        }
-                        if (!bFunctionOK)
-                        {
-                            bRuning = false;
-                            goto Finished;
-                        }
-                        DateTime testEnd = DateTime.Now;
-                        ts = testEnd.Subtract(testStart);
-                      
-                        ShowMsg($"CLBand TLS test . OK! Costs {ts.TotalSeconds}s", true);
-                       
-                        //创建RawData的文件夹 用于存放所有的RawData文件
+                                dwStartChannel = dwEndChannel + 1;
 
-                        string strTime = testTime.ToString("yyyy-MM-dd-hh-mm");
-                        string strStation = m_dwTestIndex.ToString().PadLeft(3, '0');
-                        string strFileName = string.Format("SU-{0}-{1}-{2}-{3}-T-{4}-{5}", deviceInfo.m_EditSerialNumber, deviceInfo.m_strChipID.Substring(0, 2).PadLeft(3, '0'), deviceInfo.m_strChipID.Substring(2, 2).PadLeft(3, '0'), "S" + iStation.ToString().PadLeft(2, '0'), strStation, strTime);
-                        string strZipName = strFileName + ".zip";
-                        string strPath = Directory.GetCurrentDirectory() + "\\Data\\";
-                        string strZipPath = strPath + strZipName;
-                        strFilePath = strPath + strFileName + "\\";
-                        if (!Directory.Exists(strFilePath))
-                        {
-                            Directory.CreateDirectory(strFilePath);
-                        }
-                       
-                        // 测试完成后从功率计读取并保存RawData;
-                        ShowMsg("Read Test Data...", true);
-                        try
-                        {
-                            aWGTest.ReadSaveTestPower($"{strFilePath}\\RawData.csv");
-                        }
-                        catch(Exception ex)
-                        {
-                            ShowMsg($"从功率计读取数据出错{ex.Message}", false);
-                            throw ex;
-                        }
-
-                       string strCaliFile = Directory.GetCurrentDirectory() + String.Format($"\\Data\\Cali_RawData.csv");
-                       
-                        File.Copy(strCaliFile, $"{strFilePath}\\Cali_RawData.csv");
-
-                        //获取ILMin和ILMax的数组
-                        ShowMsg("Calculate ILMax ILMin Data...", true);
-                        try
-                        {
-                            aWGTest.GetILMinMax(ref m_stPLCData);
-                        }
-                        catch(Exception ex)
-                        {
-                            ShowMsg(ex.Message, false);
-                            throw ex;
-                        }
-
-                        bFunctionOK = awgTestClient.SaveILMinMaxRawData(m_stPLCData, deviceInfo, iStation, testTime, m_dwTestIndex, strFilePath);
-                        if (!bFunctionOK)
-                        {
-                            strMsg = "Save ILMax ILMin Data Failed !!!";
-                            ShowMsg(strMsg, false);
-                            bRuning = false;
-                            MessageBox.Show(strMsg);
-                            goto Finished;
-                        }
-                        referenceData = new double[MaxChannel];
-                        ShowMsg("Read Ref Data...", true);
-                        bFunctionOK = awgTestClient.ReadRefRawData(ref referenceData, ref m_stPLCData, 0, MaxChannel);
-                        if (!bFunctionOK)
-                        {
-                            strMsg = "Read Ref Data Failed !!!";
-                            ShowMsg(strMsg, false);
-                            bRuning = false;
-                            MessageBox.Show(strMsg);
-                            goto Finished;
-                        }
-                       
-                        DateTime readRawDataEnd = DateTime.Now;
-                        ts = readRawDataEnd.Subtract(testEnd);
-                        ShowMsg($"Reading raw data costs {ts.TotalSeconds}s",true);
-
-
-                        ShowMsg("Draw Picture...", true);
-                        DrawPicture(m_stPLCData.m_pdwILMaxArray, m_stPLCData.m_pdwWavelengthArray, "ILMax Plot", "Wavelength(nm)", "LossMax(dB)", m_bRadioDrawType);
-
-                        double dblTemperature = 0;
-                        string strTmplFileName = $"{cfg.RawDataPath}\\Config\\StationSetting\\AWGTLSSetting{iStation}.ini";
-
-                        string strTempp = awgTestClient.GetSeting(strTmplFileName, "Temperature", "Temperature", "XXX");
-                        if (strTempp == "XXX")
-                            dblTemperature = 999;
-                        else
-                            dblTemperature = double.Parse(strTempp);
-                        deviceInfo.m_strTemperature = Math.Round(dblTemperature, 2).ToString();
-                        this.Invoke(new ThreedShowTextDelegate(ShowTemperature), new object[] { deviceInfo.m_strTemperature });
-                        double dblSpecWL;
-                        if (specCommon.Is_Wave)
-                        {
-                            dblSpecWL = ITU_start + 2 * ITU_step;
-                        }
-                        else
-                        {
-                            dblSpecWL = C / (specCommon.ITU_Start_Freq - specCommon.ITU_Step_Freq);
-                        }
-
-
-                        int dwOutputPortCount = dwEndChannel - dwStartChannel + 1;
-                        bool bUseTETM = false;
-                        TimeSpan timeSpan = DateTime.Now - testTime;
-
-                        #region Get parameter values for Database
-
-                        #region Baseinfo
-                        testcommon.baseInfo.Chip_id = deviceInfo.m_strWaferID + "-" + deviceInfo.m_strChipID;
-                        testcommon.baseInfo.GetRowID(cmd, testcommon.baseInfo.Chip_id);
-
-                        testcommon.baseInfo.Wafer_id = deviceInfo.m_strWaferID;
-                        #endregion
-
-                        #region Common
-                        testcommon.Baseinfo_id = testcommon.baseInfo.RowID;
-                        testcommon.Temperature = deviceInfo.m_strTemperature;
-                     
-                        testcommon.Input_channel = int.Parse(deviceInfo.m_strInput);
-                        testcommon.Sys_loss = 2;
-                     
-                        testcommon.Tested_by = 7;//*****
-                        testcommon.Test_costs = double.Parse(timeSpan.TotalSeconds.ToString());
-                        testcommon.Station = "station" + iStation;
-                        testcommon.Comment = "Nah";
-                        testcommon.Trimming_cnt = 2;
-                        testcommon.Last_trimming = 2;
-
-                        #endregion
-
-                        #region Test Data Detail
-                        //double[,] pdwMinLossArrayTest;
-                        //double[,] pdwMaxLossArrayTest;
-
-                      //  DateTime filterDataStart = DateTime.Now;
-
-                        //    ShowMsg("Filtering test data ...", true);
-                        //bFunctionOK = awgTestClient.CalulateILAve(m_stPLCData, 0, dwOutputPortCount, out pdwMinLossArrayTest, out pdwMaxLossArrayTest);
-
-                        //if (!bFunctionOK)
-                        //{
-                        //    strMsg = "Filtering test data Failed !!!";
-                        //    ShowMsg(strMsg, false);
-                        //    bRuning = false;
-                        //    MessageBox.Show(strMsg);
-                        //}
-                        DateTime filterDataEnd = DateTime.Now;
-                        //ts = filterDataEnd.Subtract(filterDataStart);
-                        //ShowMsg($"Filtering test data costs {ts.Seconds}s", true);
-
-                        ShowMsg("Calculate IL PDL ...", true);
-                        foreach (var cond in specCommon.lstCondSpec)
-                        {
-                            testCondition.iTUWL = new double[MaxChannel];
-                            testCondition.ITUStep = ITU_step;
-                            testCondition.ITUStepFreq = specCommon.ITU_Step_Freq;
-                            testCondition.IsWave = specCommon.Is_Wave;
-                            for (int iChan = 0; iChan < MaxChannel; iChan++)
-                            {
-                                if (specCommon.Is_Wave)
-                                {
-                                    testCondition.iTUWL[iChan] = ITU_start + iChan * ITU_step;
-                                }
+                                if ((m_dwOutputPortCounts - dwTestChannelCount) < MaxChannel)
+                                    dwEndChannel = dwStartChannel + m_dwOutputPortCounts - dwTestChannelCount - 1;
                                 else
+                                    dwEndChannel = dwStartChannel + MaxChannel - 1;
+                            }
+
+                            int iLen = dwEndChannel - dwStartChannel + 1;
+                            IniArray(iLen);
+
+
+                            string strTemp = string.Format("Testing sample Channel {0} - {1}", dwStartChannel, dwEndChannel);
+
+                            ShowMsg(strTemp, true);
+
+
+                            string strMsg = "Testing，pls wait . . .";
+                            testStart = DateTime.Now;
+
+                            ShowMsg(strMsg, true);
+                            server_ret = 0;
+                            try
+                            {
+                                awgTest.InitPowermeter();
+                                awgTest.StartSweep();
+                            }
+                            catch (Exception ex)
+                            {
+                                ShowMsg($"启动功率计扫描状态出错{ex.Message}", false);
+                                throw new Exception($"启动功率计扫描状态出错{ex.Message}");
+                            }
+
+                            //  SendMsg("test " + iStation);
+                            string llog = m_bLLog ? "1" : "0";
+                            SendMsg("test " + iStation + ";" + m_dwStartWavelength + ";" + m_dwStopWavelength + ";" + m_dblStep + ";" + m_dblPower + ";" + m_dwOutput + ";" + llog);
+
+                            int iCount = 0;
+                            while (true)
+                            {
+                                if (m_bStop)
+                                    break;
+                                System.Threading.Thread.Sleep(500);
+                                strMsg = strMsg + (" . ");
+                                ShowMsg(strMsg, true);
+                                iCount++;
+                                if (server_ret == 7)
                                 {
-                                    testCondition.iTUWL[iChan] =C/(specCommon.ITU_Start_Freq - iChan * specCommon.ITU_Step_Freq);
+                                    bFunctionOK = true;
+                                    break;
+                                }
+                                if (server_ret == 8)
+                                {
+                                    strMsg = "CLBand TLS test error，pls try again";
+                                    ShowMsg(strMsg, false);
+                                    MessageBox.Show(strMsg);
+                                    break;
+                                }
+                                if (iCount > 600)
+                                {
+                                    strMsg = "Operation overtime,pls confirm running status of Server!";
+                                    ShowMsg(strMsg, false);
+                                    MessageBox.Show(strMsg);
+                                    break;
                                 }
                             }
-                            testCondition.AlignIL = cond.Align_il;
-                            testCondition.CrossTalkLosWindow = cond.Xtalk_loss_win;
-                            testCondition.RippleLossWindow = cond.Ripple_loss_win;
-                            testCondition.ILLossWindow = cond.Il_loss_win;
-                            bFunctionOK = awgTestClient.CalculateILPDL_New(ref m_stPLCTestResultData, ref m_stPLCData, testCondition, 0, dwOutputPortCount, true, bUseTETM, false);
-
                             if (!bFunctionOK)
                             {
-                                strMsg = "Calculate ILPDL Failed !!!";
+                                bRuning = false;
+                                goto Finished;
+                            }
+                            DateTime testEnd = DateTime.Now;
+                            ts = testEnd.Subtract(testStart);
+
+                            ShowMsg($"CLBand TLS test . OK! Costs {ts.TotalSeconds}s", true);
+
+                            //创建RawData的文件夹 用于存放所有的RawData文件
+
+                            string strTime = testTime.ToString("yyyy-MM-dd-hh-mm");
+                            string strStation = m_dwTestIndex.ToString().PadLeft(3, '0');
+                            string strFileName = string.Format("SU-{0}-{1}-{2}-{3}-T-{4}-{5}", deviceInfo.m_EditSerialNumber, deviceInfo.m_strChipID.Substring(0, 2).PadLeft(3, '0'), deviceInfo.m_strChipID.Substring(2, 2).PadLeft(3, '0'), "S" + iStation.ToString().PadLeft(2, '0'), strStation, strTime);
+                            string strZipName = strFileName + ".zip";
+                            string strPath = Directory.GetCurrentDirectory() + "\\Data\\";
+                            string strZipPath = strPath + strZipName;
+                            strFilePath = strPath + strFileName + "\\";
+                            if (!Directory.Exists(strFilePath))
+                            {
+                                Directory.CreateDirectory(strFilePath);
+                            }
+
+                            // 测试完成后从功率计读取并保存RawData;
+                            ShowMsg("Read Test Data from Powermeter...", true);
+                            try
+                            {
+                                awgTest.ReadSaveTestPower($"{strFilePath}\\RawData.csv");
+                            }
+                            catch (Exception ex)
+                            {
+                                ShowMsg($"从功率计读取数据出错{ex.Message}", false);
+                                throw ex;
+                            }
+
+                            string strCaliFile = Directory.GetCurrentDirectory() + String.Format($"\\Data\\Cali_RawData.csv");
+
+                            try
+                            {
+                                ShowMsg("Read Calibration Data...", true);
+                                awgTest.ReadCaliRawData(strCaliFile);
+
+                                File.Copy(strCaliFile, $"{strFilePath}\\Cali_RawData.csv");
+
+                                //获取ILMin和ILMax的数组
+                                ShowMsg("Calculate ILMax ILMin Data...", true);
+                                awgTest.GetILMinMax(ref m_stPLCData);
+                            }
+                            catch (Exception ex)
+                            {
+                                ShowMsg(ex.Message, false);
+                                throw ex;
+                            }
+
+                            bFunctionOK = awgTestClient.SaveILMinMaxRawData(m_stPLCData, deviceInfo, iStation, testTime, m_dwTestIndex, strFilePath);
+                            if (!bFunctionOK)
+                            {
+                                strMsg = "Save ILMax ILMin Data Failed !!!";
                                 ShowMsg(strMsg, false);
                                 bRuning = false;
                                 MessageBox.Show(strMsg);
-                                return;
+                                goto Finished;
                             }
-                            //else
+                            //referenceData = new double[MaxChannel];
+                            //ShowMsg("Read Ref Data...", true);
+                            //bFunctionOK = awgTestClient.ReadRefRawData(ref referenceData, ref m_stPLCData, 0, MaxChannel);
+                            //if (!bFunctionOK)
                             //{
-                            //    ShowMsg("Calulate ILPDL successfully!", true);
+                            //    strMsg = "Read Ref Data Failed !!!";
+                            //    ShowMsg(strMsg, false);
+                            //    bRuning = false;
+                            //    MessageBox.Show(strMsg);
+                            //    goto Finished;
                             //}
-                            SpecPerClass uniformitySpec = new SpecPerClass();
-                            foreach (var spec in specCommon.lstSpecPerClass)
+
+                            DateTime readRawDataEnd = DateTime.Now;
+                            ts = readRawDataEnd.Subtract(testEnd);
+                            ShowMsg($"Reading raw data costs {ts.TotalSeconds}s", true);
+
+
+                            ShowMsg("Draw Picture...", true);
+                            DrawPicture(m_stPLCData.m_pdwILMaxArray, m_stPLCData.m_pdwWavelengthArray, "ILMax Plot", "Wavelength(nm)", "LossMax(dB)", m_bRadioDrawType);
+
+                            double dblTemperature = 0;
+                            string strTmplFileName = $"{cfg.RawDataPath}\\Config\\StationSetting\\AWGTLSSetting{iStation}.ini";
+
+                            string strTempp = awgTestClient.GetSeting(strTmplFileName, "Temperature", "Temperature", "XXX");
+                            if (strTempp == "XXX")
+                                dblTemperature = 999;
+                            else
+                                dblTemperature = double.Parse(strTempp);
+                            deviceInfo.m_strTemperature = Math.Round(dblTemperature, 2).ToString();
+                            this.Invoke(new ThreedShowTextDelegate(ShowTemperature), new object[] { deviceInfo.m_strTemperature });
+                            double dblSpecWL;
+                            if (specCommon.Is_Wave)
                             {
-                                if (spec.Class_id == cond.Class_id)
-                                {
-                                    uniformitySpec= spec;
-                                }
+                                dblSpecWL = ITU_start + 2 * ITU_step;
+                            }
+                            else
+                            {
+                                dblSpecWL = C / (specCommon.ITU_Start_Freq - specCommon.ITU_Step_Freq);
                             }
 
-                            CUniformity uniformity = new CUniformity()
+
+                            int dwOutputPortCount = dwEndChannel - dwStartChannel + 1;
+                            bool bUseTETM = false;
+                            TimeSpan timeSpan = DateTime.Now - testTime;
+
+                            #region Get parameter values for Database
+
+                            #region Baseinfo
+                            testcommon.baseInfo.Chip_id = deviceInfo.m_strWaferID + "-" + deviceInfo.m_strChipID;
+                            testcommon.baseInfo.GetRowID(cmd, testcommon.baseInfo.Chip_id);
+
+                            testcommon.baseInfo.Wafer_id = deviceInfo.m_strWaferID;
+                            #endregion
+
+                            #region Common
+                            testcommon.Baseinfo_id = testcommon.baseInfo.RowID;
+                            testcommon.Temperature = deviceInfo.m_strTemperature;
+
+                            testcommon.Input_channel = int.Parse(deviceInfo.m_strInput);
+                            testcommon.Sys_loss = 2;
+
+                            testcommon.Tested_by = 7;//*****
+                            testcommon.Test_costs = double.Parse(timeSpan.TotalSeconds.ToString());
+                            testcommon.Station = "station" + iStation;
+                            testcommon.Comment = "Nah";
+                            testcommon.Trimming_cnt = 2;
+                            testcommon.Last_trimming = 2;
+
+                            #endregion
+
+                            #region Test Data Detail
+                            //double[,] pdwMinLossArrayTest;
+                            //double[,] pdwMaxLossArrayTest;
+
+                            //  DateTime filterDataStart = DateTime.Now;
+
+                            //    ShowMsg("Filtering test data ...", true);
+                            //bFunctionOK = awgTestClient.CalulateILAve(m_stPLCData, 0, dwOutputPortCount, out pdwMinLossArrayTest, out pdwMaxLossArrayTest);
+
+                            //if (!bFunctionOK)
+                            //{
+                            //    strMsg = "Filtering test data Failed !!!";
+                            //    ShowMsg(strMsg, false);
+                            //    bRuning = false;
+                            //    MessageBox.Show(strMsg);
+                            //}
+                            DateTime filterDataEnd = DateTime.Now;
+                            //ts = filterDataEnd.Subtract(filterDataStart);
+                            //ShowMsg($"Filtering test data costs {ts.Seconds}s", true);
+
+                            ShowMsg("Calculate IL PDL ...", true);
+                            foreach (var cond in specCommon.lstCondSpec)
                             {
-                                SpecClassID = cond.Class_id,
-                                Uniformity = m_stPLCTestResultData.m_dblUniformity,
-                                PredictedTemp = double.Parse(m_strPreTemperature),
-                                specUniformity = uniformitySpec
-                            };
-                            testcommon.lstUniformity.Add(uniformity);
+                                testCondition.iTUWL = new double[MaxChannel];
+                                testCondition.ITUStep = ITU_step;
+                                testCondition.ITUStepFreq = specCommon.ITU_Step_Freq;
+                                testCondition.IsWave = specCommon.Is_Wave;
+                                for (int iChan = 0; iChan < MaxChannel; iChan++)
+                                {
+                                    if (specCommon.Is_Wave)
+                                    {
+                                        testCondition.iTUWL[iChan] = ITU_start + iChan * ITU_step;
+                                    }
+                                    else
+                                    {
+                                        testCondition.iTUWL[iChan] = C / (specCommon.ITU_Start_Freq - iChan * specCommon.ITU_Step_Freq);
+                                    }
+                                }
+                                testCondition.AlignIL = cond.Align_il;
+                                testCondition.CrossTalkLosWindow = cond.Xtalk_loss_win;
+                                testCondition.RippleLossWindow = cond.Ripple_loss_win;
+                                testCondition.ILLossWindow = cond.Il_loss_win;
+                                bFunctionOK = awgTestClient.CalculateILPDL_New(ref m_stPLCTestResultData, ref m_stPLCData, testCondition, 0, dwOutputPortCount, true, bUseTETM, false);
+
+                                if (!bFunctionOK)
+                                {
+                                    strMsg = "Calculate ILPDL Failed !!!";
+                                    ShowMsg(strMsg, false);
+                                    bRuning = false;
+                                    MessageBox.Show(strMsg);
+                                    return;
+                                }
+                                //else
+                                //{
+                                //    ShowMsg("Calulate ILPDL successfully!", true);
+                                //}
+                                SpecPerClass uniformitySpec = new SpecPerClass();
+                                foreach (var spec in specCommon.lstSpecPerClass)
+                                {
+                                    if (spec.Class_id == cond.Class_id)
+                                    {
+                                        uniformitySpec = spec;
+                                    }
+                                }
+
+                                CUniformity uniformity = new CUniformity()
+                                {
+                                    SpecClassID = cond.Class_id,
+                                    Uniformity = m_stPLCTestResultData.m_dblUniformity,
+                                    PredictedTemp = double.Parse(m_strPreTemperature),
+                                    specUniformity = uniformitySpec
+                                };
+                                testcommon.lstUniformity.Add(uniformity);
+                                for (int n = 0; n < MaxChannel; n++)
+                                {
+                                    int channel = n + 1;
+                                    #region Crosstalk
+                                    double temp = Math.Abs(m_stPLCTestResultData.m_dblAXLeft[n]) < Math.Abs(m_stPLCTestResultData.m_dblAXRight[n]) ? m_stPLCTestResultData.m_dblAXLeft[n] : m_stPLCTestResultData.m_dblAXRight[n];
+
+                                    crosstalkSpec = specCommon.GetCrosstalkSpecBySpecClassAndChannel(cond.Class_id, channel);
+                                    CCrosstalk crosstalk = new CCrosstalk()
+                                    {
+                                        Ax = Math.Round(double.Parse(temp.ToString()), 2),
+                                        Ax_n = Math.Round(double.Parse(m_stPLCTestResultData.m_dblAXLeft[n].ToString()), 2),
+                                        Ax_p = Math.Round(double.Parse(m_stPLCTestResultData.m_dblAXRight[n].ToString()), 2),
+                                        Nx = Math.Round(double.Parse(m_stPLCTestResultData.m_dblNX[n].ToString()), 2),
+                                        Tax = Math.Round(double.Parse(m_stPLCTestResultData.m_dblTAX[n].ToString()), 2),
+                                        Tnx = Math.Round(double.Parse(m_stPLCTestResultData.m_dblTNX[n].ToString()), 2),
+                                        Tx = Math.Round(double.Parse(m_stPLCTestResultData.m_dblTX[n].ToString()), 2),
+                                        Channel = channel,
+                                        Spec_class_id = crosstalkSpec.RawID,
+                                        Spec = crosstalkSpec
+                                    };
+                                    testcommon.lstTestDetail.Add(crosstalk);
+                                    #endregion
+
+                                    #region Wavelength
+
+                                    wavelengthSpec = specCommon.GetWavelengthSpecBySpecClassAndChannel(cond.Class_id, channel);
+
+                                    CWavelength wavelength = new CWavelength()
+                                    {
+                                        Wavelength = Math.Round(double.Parse(m_stPLCTestResultData.m_dblCW[n].ToString()), 2),
+                                        Pdw = Math.Round(double.Parse(m_stPLCTestResultData.m_dblPDW[n].ToString()), 2),
+                                        Offset = Math.Round(double.Parse(m_stPLCTestResultData.m_dblShift[n].ToString()), 2),
+                                        Channel = channel,
+                                        Spec_class_id = wavelengthSpec.RawID,
+                                        Spec = wavelengthSpec
+                                    };
+                                    testcommon.lstTestDetail.Add(wavelength);
+                                    #endregion
+
+                                    #region Loss
+
+                                    lossSpec = specCommon.GetLossSpecBySpecClassAndChannel(cond.Class_id, channel);
+                                    CLoss loss = new CLoss()
+                                    {
+                                        Max_at_cw = Math.Round(double.Parse(m_stPLCTestResultData.m_dbMax_at_cw[n].ToString()), 2),
+                                        Max_at_itu = Math.Round(double.Parse(m_stPLCTestResultData.m_dbMax_at_itu[n].ToString()), 2),
+                                        Max_at_lw = Math.Round(double.Parse(m_stPLCTestResultData.m_dblILMax[n].ToString()), 2),
+                                        Min_at_cw = Math.Round(double.Parse(m_stPLCTestResultData.m_dbMin_at_cw[n].ToString()), 2),
+                                        Min_at_itu = Math.Round(double.Parse(m_stPLCTestResultData.m_dbMin_at_itu[n].ToString()), 2),
+                                        Min_at_lw = Math.Round(double.Parse(m_stPLCTestResultData.m_dblILMin[n].ToString()), 2),
+                                        Ripple = Math.Round(double.Parse(m_stPLCTestResultData.m_dblRipple[n].ToString()), 2),
+                                        Channel = channel,
+                                        Spec_class_id = lossSpec.RawID,
+                                        Spec = lossSpec
+
+                                    };
+                                    testcommon.lstTestDetail.Add(loss);
+                                    #endregion
+
+                                    #region Passband
+
+                                    passbandSpec = specCommon.GetPassbandSpecBySpecClassAndChannel(cond.Class_id, channel);
+                                    CPassband passband = new CPassband()
+                                    {
+                                        At_05db = Math.Round(double.Parse(m_stPLCTestResultData.m_dblBW05dB[n].ToString()), 2),
+                                        At_1db = Math.Round(double.Parse(m_stPLCTestResultData.m_dblBW1dB[n].ToString()), 2),
+                                        At_20db = Math.Round(double.Parse(m_stPLCTestResultData.m_dblBW20dB[n].ToString()), 2),
+                                        At_25db = Math.Round(double.Parse(m_stPLCTestResultData.m_dblBW25dB[n].ToString()), 2),
+                                        At_3db = Math.Round(double.Parse(m_stPLCTestResultData.m_dblBW3dB[n].ToString()), 2),
+                                        Channel = channel,
+                                        Spec_class_id = passbandSpec.RawID,
+                                        Spec = passbandSpec
+                                    };
+                                    testcommon.lstTestDetail.Add(passband);
+                                    #endregion
+
+                                    #region Pdl
+
+                                    pdlSpec = specCommon.GetPdlSpecBySpecClassAndChannel(cond.Class_id, channel);
+                                    CPdl pdl = new CPdl()
+                                    {
+                                        Pdl_at_ctr = Math.Round(double.Parse(m_stPLCTestResultData.m_dblPDLCRT[n].ToString()), 2),
+                                        Pdl_at_itu = Math.Round(double.Parse(m_stPLCTestResultData.m_dblPDLITU[n].ToString()), 2),
+                                        Pdl_max = Math.Round(double.Parse(m_stPLCTestResultData.m_dblPDLMax[n].ToString()), 2),
+                                        Channel = channel,
+                                        Spec_class_id = pdlSpec.RawID,
+                                        Spec = pdlSpec
+                                    };
+                                    testcommon.lstTestDetail.Add(pdl);
+                                    #endregion
+
+                                    #region Frequency
+
+                                    frequencySpec = specCommon.GetFrequencySpecBySpecClassAndChannel(cond.Class_id, channel);
+
+                                    CFrequency frequency;
+
+                                    if (m_stPLCTestResultData.m_dblCW[n] == 0)
+                                    {
+                                        frequency = new CFrequency()
+                                        {
+                                            Freq = 0,
+                                            Offset = 0,
+                                            Channel = channel,
+                                            Spec_class_id = frequencySpec.RawID,
+                                            Spec = frequencySpec
+                                        };
+                                    }
+                                    else
+                                    {
+                                        frequency = new CFrequency()
+                                        {
+
+                                            Freq = Math.Round(double.Parse((1.0 / (m_stPLCTestResultData.m_dblCW[n] / 2.99792457) * 1e5).ToString()), 2),
+                                            Offset = Math.Round(double.Parse(Math.Abs(Math.Round(1.0 / (m_stPLCTestResultData.m_dblCW[n] / 2.99792457) * 1e5 - 1.0 / (testCondition.iTUWL[n] / 2.99792457) * 1e5, 3)).ToString()), 2),
+                                            Channel = channel,
+                                            Spec_class_id = frequencySpec.RawID,
+                                            Spec = frequencySpec
+                                        };
+                                    }
+                                    testcommon.lstTestDetail.Add(frequency);
+                                    #endregion
+                                }
+                                lastClassID = cond.Class_id;
+                            }
+                            DateTime calculateDataEnd = DateTime.Now;
+                            ts = calculateDataEnd.Subtract(filterDataEnd);
+                            ShowMsg($"Calculating test data costs {ts.TotalSeconds}s", true);
+
+                            #endregion
+
+                            #region RawData
+                            //压缩 RawData的文件夹
+                            ZipFile.CreateFromDirectory(strFilePath, strZipPath);
+                            ReadRawData zipFiles = new ReadRawData(strZipPath);
+                            testcommon.rawData.RawData = zipFiles.BinBytes;
+                            testcommon.rawData.File_ext = "zip";
+                            #endregion
+
+                            #region Reference
+
                             for (int n = 0; n < MaxChannel; n++)
                             {
-                                int channel = n + 1;
-                                #region Crosstalk
-                                double temp = Math.Abs(m_stPLCTestResultData.m_dblAXLeft[n]) < Math.Abs(m_stPLCTestResultData.m_dblAXRight[n]) ? m_stPLCTestResultData.m_dblAXLeft[n] : m_stPLCTestResultData.m_dblAXRight[n];
-
-                                crosstalkSpec = specCommon.GetCrosstalkSpecBySpecClassAndChannel(cond.Class_id, channel);
-                                CCrosstalk crosstalk = new CCrosstalk()
+                                CReference reference = new CReference()
                                 {
-                                    Ax = Math.Round(double.Parse(temp.ToString()), 2),
-                                    Ax_n = Math.Round(double.Parse(m_stPLCTestResultData.m_dblAXLeft[n].ToString()), 2),
-                                    Ax_p = Math.Round(double.Parse(m_stPLCTestResultData.m_dblAXRight[n].ToString()), 2),
-                                    Nx = Math.Round(double.Parse(m_stPLCTestResultData.m_dblNX[n].ToString()), 2),
-                                    Tax = Math.Round(double.Parse(m_stPLCTestResultData.m_dblTAX[n].ToString()), 2),
-                                    Tnx = Math.Round(double.Parse(m_stPLCTestResultData.m_dblTNX[n].ToString()), 2),
-                                    Tx = Math.Round(double.Parse(m_stPLCTestResultData.m_dblTX[n].ToString()), 2),
-                                    Channel = channel,
-                                    Spec_class_id = crosstalkSpec.RawID,
-                                    Spec = crosstalkSpec
-                                };
-                                testcommon.lstTestDetail.Add(crosstalk);
-                                #endregion
-
-                                #region Wavelength
-
-                                wavelengthSpec = specCommon.GetWavelengthSpecBySpecClassAndChannel(cond.Class_id, channel);
-
-                                CWavelength wavelength = new CWavelength()
-                                {
-                                    Wavelength = Math.Round(double.Parse(m_stPLCTestResultData.m_dblCW[n].ToString()), 2),
-                                    Pdw = Math.Round(double.Parse(m_stPLCTestResultData.m_dblPDW[n].ToString()), 2),
-                                    Offset = Math.Round(double.Parse(m_stPLCTestResultData.m_dblShift[n].ToString()), 2),
-                                    Channel = channel,
-                                    Spec_class_id = wavelengthSpec.RawID,
-                                    Spec = wavelengthSpec
-                                };
-                                testcommon.lstTestDetail.Add(wavelength);
-                                #endregion
-
-                                #region Loss
-
-                                lossSpec = specCommon.GetLossSpecBySpecClassAndChannel(cond.Class_id, channel);
-                                CLoss loss = new CLoss()
-                                {
-                                    Max_at_cw = Math.Round(double.Parse(m_stPLCTestResultData.m_dbMax_at_cw[n].ToString()), 2),
-                                    Max_at_itu = Math.Round(double.Parse(m_stPLCTestResultData.m_dbMax_at_itu[n].ToString()), 2),
-                                    Max_at_lw = Math.Round(double.Parse(m_stPLCTestResultData.m_dblILMax[n].ToString()), 2),
-                                    Min_at_cw = Math.Round(double.Parse(m_stPLCTestResultData.m_dbMin_at_cw[n].ToString()), 2),
-                                    Min_at_itu = Math.Round(double.Parse(m_stPLCTestResultData.m_dbMin_at_itu[n].ToString()), 2),
-                                    Min_at_lw = Math.Round(double.Parse(m_stPLCTestResultData.m_dblILMin[n].ToString()), 2),
-                                    Ripple = Math.Round(double.Parse(m_stPLCTestResultData.m_dblRipple[n].ToString()), 2),
-                                    Channel = channel,
-                                    Spec_class_id = lossSpec.RawID,
-                                    Spec = lossSpec
+                                    Reference = Math.Round(double.Parse(referenceData[n].ToString()), 2),
+                                    Channel = n + 1,
 
                                 };
-                                testcommon.lstTestDetail.Add(loss);
-                                #endregion
-
-                                #region Passband
-
-                                passbandSpec = specCommon.GetPassbandSpecBySpecClassAndChannel(cond.Class_id, channel);
-                                CPassband passband = new CPassband()
-                                {
-                                    At_05db = Math.Round(double.Parse(m_stPLCTestResultData.m_dblBW05dB[n].ToString()), 2),
-                                    At_1db = Math.Round(double.Parse(m_stPLCTestResultData.m_dblBW1dB[n].ToString()), 2),
-                                    At_20db = Math.Round(double.Parse(m_stPLCTestResultData.m_dblBW20dB[n].ToString()), 2),
-                                    At_25db = Math.Round(double.Parse(m_stPLCTestResultData.m_dblBW25dB[n].ToString()), 2),
-                                    At_3db = Math.Round(double.Parse(m_stPLCTestResultData.m_dblBW3dB[n].ToString()), 2),
-                                    Channel = channel,
-                                    Spec_class_id = passbandSpec.RawID,
-                                    Spec = passbandSpec
-                                };
-                                testcommon.lstTestDetail.Add(passband);
-                                #endregion
-
-                                #region Pdl
-
-                                pdlSpec = specCommon.GetPdlSpecBySpecClassAndChannel(cond.Class_id, channel);
-                                CPdl pdl = new CPdl()
-                                {
-                                    Pdl_at_ctr = Math.Round(double.Parse(m_stPLCTestResultData.m_dblPDLCRT[n].ToString()), 2),
-                                    Pdl_at_itu = Math.Round(double.Parse(m_stPLCTestResultData.m_dblPDLITU[n].ToString()), 2),
-                                    Pdl_max = Math.Round(double.Parse(m_stPLCTestResultData.m_dblPDLMax[n].ToString()), 2),
-                                    Channel = channel,
-                                    Spec_class_id = pdlSpec.RawID,
-                                    Spec = pdlSpec
-                                };
-                                testcommon.lstTestDetail.Add(pdl);
-                                #endregion
-
-                                #region Frequency
-
-                                frequencySpec = specCommon.GetFrequencySpecBySpecClassAndChannel(cond.Class_id, channel);
-                                CFrequency frequency = new CFrequency()
-                                {
-                                    Freq = Math.Round(double.Parse((1.0 / (m_stPLCTestResultData.m_dblCW[n] / 2.99792457) * 1e5).ToString()), 2),
-                                    Offset = Math.Round(double.Parse(Math.Abs(Math.Round(1.0 / (m_stPLCTestResultData.m_dblCW[n] / 2.99792457) * 1e5 - 1.0 / (testCondition.iTUWL[n] / 2.99792457) * 1e5, 3)).ToString()), 2),
-                                    Channel = channel,
-                                    Spec_class_id = frequencySpec.RawID,
-                                    Spec = frequencySpec
-                                };
-                                testcommon.lstTestDetail.Add(frequency);
-                                #endregion
+                                testcommon.lstReference.Add(reference);
                             }
-                            lastClassID = cond.Class_id;
+                            #endregion
+
+                            #endregion
+
+                            dwTestChannelCount += dwOutputPortCount;
+                            dwOutputPortIndex += MaxChannel;
                         }
-                        DateTime calculateDataEnd = DateTime.Now;
-                        ts = calculateDataEnd.Subtract(filterDataEnd);
-                        ShowMsg($"Calculating test data costs {ts.TotalSeconds}s", true);
-
-                        #endregion
-
-                        #region RawData
-                        //压缩 RawData的文件夹
-                        ZipFile.CreateFromDirectory(strFilePath, strZipPath);
-                        ReadRawData zipFiles = new ReadRawData(strZipPath);
-                        testcommon.rawData.RawData = zipFiles.BinBytes;
-                        testcommon.rawData.File_ext = "zip";
-                        #endregion
-
-                        #region Reference
-
-                        for (int n = 0; n < MaxChannel; n++)
-                        {
-                            CReference reference = new CReference()
-                            {
-                                Reference = Math.Round(double.Parse(referenceData[n].ToString()), 2),
-                                Channel = n + 1,
-
-                            };
-                            testcommon.lstReference.Add(reference);
-                        }
-                        #endregion
-
-                        #endregion
-                       
-                        dwTestChannelCount += dwOutputPortCount;
-                        dwOutputPortIndex += MaxChannel;
                     }
-                }
-                int[] iPass = new int[23];
-                string[] ParaName = new string[23];
+                    int[] iPass = new int[23];
+                    string[] ParaName = new string[23];
 
-                for (int i = 0; i < MaxChannel; i++)
-                {
-                    for (int k = 0; k < 23; k++)
-                        iPass[k] = 1;
-                    GetTestResult(ref ParaName, ref iPass,specCommon, lastClassID,i);
-                    ShowResult(ParaName, iPass);
-                }
-                DateTime finshedTest = DateTime.Now;
-                ts = finshedTest.Subtract(testStart);
-                ShowMsg($"The whole test process costs {ts.TotalSeconds}s",true);
-               ///保存测试数据到数据库
-                ///
-                if (MessageBox.Show("Save test result to Database?", "Information", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                {
-                    ShowMsg("Save test result....", true);
-                    testcommon.SaveAllData(cmd, specCommon);
-                    //显示测试数据在每份spec下的pass状态
-                    for (int i = 0; i < specCommon.lstCondSpec.Count; i++)
+                    for (int i = 0; i < MaxChannel; i++)
                     {
-                        ListViewItem lt = new ListViewItem();
-                        lt.Text = specCommon.lstCondSpec[i].Class_name;
-
-                        if (testcommon.lstFinalPf[i].Pf == false)
-                            lt.BackColor = Color.Red;
-                        else
-                            lt.BackColor = Color.Green;
-
-                        lstviewTestResult.Items.Add(lt);
+                        for (int k = 0; k < 23; k++)
+                            iPass[k] = 1;
+                        GetTestResult(ref ParaName, ref iPass, specCommon, lastClassID, i);
+                        ShowResult(ParaName, iPass);
                     }
-                    //保存MES数据
-                    MES_TEST_DATA mes = new MES_TEST_DATA();
-                    mes.Serial_no = testcommon.baseInfo.Chip_id;
-                    mes.Test_start = testStart;
-                    mes.Test_time = testStart;
-                    mes.Current_station = "";
-                    mes.Operator= this.textBoxOperator.Text;
-                    mes.Part_no = this.textBoxPartNum.Text;
-                    mes.Result =testcommon.Pf?"Pass":"Fail";
-                    mes.Test_no = testcommon.Station;
-                    mes.Workshop_id = "PLC";
-                    mes.Current_station = "PLC Test";
-                    mes.IN_OUT = "OUT";
-                    mes.Create_by= this.textBoxOperator.Text;
-                    mes.Create_date = DateTime.Now;
-                   
-                    IsoDateTimeConverter timeConverter = new IsoDateTimeConverter { DateTimeFormat = "yyyy-MM-dd HH:mm:ss" };
-                    string post_json = JsonConvert.SerializeObject(mes, Formatting.Indented, timeConverter);
-                    string created_by = this.textBoxOperator.Text;
-                    CDatabase db = new CDatabase();
-                    db.SaveMesData(post_json, created_by);
+                    DateTime finshedTest = DateTime.Now;
+                    ts = finshedTest.Subtract(testStart);
+                    ShowMsg($"The whole test process costs {ts.TotalSeconds}s", true);
+                    ///保存测试数据到数据库
+                    ///
+                    if (MessageBox.Show("Save test result to Database?", "Information", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                    {
+                        ShowMsg("Save test result....", true);
+                        testcommon.SaveAllData(cmd, specCommon);
+                        //显示测试数据在每份spec下的pass状态
+                        for (int i = 0; i < specCommon.lstCondSpec.Count; i++)
+                        {
+                            ListViewItem lt = new ListViewItem();
+                            lt.Text = specCommon.lstCondSpec[i].Class_name;
+
+                            if (testcommon.lstFinalPf[i].Pf == false)
+                                lt.BackColor = Color.Red;
+                            else
+                                lt.BackColor = Color.Green;
+
+                            lstviewTestResult.Items.Add(lt);
+                        }
+                        //保存MES数据
+                        MES_TEST_DATA mes = new MES_TEST_DATA();
+                        mes.Serial_no = testcommon.baseInfo.Chip_id;
+                        mes.Test_start = testStart;
+                        mes.Test_time = testStart;
+                        mes.Current_station = "";
+                        mes.Operator = this.textBoxOperator.Text;
+                        mes.Part_no = this.textBoxPartNum.Text;
+                        mes.Result = testcommon.Pf ? "Pass" : "Fail";
+                        mes.Test_no = testcommon.Station;
+                        mes.Workshop_id = "PLC";
+                        mes.Current_station = "PLC Test";
+                        mes.IN_OUT = "OUT";
+                        mes.Create_by = this.textBoxOperator.Text;
+                        mes.Create_date = DateTime.Now;
+
+                        IsoDateTimeConverter timeConverter = new IsoDateTimeConverter { DateTimeFormat = "yyyy-MM-dd HH:mm:ss" };
+                        string post_json = JsonConvert.SerializeObject(mes, Formatting.Indented, timeConverter);
+                        string created_by = this.textBoxOperator.Text;
+                        db.SaveMesData(post_json, created_by);
+                    }
+                    /// 保存测试结果到本地
+
+                    //ShowMsg("Save Result ...", true);
+                    //bFunctionOK = SaveTestResult(strFilePath, m_stPLCTestResultData, testcommon, testCondition, deviceInfo, iStation, 0, MaxChannel, false, ref strResult);
+                    //if (!bFunctionOK)
+                    //{
+                    //    string strT = "Save Test Result Failed !!!";
+                    //    ShowMsg(strT, false);
+                    //    MessageBox.Show(strT);
+                    //}
+                    ///
                 }
-                /// 保存测试结果到本地
-
-                //ShowMsg("Save Result ...", true);
-                //bFunctionOK = SaveTestResult(strFilePath, m_stPLCTestResultData, testcommon, testCondition, deviceInfo, iStation, 0, MaxChannel, false, ref strResult);
-                //if (!bFunctionOK)
-                //{
-                //    string strT = "Save Test Result Failed !!!";
-                //    ShowMsg(strT, false);
-                //    MessageBox.Show(strT);
-                //}
-                ///
-
             }
             catch (Exception ex)
             {
@@ -1538,30 +1564,31 @@ namespace AWGTestClient
                 MessageBox.Show("The fomart of PN is error!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-           
-            if (db.Open(out cmd))
+
+            try
             {
-                try
+
+                if (db.Open(out cmd))
                 {
                     specCommon = new CTestSpecCommon(cmd, strTmplName, strTestTemp);
                     MaxChannel = specCommon.MaxChannel;
                     textBoxStartWavelength.Text = specCommon.Sweep_start.ToString();
                     textBoxStopWavelength.Text = specCommon.Sweep_end.ToString();
                     textBoxPower.Text = specCommon.Laser_output_pwr.ToString();
-                   
+
                     m_dwStartWavelength = double.Parse(specCommon.Sweep_start.ToString());
                     m_dwStopWavelength = double.Parse(specCommon.Sweep_end.ToString());
                     m_dblPower = double.Parse(specCommon.Laser_output_pwr.ToString());
                     m_dblStep = double.Parse(specCommon.Sweep_step.ToString());
-                   // m_dwStepIndex = int.Parse(specCommon.Sweep_step.ToString());
-                  //  m_dblStep = _gpdblSweepRate[m_dwStepIndex] * 0.3*Math.Pow(10,-3);
+                    // m_dwStepIndex = int.Parse(specCommon.Sweep_step.ToString());
+                    //  m_dblStep = _gpdblSweepRate[m_dwStepIndex] * 0.3*Math.Pow(10,-3);
                     txtbSweepStep.Text = $"{m_dblStep}nm";
                     m_bLLog = specCommon.Llog;
                     ITU_start = specCommon.ITU_Start;
                     ITU_step = specCommon.ITU_Step;
-                  
+
                     awgTestClient.CHANNEL_COUNT = MaxChannel;
-                   
+
                     referenceData = new double[MaxChannel];
                     double mm = (m_dwStopWavelength - m_dwStartWavelength) / m_dblStep + 1;
                     mm = Math.Ceiling(mm);
@@ -1569,16 +1596,17 @@ namespace AWGTestClient
 
                     awgTestClient.m_dwSamplePoint = m_dwSamplePoint;
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"{ex.Message} Pls confirm PN and Temperature! ", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-                finally
-                {
-                    db.Close();
-                }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{ex.Message} Pls confirm PN and Temperature! ", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            finally
+            {
+                db.Close();
+            }
+           
             if (cbxProductType.SelectedIndex == -1)
             {
                 MessageBox.Show("请选择产品类型！", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -1588,22 +1616,19 @@ namespace AWGTestClient
             {
                 try
                 {
-                    if (cbxProductType.SelectedItem.ToString().ToUpper().Contains("MUX"))
+                    if (cbxProductType.SelectedItem.ToString().ToUpper()=="MUX")
                     {
-                        aWGTest = new MuxTest();
+                        awgTest = new MuxTest();
                     }
-                    else if (cbxProductType.SelectedItem.ToString().ToUpper().Contains("DEMUX"))
+                    else if (cbxProductType.SelectedItem.ToString().ToUpper()=="DEMUX")
                     {
-                        aWGTest = new DemuxTest();
+                        awgTest = new DemuxTest();
                     }
-                    aWGTest.StopWavelength = m_dwStopWavelength;
-                    aWGTest.StartWavelength = m_dwStartWavelength;
-                    aWGTest.StepWavelength = m_dblStep;
-                    aWGTest.SamplingPoint = m_dwSamplePoint;
-                    aWGTest.MaxChannel = MaxChannel;
-
-                    aWGTest.InitPowermeter((m_dwStartWavelength+m_dwStopWavelength/2));
-                    ShowMsg("Initial Powermeters Successfully!", true);
+                    awgTest.StopWavelength = m_dwStopWavelength;
+                    awgTest.StartWavelength = m_dwStartWavelength;
+                    awgTest.StepWavelength = m_dblStep;
+                    awgTest.SamplingPoint = m_dwSamplePoint;
+                    awgTest.MaxChannel = MaxChannel;
                 }
                 catch (Exception ex)
                 {
@@ -1666,7 +1691,8 @@ namespace AWGTestClient
           
             m_stPLCData.m_pdwILMinArray = new double[MaxChannel, m_dwSamplePoint];
             m_stPLCData.m_pdwILMaxArray = new double[MaxChannel, m_dwSamplePoint];
-            m_stPLCData.m_dwSampleCount = MaxChannel;
+            m_stPLCData.m_dwChannelCount = MaxChannel;
+            m_stPLCData.m_dwSampleCount = m_dwSamplePoint;
 
             m_stPLCTestResultData.m_dblStartWL = m_dwStartWavelength;
             m_stPLCTestResultData.m_dblStopWL = m_dwStopWavelength;

@@ -29,7 +29,7 @@ namespace AWGTestServer
         public double[] m_dblAWGStartWavelength = new double[8];
         public double[] m_dblAWGStopWavelength = new double[8];
         public double[] m_dblAWGStepWavelength = new double[8];
-        public double m_dblAWGSweepRate = 10;
+        public double m_dblAWGSweepRate = 80;
 
         public double[] m_dblAWGTLSPower = new double[8];
         public int[] m_bAWGTLSOutoputPort = new int[8];
@@ -46,6 +46,7 @@ namespace AWGTestServer
         public Inst_Ag_ILPDL_PD(Frm_AWGTestServer frmawg)
         {
             frmAWGTest = frmawg;
+           
         }
         public void InitI()//done
         {
@@ -54,14 +55,6 @@ namespace AWGTestServer
                 cfg = new ConfigurationManagement();
                 k8164 = new K8164B(Convert.ToInt16(cfg.K8164BGPIB));//need to set the GPIB address
                 n7786 = new N7786B(Convert.ToInt16(cfg.N7786BGPIB));//need to set the GPIB address
-
-                //设置光源K8164B
-                k8164.SetSweepMode(K8164B.SweepMode.CONT);
-                k8164.SetTriggerMode(K8164B.TriggerMode.STF);
-                k8164.SetInputTrigIgn();
-             
-                k8164.SetOutputActive(true);
-                System.Threading.Thread.Sleep(1000);
             }
             catch (Exception ex)
             {
@@ -135,19 +128,18 @@ namespace AWGTestServer
             }
         }
 
-        public bool DoTest(int bWSIndex, ref string ErrorMsg)
+        public void DoTest(int bWSIndex, ref string ErrorMsg)
         {
-            bool bSuccess = false;
             try
             {
                 StartMeasurement(bWSIndex);
             }
             catch (Exception ex)
             {
+                ErrorMsg = ex.Message;
                 throw ex;
             }
 
-            return bSuccess;
         }
 
       
@@ -176,10 +168,10 @@ namespace AWGTestServer
             lstSopArray.Add(sop2);
             lstSopArray.Add(sop3);
             lstSopArray.Add(sop4);
+            frmAWGTest.ShowMsg("set sop and start sweep four times", false);
             try
             {
-                //      System.Threading.ThreadPool.QueueUserWorkItem((o) =>
-                //         {
+                
                 for (int i = 0; i < PolarizerCount; i++)
                 {
 
@@ -263,6 +255,14 @@ namespace AWGTestServer
             try
             {
                 //设置光源扫描设置
+                //设置光源K8164B
+                k8164.SetSweepMode(K8164B.SweepMode.CONT);
+                k8164.SetTriggerMode(K8164B.TriggerMode.STF);
+                k8164.SetInputTrigIgn();
+
+                k8164.SetOutputActive(true);
+                System.Threading.Thread.Sleep(100);
+
                 k8164.SetOutputPower(this.m_dblAWGTLSPower[bWSIndex], K8164B.PowerUnit.DBM);
                 k8164.SetSweepRep();
                 k8164.SetSweepCycle(1);
