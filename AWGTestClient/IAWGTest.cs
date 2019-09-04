@@ -30,5 +30,7 @@ namespace AWGTestClient
 
          void ReadCaliRawData(string strFilePathName);
 
+        void ReadDatILMaxMinData(string strFilePathName, ref tagAutoWaveform pstAutoWaveform);
+
     }
 }

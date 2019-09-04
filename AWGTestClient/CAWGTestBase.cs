@@ -197,6 +197,16 @@ namespace AWGTestClient
         {
            
         }
+
+        /// <summary>
+        /// 从csv文件读取IL数组
+        /// </summary>
+        /// <param name="strFilePathName"></param>
+        /// <param name="pstAutoWaveform"></param>
+        public virtual void ReadDatILMaxMinData(string strFilePathName, ref tagAutoWaveform pstAutoWaveform)
+        {
+
+        }
         #endregion
 
         #region private Methods

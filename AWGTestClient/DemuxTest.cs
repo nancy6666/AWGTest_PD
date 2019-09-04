@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TestSystem.TestLibrary.Utilities;
 
 namespace AWGTestClient
 {
@@ -72,6 +73,37 @@ namespace AWGTestClient
             catch (Exception ex)
             {
                 throw new Exception($"计算ILMin和ILMax出错，{ex.Message}");
+            }
+        }
+
+        public override void ReadDatILMaxMinData(string strFilePathName, ref tagAutoWaveform pstAutoWaveform)
+        {
+            double[] m_pdwWaveLengt = new double[SamplingPoint];
+            try
+            {
+                using (CsvReader reader = new CsvReader())
+                {
+                    reader.OpenFile(strFilePathName);
+
+                    String[] line;
+                    int iCount = 0;
+                    line = reader.GetLine();
+                    while ((line = reader.GetLine()) != null)
+                    {
+                        m_pdwWaveLengt[iCount] = double.Parse(line[0]);
+                        pstAutoWaveform.m_pdwWavelengthArray[iCount] = m_pdwWaveLengt[iCount];
+                        for (int i = 0; i < this.MaxChannel; i++)
+                        {
+                            pstAutoWaveform.m_pdwILMinArray[i, iCount] = double.Parse(line[1]);
+                            pstAutoWaveform.m_pdwILMaxArray[i, iCount] = double.Parse(line[2]);
+                        }
+                        iCount++;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
     }

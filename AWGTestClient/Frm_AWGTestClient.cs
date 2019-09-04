@@ -1704,14 +1704,15 @@ namespace AWGTestClient
             IniArray(iLen);
 
             string strMsg = "";
-            awgTestClient.CHANNEL_COUNT = MaxChannel;
-            bFunctionOK = awgTestClient.ReadDatILMaxMinData(strFileRawData, ref m_stPLCData);
-            if (!bFunctionOK)
+            try
+            {
+                awgTest.ReadDatILMaxMinData(strFileRawData, ref m_stPLCData);
+            }
+            catch(Exception ex)
             {
                 strMsg = "Read ILMax ILMin Dat File Failed !!!";
-                MessageBox.Show(strMsg);
+                MessageBox.Show($"{strMsg} {ex.Message}");
                 ShowMsg(strMsg, false);
-                return;
             }
             double dblTemperature = 0;
 
