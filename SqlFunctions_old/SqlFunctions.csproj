@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{ADB9B63C-17FA-499E-9AAC-4A4CCB8C30A5}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SqlFunctions</RootNamespace>
+    <AssemblyName>SqlFunctions</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CConfigurationManagement.cs" />
+    <Compile Include="CDatabase.cs" />
+    <Compile Include="Class Test Data Pf\CCrosstalkPf.cs" />
+    <Compile Include="Class Test Data Pf\CFinalPf.cs" />
+    <Compile Include="Class Test Data Pf\CFrequencyPf.cs" />
+    <Compile Include="Class Test Data Pf\CLossPf.cs" />
+    <Compile Include="Class Test Data Pf\CPassband.cs" />
+    <Compile Include="Class Test Data Pf\CPdlPf.cs" />
+    <Compile Include="Class Test Data Pf\CWavelength.cs" />
+    <Compile Include="Class Test Data Spec\CCondSpec.cs" />
+    <Compile Include="Class Test Data Spec\CCrosstalkSpec.cs" />
+    <Compile Include="Class Test Data Spec\CFrequencySpec.cs" />
+    <Compile Include="Class Test Data Spec\CLossSpec.cs" />
+    <Compile Include="Class Test Data Spec\CPassbandSpec.cs" />
+    <Compile Include="Class Test Data Spec\CPdlSpec.cs" />
+    <Compile Include="Class Test Data Spec\CWavelengthSpec.cs" />
+    <Compile Include="Class Test Data\CBaseInfo.cs" />
+    <Compile Include="Class Test Data\CCrosstalk.cs" />
+    <Compile Include="Class Test Data\CFrequency.cs" />
+    <Compile Include="Class Test Data\CLoss.cs" />
+    <Compile Include="Class Test Data\CPassband.cs" />
+    <Compile Include="Class Test Data\CPdl.cs" />
+    <Compile Include="Class Test Data\CRawData.cs" />
+    <Compile Include="Class Test Data\CReference.cs" />
+    <Compile Include="Class Test Data\CUsers.cs" />
+    <Compile Include="Class Test Data\CWavelength.cs" />
+    <Compile Include="CTestDataCommon.cs" />
+    <Compile Include="CTestSpecCommon.cs" />
+    <Compile Include="ITestDetail.cs" />
+    <Compile Include="ITestDetailPf.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

@@ -15,6 +15,7 @@ namespace AWGTestClient
         {
             lstPowermeterComs = new List<string>();
             lstPowermeterComs.Add(cfg.PM1906Com1);
+            //等功率计out trigger ok以后再enable
             //lstPowermeterComs.Add(cfg.PM1906Com2);
             //lstPowermeterComs.Add(cfg.PM1906Com3);
             //lstPowermeterComs.Add(cfg.PM1906Com4);
@@ -29,6 +30,35 @@ namespace AWGTestClient
             }
         }
 
+        public void OpenPowermeter()
+        {
+            try
+            {
+                foreach (var powermeter in lstPowermeter)
+                {
+                    powermeter.Open();
+                }
+            }
+            catch(Exception ex)
+            {
+                throw new Exception($"打开串口失败{ex.Message}");
+            }
+        }
+
+        public void ClosePowermeter()
+        {
+            try
+            {
+                foreach (var powermeter in lstPowermeter)
+                {
+                    powermeter.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"关闭串口失败{ex.Message}");
+            }
+        }
         ConfigurationInstruments cfg = new ConfigurationInstruments();
         public List<IPowermeter> lstPowermeter = new List<IPowermeter>();
         public List<string> lstPowermeterComs;
@@ -51,8 +81,6 @@ namespace AWGTestClient
         public int SamplingPoint { get;set;}
 
         public double MaxChannel { get; set; }
-
-        
 
         #region Public Methods
 

@@ -101,8 +101,8 @@ namespace AWGTestClient
                         pstAutoWaveform.m_pdwWavelengthArray[iCount] = m_pdwWaveLengt[iCount];
                         for (int ch = 0; ch < this.MaxChannel; ch++)
                         {
-                            pstAutoWaveform.m_pdwILMinArray[ch, iCount] = double.Parse(line[1+ch]);
-                            pstAutoWaveform.m_pdwILMaxArray[ch, iCount] = double.Parse(line[2+ch]);
+                            pstAutoWaveform.m_pdwILMinArray[ch, iCount] = double.Parse(line[1+ch*2]);
+                            pstAutoWaveform.m_pdwILMaxArray[ch, iCount] = double.Parse(line[2+ch*2]);
                         }
                         iCount++;
                     }

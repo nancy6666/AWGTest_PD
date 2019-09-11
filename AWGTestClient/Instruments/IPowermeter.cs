@@ -9,16 +9,12 @@ namespace AWGTestClient.Instruments
 {
     public interface IPowermeter
     {
-        bool IsConnected
-        {
-            set;
-            get;
-        }
-       
         void SetParameters(int cw);
 
         void StartSweep();
 
         void GetPowermeterData(out double[] powers, int desiredPoint);
+        void Open();
+        void Close();
     }
 }

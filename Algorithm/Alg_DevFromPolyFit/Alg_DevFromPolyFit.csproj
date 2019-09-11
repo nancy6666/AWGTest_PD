@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{68EBB396-C009-427E-801E-C5567B75DB15}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Alg_DevFromPolyFit</RootNamespace>
+    <AssemblyName>Alg_DevFromPolyFit</AssemblyName>
+    <SignAssembly>false</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\TestLibraryKey.snk</AssemblyOriginatorKeyFile>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>
+    </DocumentationFile>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\..\solution\TuneGoldBox_bin</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="nunit.framework">
+      <HintPath>..\..\DLL\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Alg_DevFromPolyFit.cs" />
+    <Compile Include="Alg_DevFromPolyFit_TEST.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\TestLibraryKey.snk">
+      <Link>TestLibraryKey.snk</Link>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AlgorithmException\AlgorithmException.csproj">
+      <Project>{0E06382C-DFA2-4156-A3F9-E5A6B192B1BD}</Project>
+      <Name>AlgorithmException</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Alg_ArrayFunctions\Alg_ArrayFunctions.csproj">
+      <Project>{A7701A43-3FE9-4E32-AD72-73F190366CE3}</Project>
+      <Name>Alg_ArrayFunctions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Alg_PointSearch\Alg_PointSearch.csproj">
+      <Project>{81EE9AEB-9EFF-42CD-89DF-C09304A51FA3}</Project>
+      <Name>Alg_PointSearch</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Alg_PolyFit\Alg_PolyFit.csproj">
+      <Project>{F46ED11A-1832-4471-A726-F212B6C31CDF}</Project>
+      <Name>Alg_PolyFit</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BoundingIndices\Alg_BoundingIndices.csproj">
+      <Project>{92FFECD2-086E-4599-8E3D-B96046E52D1D}</Project>
+      <Name>Alg_BoundingIndices</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

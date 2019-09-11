@@ -16,29 +16,20 @@ namespace AWGTestClient.Instruments
         PM1906A pm;
         SerialPort port;
         ConfigurationInstruments cfg = new ConfigurationInstruments();
-        private bool _isConnected;
-
-        public bool IsConnected
-        {
-            set
-            {
-                _isConnected = (port != null && port.IsOpen);
-            }
-            get
-            {
-                return _isConnected;
-            }
-        }
-
+       
         public MyPM1906A(string PortName, int BaudRate)
         {
                 pm = new PM1906A(PortName, BaudRate);
-
-                pm.Open();
-
-                this.IsConnected = true;
         }
 
+        public void Open()
+        {
+            pm.Open();
+        }
+        public void Close()
+        {
+            pm.Close();
+        }
         public void GetPowermeterData(out double[] powers, int desiredPoint)
         {
             try
@@ -60,10 +51,7 @@ namespace AWGTestClient.Instruments
             {
                 throw new Exception(ex.Message);
             }
-            finally
-            {
-                
-            }
+      
         }
 
         public void SetParameters(int cw)

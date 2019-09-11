@@ -28,8 +28,7 @@ namespace AWGTestClient.Instruments
         }
 
         public string ErrorString { get; private set; }
-        bool IPowermeter.IsConnected { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
+        
         private Mutex _mux = new Mutex();
         public enum EnumTriggrerMode
         {
@@ -566,6 +565,16 @@ namespace AWGTestClient.Instruments
                 }
             }
 
+        }
+
+        public void Open()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Close()
+        {
+            throw new NotImplementedException();
         }
         #endregion
     }

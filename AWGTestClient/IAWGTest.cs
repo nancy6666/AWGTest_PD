@@ -32,5 +32,8 @@ namespace AWGTestClient
 
         void ReadDatILMaxMinData(string strFilePathName, ref tagAutoWaveform pstAutoWaveform);
 
+        void OpenPowermeter();
+
+        void ClosePowermeter();
     }
 }

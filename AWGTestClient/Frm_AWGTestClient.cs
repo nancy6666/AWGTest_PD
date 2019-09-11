@@ -329,100 +329,103 @@ namespace AWGTestClient
         }
         private void DoCalibration()
         {
-            awgTestClient.SaveTLSSeting("TLS Setting", m_dwStartWavelength , m_dwStopWavelength, m_dblPower,
+            awgTestClient.SaveTLSSeting("TLS Setting", m_dwStartWavelength, m_dwStopWavelength, m_dblPower,
                 m_dblStep, m_dwOutput, m_bLLog ? 1 : 0, iStation);
             try
             {
+                awgTest.OpenPowermeter();
+
+                awgTest.InitPowermeter();
+
                 awgTest.StartSweep();
-            }
-            catch(Exception ex)
-            {
-                ShowMsg(ex.Message, false);
-                throw ex;
-            }
 
-            #region calibration NO.1 powermeter
+                #region calibration NO.1 powermeter
 
-            MessageBox.Show("请将光纤接入第1个功率计，注意此时不接产品!!!");
-            string strMsg = "calibrating Powermeter No.1，pls wait . . .";
-            ShowMsg(strMsg, true);
-            if (!SendCalibrationMsg())
-            {
-                bRuning = false;
-                return;
-            }
-            strMsg = "Powermeter NO.1 calibration OK!";
-            ShowMsg(strMsg, true);
-            #endregion
-            /* 待功率计的信号线全部串联好，再enable
-            #region calibration NO.2 powermeter
+                MessageBox.Show("请将光纤接入第1个功率计，注意此时不接产品!!!");
+                string strMsg = "calibrating Powermeter No.1，pls wait . . .";
+                ShowMsg(strMsg, true);
+                if (!SendCalibrationMsg())
+                {
+                    bRuning = false;
+                    return;
+                }
+                strMsg = "Powermeter NO.1 calibration OK!";
+                ShowMsg(strMsg, true);
+                #endregion
+                /* 待功率计的信号线全部串联好，再enable
+                #region calibration NO.2 powermeter
 
-            MessageBox.Show("请将光纤接入第2个功率计，注意此时不接产品!!!");
-             strMsg = "calibrating Powermeter No.2，pls wait . . .";
-            ShowMsg(strMsg, true);
-            if (!SendCalibrationMsg())
-            {
-                bRuning = false;
-                return;
-            }
-            strMsg = "Powermeter NO.2 calibration OK!";
-            ShowMsg(strMsg, true);
-            #endregion
+                MessageBox.Show("请将光纤接入第2个功率计，注意此时不接产品!!!");
+                 strMsg = "calibrating Powermeter No.2，pls wait . . .";
+                ShowMsg(strMsg, true);
+                if (!SendCalibrationMsg())
+                {
+                    bRuning = false;
+                    return;
+                }
+                strMsg = "Powermeter NO.2 calibration OK!";
+                ShowMsg(strMsg, true);
+                #endregion
 
-            #region calibration NO.3 powermeter
+                #region calibration NO.3 powermeter
 
-            MessageBox.Show("请将光纤接入第3个功率计，注意此时不接产品!!!");
-            strMsg = "calibrating Powermeter No.3，pls wait . . .";
-            ShowMsg(strMsg, true);
-            if (!SendCalibrationMsg())
-            {
-                bRuning = false;
-                return;
-            }
-            strMsg = "Powermeter NO.3 calibration OK!";
-            ShowMsg(strMsg, true);
-            #endregion
+                MessageBox.Show("请将光纤接入第3个功率计，注意此时不接产品!!!");
+                strMsg = "calibrating Powermeter No.3，pls wait . . .";
+                ShowMsg(strMsg, true);
+                if (!SendCalibrationMsg())
+                {
+                    bRuning = false;
+                    return;
+                }
+                strMsg = "Powermeter NO.3 calibration OK!";
+                ShowMsg(strMsg, true);
+                #endregion
 
-            #region calibration NO.4 powermeter
+                #region calibration NO.4 powermeter
 
-            MessageBox.Show("请将光纤接入第4个功率计，注意此时不接产品!!!");
-            strMsg = "calibrating Powermeter No.4，pls wait . . .";
-            ShowMsg(strMsg, true);
-            if (!SendCalibrationMsg())
-            {
-                bRuning = false;
-                return;
-            }
-            strMsg = "Powermeter NO.4 calibration OK!";
-            ShowMsg(strMsg, true);
-            #endregion
-            */
-            EnableTestButton(true);
+                MessageBox.Show("请将光纤接入第4个功率计，注意此时不接产品!!!");
+                strMsg = "calibrating Powermeter No.4，pls wait . . .";
+                ShowMsg(strMsg, true);
+                if (!SendCalibrationMsg())
+                {
+                    bRuning = false;
+                    return;
+                }
+                strMsg = "Powermeter NO.4 calibration OK!";
+                ShowMsg(strMsg, true);
+                #endregion
+                */
+                EnableTestButton(true);
 
-            awgTestClient.SaveSeting(strTmplFileName, "Main", "TmplName", strTmplName + " " + strTestTemp);
-            this.Invoke(new ThreedEnableButtonDelegate(EnableCalibrationButton), new object[] { true });
-            this.Invoke(new ThreedEnableButtonDelegate(EnableTestButton), new object[] { true });
-            m_bCLBandRefDone = true;
+                awgTestClient.SaveSeting(strTmplFileName, "Main", "TmplName", strTmplName + " " + strTestTemp);
+                this.Invoke(new ThreedEnableButtonDelegate(EnableCalibrationButton), new object[] { true });
+                this.Invoke(new ThreedEnableButtonDelegate(EnableTestButton), new object[] { true });
+                m_bCLBandRefDone = true;
 
-            string strFileName = Directory.GetCurrentDirectory() + String.Format($"\\Data\\Cali_RawData.csv");
-            try
-            {
+                string strFileName = Directory.GetCurrentDirectory() + String.Format($"\\Data\\Cali_RawData.csv");
+
                 awgTest.ReadSaveCaliData(strFileName);
+
+                strMsg = "Read and Calibration Data OK!";
+                ShowMsg(strMsg, true);
+
+                m_strOldSN = "";
+                m_dwTestIndex = 0;
+                bRuning = false;
+
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ShowMsg(ex.Message, false);
                 throw ex;
             }
-            strMsg = "Read and Calibration Data OK!";
-            ShowMsg(strMsg, true);
-
-            m_strOldSN = "";
-            m_dwTestIndex = 0;
-            bRuning = false;
+            finally
+            {
+                awgTest.ClosePowermeter();
+            }
         }
 
-        private bool SendCalibrationMsg()
+    private bool SendCalibrationMsg()
         {
             string strMsg;
             bool bFunctionOK = false;
@@ -673,6 +676,7 @@ namespace AWGTestClient
                             server_ret = 0;
                             try
                             {
+                                awgTest.OpenPowermeter();
                                 awgTest.InitPowermeter();
                                 awgTest.StartSweep();
                             }
@@ -753,8 +757,6 @@ namespace AWGTestClient
 
                             string strCaliFile = Directory.GetCurrentDirectory() + String.Format($"\\Data\\Cali_RawData.csv");
 
-                            try
-                            {
                                 ShowMsg("Read Calibration Data...", true);
                                 awgTest.ReadCaliRawData(strCaliFile);
 
@@ -763,13 +765,7 @@ namespace AWGTestClient
                                 //获取ILMin和ILMax的数组
                                 ShowMsg("Calculate ILMax ILMin Data...", true);
                                 awgTest.GetILMinMax(ref m_stPLCData);
-                            }
-                            catch (Exception ex)
-                            {
-                                ShowMsg(ex.Message, false);
-                                throw ex;
-                            }
-
+                           
                             bFunctionOK = awgTestClient.SaveILMinMaxRawData(m_stPLCData, deviceInfo, iStation, testTime, m_dwTestIndex, strFilePath);
                             if (!bFunctionOK)
                             {
@@ -1153,6 +1149,10 @@ namespace AWGTestClient
                 ShowMsg(strT, false);
                 db.Close();
                 MessageBox.Show(strT);
+            }
+            finally
+            {
+                awgTest.ClosePowermeter();
             }
         Finished:
             this.Invoke(new ThreedClearInput(ClearInput));//, new object[] { iPass });

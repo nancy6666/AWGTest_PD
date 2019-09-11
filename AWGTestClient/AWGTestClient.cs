@@ -18,7 +18,7 @@ namespace AWGTestClient
         /// <summary>
         /// decrease the data to get cross point in ILMax Array to caculate cw, 
         /// </summary>
-        public const double IL_SUBS = 1.5;
+        public const double IL_SUBS = 1;
 
         public int CHANNEL_COUNT = 10;
         tagAutoWaveform m_stPLCData;
@@ -106,7 +106,6 @@ namespace AWGTestClient
         {
             bool bSuccess = false;
             int dwSamplePoint = pstAutoWaveform.m_dwSampleCount;
-            //dwSamplePoint = 7501;
             double[] pdwWaveArray = pstAutoWaveform.m_pdwWavelengthArray;
             if (pdwWaveArray == null)
                 return false;
@@ -131,7 +130,6 @@ namespace AWGTestClient
             int iStartLossWindowRipple = 0;
             int iStopLossWindowRipple = 0;
            
-        //    int indexCW = 0;
             double deltaWave = 0;
                
             double C = 299792458;
@@ -151,15 +149,7 @@ namespace AWGTestClient
                         }
                         // CW
                         #region Calc CW
-
-                        //double MaxILMin = Alg_PointSearch.FindMinValueInArray(pdwMaxLossArray);
-                        //int MaxILIndex = Alg_PointSearch.FindFirstIndexOfMinValueInArray(pdwMaxLossArray);
-                        //double MaxILWavelength = pdwWaveArray[MaxILIndex];
-                        //double[] CrossPoint1 = GetCrossPointCW(pdwMaxLossArray, pdwWaveArray, MaxILMin + 3, MaxILIndex);
-
-                        //double[] CrossPoint = GetCrossPointCW(pdwMinLossArray, pdwWaveArray, MaxILMin + 3, MaxILIndex);
-
-                        
+                      
                         double CWWLStart;
                         double CWWLEnd;
                         //根据Iswave决定使用波长还是频率
