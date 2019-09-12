@@ -244,10 +244,11 @@ namespace AWGTestClient
             
             List<double[]> lstArray = new List<double[]>(num);
             int perCount = array.Count() / num;
-            double[] perArray = new double[perCount];
+          
             for (int arrayNum=0; arrayNum < num; arrayNum++)
             {
-                for(int j=0;j<perCount;j++)
+                double[] perArray = new double[perCount];
+                for (int j=0;j<perCount;j++)
                 {
                     perArray[j] = array[j + arrayNum * perCount];
                 }

@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DevExpress.XtraCharts.XYDiagram xyDiagram2 = new DevExpress.XtraCharts.XYDiagram();
-            DevExpress.XtraCharts.Series series2 = new DevExpress.XtraCharts.Series();
-            DevExpress.XtraCharts.LineSeriesView lineSeriesView2 = new DevExpress.XtraCharts.LineSeriesView();
+            DevExpress.XtraCharts.XYDiagram xyDiagram1 = new DevExpress.XtraCharts.XYDiagram();
+            DevExpress.XtraCharts.Series series1 = new DevExpress.XtraCharts.Series();
+            DevExpress.XtraCharts.LineSeriesView lineSeriesView1 = new DevExpress.XtraCharts.LineSeriesView();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.listView2 = new System.Windows.Forms.ListView();
             this.columnHeader19 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -61,6 +61,8 @@
             this.label34 = new System.Windows.Forms.Label();
             this.textBoxPartNum = new System.Windows.Forms.TextBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.cbxProductType = new System.Windows.Forms.ComboBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.txtbSweepStep = new System.Windows.Forms.TextBox();
             this.textBoxTestTemp = new System.Windows.Forms.TextBox();
             this.label19 = new System.Windows.Forms.Label();
@@ -100,16 +102,14 @@
             this.btnTETMCalcu = new System.Windows.Forms.Button();
             this.ILChart = new DevExpress.XtraCharts.ChartControl();
             this.btnILArrayCal = new System.Windows.Forms.Button();
-            this.label3 = new System.Windows.Forms.Label();
-            this.cbxProductType = new System.Windows.Forms.ComboBox();
             this.groupBox1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.groupBox5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ILChart)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(xyDiagram2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(series2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(lineSeriesView2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(xyDiagram1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(series1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(lineSeriesView1)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -132,6 +132,7 @@
             this.listView2.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader19});
             this.listView2.GridLines = true;
+            this.listView2.HideSelection = false;
             this.listView2.Location = new System.Drawing.Point(175, 23);
             this.listView2.Margin = new System.Windows.Forms.Padding(2);
             this.listView2.Name = "listView2";
@@ -464,6 +465,23 @@
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "测试条件";
             // 
+            // cbxProductType
+            // 
+            this.cbxProductType.FormattingEnabled = true;
+            this.cbxProductType.Location = new System.Drawing.Point(101, 77);
+            this.cbxProductType.Name = "cbxProductType";
+            this.cbxProductType.Size = new System.Drawing.Size(65, 20);
+            this.cbxProductType.TabIndex = 66;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(6, 83);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(53, 12);
+            this.label3.TabIndex = 65;
+            this.label3.Text = "产品类型";
+            // 
             // txtbSweepStep
             // 
             this.txtbSweepStep.Enabled = false;
@@ -608,6 +626,7 @@
             this.columnHeader11,
             this.columnHeader12});
             this.parametersList.GridLines = true;
+            this.parametersList.HideSelection = false;
             this.parametersList.Location = new System.Drawing.Point(10, 525);
             this.parametersList.Margin = new System.Windows.Forms.Padding(2);
             this.parametersList.Name = "parametersList";
@@ -655,7 +674,7 @@
             // 
             // columnHeader3
             // 
-            this.columnHeader3.Text = "Ripple";
+            this.columnHeader3.Text = "Ripple_ITU";
             this.columnHeader3.Width = 66;
             // 
             // columnHeader4
@@ -708,6 +727,7 @@
             this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader18});
             this.listView1.GridLines = true;
+            this.listView1.HideSelection = false;
             this.listView1.Location = new System.Drawing.Point(10, 207);
             this.listView1.Margin = new System.Windows.Forms.Padding(2);
             this.listView1.Name = "listView1";
@@ -737,6 +757,7 @@
             this.Customer_PN});
             this.lstviewTestResult.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lstviewTestResult.GridLines = true;
+            this.lstviewTestResult.HideSelection = false;
             this.lstviewTestResult.Location = new System.Drawing.Point(6, 16);
             this.lstviewTestResult.Name = "lstviewTestResult";
             this.lstviewTestResult.Size = new System.Drawing.Size(116, 163);
@@ -770,21 +791,21 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ILChart.BorderOptions.Visibility = DevExpress.Utils.DefaultBoolean.True;
             this.ILChart.CacheToMemory = true;
-            xyDiagram2.AxisX.Title.Text = "Wavelength (nm)";
-            xyDiagram2.AxisX.Title.Visibility = DevExpress.Utils.DefaultBoolean.True;
-            xyDiagram2.AxisX.VisibleInPanesSerializable = "-1";
-            xyDiagram2.AxisY.Title.Text = "ILMax (dB)";
-            xyDiagram2.AxisY.Title.Visibility = DevExpress.Utils.DefaultBoolean.True;
-            xyDiagram2.AxisY.VisibleInPanesSerializable = "-1";
-            this.ILChart.Diagram = xyDiagram2;
+            xyDiagram1.AxisX.Title.Text = "Wavelength (nm)";
+            xyDiagram1.AxisX.Title.Visibility = DevExpress.Utils.DefaultBoolean.True;
+            xyDiagram1.AxisX.VisibleInPanesSerializable = "-1";
+            xyDiagram1.AxisY.Title.Text = "ILMax (dB)";
+            xyDiagram1.AxisY.Title.Visibility = DevExpress.Utils.DefaultBoolean.True;
+            xyDiagram1.AxisY.VisibleInPanesSerializable = "-1";
+            this.ILChart.Diagram = xyDiagram1;
             this.ILChart.Legend.AlignmentHorizontal = DevExpress.XtraCharts.LegendAlignmentHorizontal.Right;
             this.ILChart.Legend.Name = "Default Legend";
             this.ILChart.Location = new System.Drawing.Point(328, 207);
             this.ILChart.Name = "ILChart";
-            series2.Name = "ILMax";
-            series2.View = lineSeriesView2;
+            series1.Name = "ILMax";
+            series1.View = lineSeriesView1;
             this.ILChart.SeriesSerializable = new DevExpress.XtraCharts.Series[] {
-        series2};
+        series1};
             this.ILChart.Size = new System.Drawing.Size(935, 302);
             this.ILChart.TabIndex = 51;
             // 
@@ -798,23 +819,6 @@
             this.btnILArrayCal.UseVisualStyleBackColor = true;
             this.btnILArrayCal.Visible = false;
             this.btnILArrayCal.Click += new System.EventHandler(this.btnILArrayCal_Click);
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 83);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(53, 12);
-            this.label3.TabIndex = 65;
-            this.label3.Text = "产品类型";
-            // 
-            // cbxProductType
-            // 
-            this.cbxProductType.FormattingEnabled = true;
-            this.cbxProductType.Location = new System.Drawing.Point(101, 77);
-            this.cbxProductType.Name = "cbxProductType";
-            this.cbxProductType.Size = new System.Drawing.Size(65, 20);
-            this.cbxProductType.TabIndex = 66;
             // 
             // Frm_AWGTestClient
             // 
@@ -846,9 +850,9 @@
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
             this.groupBox5.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(xyDiagram2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(lineSeriesView2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(series2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(xyDiagram1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(lineSeriesView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(series1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ILChart)).EndInit();
             this.ResumeLayout(false);
 

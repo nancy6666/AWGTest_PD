@@ -653,30 +653,30 @@ namespace AWGTestClient
 
                 int iLen = RawDataY.Length;
                 indexLeftLess = Alg_PointSearch.FindFirstValue(RawDataY, Alg_PointSearch.ComparisonOperator.LessThanOrEqualTo, targetLine, 0, iSplitIndex - 1);
-                indexLeftGreater = Alg_PointSearch.FindLastValue(RawDataY, Alg_PointSearch.ComparisonOperator.GreaterThanOrEqualTo, targetLine, 0, iSplitIndex - 1);
+                //indexLeftGreater = Alg_PointSearch.FindLastValue(RawDataY, Alg_PointSearch.ComparisonOperator.GreaterThanOrEqualTo, targetLine, 0, iSplitIndex - 1);
                 indexRigtLess = Alg_PointSearch.FindLastValue(RawDataY, Alg_PointSearch.ComparisonOperator.LessThanOrEqualTo, targetLine, iSplitIndex + 1, iLen - 1);
-                indexRigtGreater = Alg_PointSearch.FindFirstValue(RawDataY, Alg_PointSearch.ComparisonOperator.GreaterThanOrEqualTo, targetLine, iSplitIndex + 1, iLen - 1);
+                //indexRigtGreater = Alg_PointSearch.FindFirstValue(RawDataY, Alg_PointSearch.ComparisonOperator.GreaterThanOrEqualTo, targetLine, iSplitIndex + 1, iLen - 1);
 
                
                 WaveLeftLess = RawDataX[indexLeftLess];
-                WaveLeftGreater = RawDataX[indexLeftGreater];
+               // WaveLeftGreater = RawDataX[indexLeftGreater];
                 WaveRightLess = RawDataX[indexRigtLess];
-                WaveRightGreater = RawDataX[indexRigtGreater];
-                IL1 = RawDataY[indexLeftLess];
-                IL2 = RawDataY[indexLeftGreater];
-                IL3 = RawDataY[indexRigtLess];
-                IL4 = RawDataY[indexRigtGreater];
+               // WaveRightGreater = RawDataX[indexRigtGreater];
+                //IL1 = RawDataY[indexLeftLess];
+               // IL2 = RawDataY[indexLeftGreater];
+              //  IL3 = RawDataY[indexRigtLess];
+                // IL4 = RawDataY[indexRigtGreater];
                 //double wave3dBILMaxLeft = Math.Round((Wave3dBLeftLess + Wave3dBLeftGreater + Wave3dBRightLess + Wave3dBRightGreater) / 4 / 1000.0, 3);
 
-                if (IL1 != IL2)
-                    waveLeftILMax = LinearInterpolateAlgorithm.Calculate(IL1, IL2, WaveLeftLess, WaveLeftGreater, targetLine);
-                else
-                    waveLeftILMax = WaveLeftLess;
+                //if (IL1 != IL2)
+                //    waveLeftILMax = LinearInterpolateAlgorithm.Calculate(IL1, IL2, WaveLeftLess, WaveLeftGreater, targetLine);
+                //else
+                waveLeftILMax = WaveLeftLess;
 
-                if (IL3 != IL4)
-                    waveRightILMax = LinearInterpolateAlgorithm.Calculate(IL3, IL4, WaveRightLess, WaveRightGreater, targetLine);
-                else
-                    waveRightILMax = WaveRightLess;
+                //if (IL3 != IL4)
+                //    waveRightILMax = LinearInterpolateAlgorithm.Calculate(IL3, IL4, WaveRightLess, WaveRightGreater, targetLine);
+                //else
+                waveRightILMax = WaveRightLess;
 
                 CrossPoint[0] = waveLeftILMax;
                 CrossPoint[1] = waveRightILMax;
