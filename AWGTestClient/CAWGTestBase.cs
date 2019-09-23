@@ -13,12 +13,12 @@ namespace AWGTestClient
     {
         public CAWGTestBase ()
         {
+            lstPowermeter = new List<IPowermeter>();
             lstPowermeterComs = new List<string>();
             lstPowermeterComs.Add(cfg.PM1906Com1);
-            //等功率计out trigger ok以后再enable
-            //lstPowermeterComs.Add(cfg.PM1906Com2);
-            //lstPowermeterComs.Add(cfg.PM1906Com3);
-            //lstPowermeterComs.Add(cfg.PM1906Com4);
+            lstPowermeterComs.Add(cfg.PM1906Com2);
+            lstPowermeterComs.Add(cfg.PM1906Com3);
+            lstPowermeterComs.Add(cfg.PM1906Com4);
 
             if (cfg.PowerMeterType.Contains("PM1906A"))
             {
@@ -60,12 +60,12 @@ namespace AWGTestClient
             }
         }
         ConfigurationInstruments cfg = new ConfigurationInstruments();
-        public List<IPowermeter> lstPowermeter = new List<IPowermeter>();
+        public List<IPowermeter> lstPowermeter { get; set; }
         public List<string> lstPowermeterComs;
        
         public IPowermeter PowerMeter;
       
-        public List<double[]> lstCaliResult;
+        public List<double[]> lstCaliResult { get; set; }
 
         public List<double[]> lstMeasureResult;
 
@@ -86,29 +86,39 @@ namespace AWGTestClient
 
         public void InitPowermeter()
         {
-           
-                foreach (var pm in lstPowermeter)
-                {
-                    PowerMeter.SetParameters((int)(StopWavelength + StartWavelength) / 2);
-                }
+            lstCaliResult = new List<double[]>();
+            foreach (var pm in lstPowermeter)
+            {
+                pm.SetParameters((int)(StopWavelength + StartWavelength) / 2);
+            }
+            GetGraphWavelength();
         }
+
+        public void ReadCali(IPowermeter pm)
+        {
+            try
+            {
+                 //获取到的是一个通道下4个偏正态的数据，所以需要用SplitArray将powers分成4个数组
+                    pm.GetPowermeterData(out double[] powers, this.SamplingPoint * 4);
+
+                    lstCaliResult.AddRange(SplitArray(powers, 4));
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"读取校准功率值出错！{ex.Message}");
+            }
+        }
+
         /// <summary>
         /// 读取所有功率计的校准数据并保存
         /// </summary>
         /// <param name="strFileName">保存数据的路径</param>
-        public void ReadSaveCaliData(string strFileName)
+        public void SaveCaliData(string strFileName)
         {
             try
             {
-                lstCaliResult = new List<double[]>();
-                foreach (var pm in lstPowermeter)
-                {
-                    //获取到的是一个通道下4个偏正态的数据，所以需要用SplitArray将powers分成4个数组
-                    pm.GetPowermeterData(out double[] powers, this.SamplingPoint*4);
-                    
-                  lstCaliResult.AddRange(SplitArray(powers, 4));
-                }
                 SaveAutoRawData(strFileName,lstCaliResult);
+                lstCaliResult.Clear();
             }
             catch (Exception ex)
             {
@@ -131,14 +141,20 @@ namespace AWGTestClient
         /// </summary>
         public void StartSweep()
         {
-            GetGraphWavelength();
             foreach (var pm in lstPowermeter)
             {
                 pm.StartSweep();
             }
-          
         }
 
+        public void StopSweep()
+        {
+            foreach (var pm in lstPowermeter)
+            {
+                pm.StopSweep();
+            }
+
+        }
         /// <summary>
         /// 读取校准的RawData
         /// </summary>

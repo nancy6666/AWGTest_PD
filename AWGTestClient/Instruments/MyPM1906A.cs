@@ -89,5 +89,9 @@ namespace AWGTestClient.Instruments
             pm.Trigger_CleanBuffer();
             pm.Trigger_Start();
         }
+        public void StopSweep()
+        {
+            pm.Trigger_Stop();
+        }
     }
 }

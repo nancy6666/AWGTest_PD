@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AWGTestClient.Instruments;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,17 +19,23 @@ namespace AWGTestClient
 
         int SamplingPoint { get; set; }
 
+        List<IPowermeter> lstPowermeter { get; set; }
+        List<double[]> lstCaliResult { get; set; }
         void InitPowermeter();
       
-        void ReadSaveCaliData(string strFileName);
+        void SaveCaliData(string strFileName);
 
         void StartSweep();
+
+        void StopSweep();
 
         void ReadSaveTestPower(string strFilePath);
 
         void GetILMinMax(ref tagAutoWaveform pstAutoWaveform);
 
-         void ReadCaliRawData(string strFilePathName);
+         void ReadCali(IPowermeter pm);
+
+        void ReadCaliRawData(string caliFile);
 
         void ReadDatILMaxMinData(string strFilePathName, ref tagAutoWaveform pstAutoWaveform);
 

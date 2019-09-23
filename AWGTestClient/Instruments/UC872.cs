@@ -576,6 +576,11 @@ namespace AWGTestClient.Instruments
         {
             throw new NotImplementedException();
         }
+
+        public void StopSweep()
+        {
+            throw new NotImplementedException();
+        }
         #endregion
     }
 }

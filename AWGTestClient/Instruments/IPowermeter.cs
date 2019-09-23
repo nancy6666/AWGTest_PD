@@ -12,7 +12,7 @@ namespace AWGTestClient.Instruments
         void SetParameters(int cw);
 
         void StartSweep();
-
+        void StopSweep();
         void GetPowermeterData(out double[] powers, int desiredPoint);
         void Open();
         void Close();

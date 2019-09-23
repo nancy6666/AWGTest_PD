@@ -337,64 +337,27 @@ namespace AWGTestClient
 
                 awgTest.InitPowermeter();
 
-                awgTest.StartSweep();
+                string strMsg = "";
 
-                #region calibration NO.1 powermeter
-
-                MessageBox.Show("请将光纤接入第1个功率计，注意此时不接产品!!!");
-                string strMsg = "calibrating Powermeter No.1，pls wait . . .";
-                ShowMsg(strMsg, true);
-                if (!SendCalibrationMsg())
+                for (int i=0;i<4;i++)
                 {
-                    bRuning = false;
-                    return;
+                    awgTest.StartSweep();
+
+                    MessageBox.Show($"请将光纤接入第{i+1}个功率计，注意此时不接产品!!!");
+                    strMsg = $"calibrating Powermeter No.{i+1}，pls wait . . .";
+                    ShowMsg(strMsg, true);
+                    if (!SendCalibrationMsg())
+                    {
+                        bRuning = false;
+                        return;
+                    }
+                    awgTest.ReadCali(awgTest.lstPowermeter[i]);
+                    strMsg = $"Powermeter NO.{i+1} calibration OK!";
+                    ShowMsg(strMsg, true);
+
+                    awgTest.StopSweep();
                 }
-                strMsg = "Powermeter NO.1 calibration OK!";
-                ShowMsg(strMsg, true);
-                #endregion
-                /* 待功率计的信号线全部串联好，再enable
-                #region calibration NO.2 powermeter
 
-                MessageBox.Show("请将光纤接入第2个功率计，注意此时不接产品!!!");
-                 strMsg = "calibrating Powermeter No.2，pls wait . . .";
-                ShowMsg(strMsg, true);
-                if (!SendCalibrationMsg())
-                {
-                    bRuning = false;
-                    return;
-                }
-                strMsg = "Powermeter NO.2 calibration OK!";
-                ShowMsg(strMsg, true);
-                #endregion
-
-                #region calibration NO.3 powermeter
-
-                MessageBox.Show("请将光纤接入第3个功率计，注意此时不接产品!!!");
-                strMsg = "calibrating Powermeter No.3，pls wait . . .";
-                ShowMsg(strMsg, true);
-                if (!SendCalibrationMsg())
-                {
-                    bRuning = false;
-                    return;
-                }
-                strMsg = "Powermeter NO.3 calibration OK!";
-                ShowMsg(strMsg, true);
-                #endregion
-
-                #region calibration NO.4 powermeter
-
-                MessageBox.Show("请将光纤接入第4个功率计，注意此时不接产品!!!");
-                strMsg = "calibrating Powermeter No.4，pls wait . . .";
-                ShowMsg(strMsg, true);
-                if (!SendCalibrationMsg())
-                {
-                    bRuning = false;
-                    return;
-                }
-                strMsg = "Powermeter NO.4 calibration OK!";
-                ShowMsg(strMsg, true);
-                #endregion
-                */
                 EnableTestButton(true);
 
                 awgTestClient.SaveSeting(strTmplFileName, "Main", "TmplName", strTmplName + " " + strTestTemp);
@@ -404,9 +367,9 @@ namespace AWGTestClient
 
                 string strFileName = Directory.GetCurrentDirectory() + String.Format($"\\Data\\Cali_RawData.csv");
 
-                awgTest.ReadSaveCaliData(strFileName);
+                awgTest.SaveCaliData(strFileName);
 
-                strMsg = "Read and Calibration Data OK!";
+                strMsg = "Save Calibration Data OK!";
                 ShowMsg(strMsg, true);
 
                 m_strOldSN = "";
