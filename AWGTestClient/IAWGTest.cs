@@ -33,7 +33,9 @@ namespace AWGTestClient
 
         void GetILMinMax(ref tagAutoWaveform pstAutoWaveform);
 
-         void ReadCali(IPowermeter pm);
+        void SaveILMinMax(tagAutoWaveform pstAutoWaveform,string strFile);
+
+        void ReadCali(IPowermeter pm);
 
         void ReadCaliRawData(string caliFile);
 

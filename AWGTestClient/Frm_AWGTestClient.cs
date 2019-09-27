@@ -728,11 +728,14 @@ namespace AWGTestClient
                                 //获取ILMin和ILMax的数组
                                 ShowMsg("Calculate ILMax ILMin Data...", true);
                                 awgTest.GetILMinMax(ref m_stPLCData);
-                           
-                            bFunctionOK = awgTestClient.SaveILMinMaxRawData(m_stPLCData, deviceInfo, iStation, testTime, m_dwTestIndex, strFilePath);
-                            if (!bFunctionOK)
+                            try
                             {
-                                strMsg = "Save ILMax ILMin Data Failed !!!";
+                                string strILFile = $"{strFilePath}\\{strFileName}.csv";
+                                awgTest.SaveILMinMax(m_stPLCData, strILFile);
+                            }
+                            catch(Exception ex)
+                            {
+                                strMsg = $"Save ILMax ILMin Data Failed !!!{ex.Message}";
                                 ShowMsg(strMsg, false);
                                 bRuning = false;
                                 MessageBox.Show(strMsg);

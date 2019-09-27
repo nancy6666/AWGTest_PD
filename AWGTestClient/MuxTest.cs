@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -80,6 +81,53 @@ namespace AWGTestClient
             catch (Exception ex)
             {
                 throw new Exception($"计算ILMin和ILMax出错，{ex.Message}");
+            }
+        }
+
+        public override void SaveILMinMax(tagAutoWaveform pstAutoWaveform, string strFile)
+        {
+            if (File.Exists(strFile))
+            {
+                File.Delete(strFile);
+            }
+            try
+            {
+                using (FileStream file = new FileStream(strFile, FileMode.Append))
+                {
+                    using (StreamWriter sw = new StreamWriter(file))
+                    {
+                        StringBuilder sb = new StringBuilder();
+                        sb.Append("Wavelength (nm),");
+                        for (int ch =1; ch <= MaxChannel; ch++)
+                        {
+                            sb.Append($"ILMIN_Ch{ch},ILMAX_Ch{ch},");
+                        }
+                        sb.Append("\r\n");
+                        for (int dwIndex = 0; dwIndex < SamplingPoint; dwIndex++)
+                        {
+                            sb.Append(Math.Round(pstAutoWaveform.m_pdwWavelengthArray[dwIndex], 3).ToString("####.000") + ",");
+
+                            for (int ch = 0; ch < MaxChannel; ch++)
+                            {
+                                double dblILMin, dblILMax;
+
+                                dblILMax = pstAutoWaveform.m_pdwILMaxArray[ch, dwIndex];
+                                dblILMin = pstAutoWaveform.m_pdwILMinArray[ch, dwIndex];
+
+                                sb.Append(string.Format("{0},{1},", Math.Round(dblILMin, 3).ToString("####.000"), Math.Round(dblILMax, 3).ToString("####.000")));
+                            }
+                            sb.Append("\r\n");
+                        }
+                        sw.Write(sb);
+                        sw.Flush();
+                        sw.Close();
+                        file.Close();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Save Raw Data Failed !!!{ex.Message}");
             }
         }
 

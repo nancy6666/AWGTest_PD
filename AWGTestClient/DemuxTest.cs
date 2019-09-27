@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -104,6 +105,53 @@ namespace AWGTestClient
             catch (Exception ex)
             {
                 throw ex;
+            }
+        }
+
+        public override void SaveILMinMax(tagAutoWaveform pstAutoWaveform, string strFile)
+        {
+            if (File.Exists(strFile))
+            {
+                File.Delete(strFile);
+            }
+            try
+            {
+                using (FileStream file = new FileStream(strFile, FileMode.Append))
+                {
+                    using (StreamWriter sw = new StreamWriter(file))
+                    {
+                        string strTemp = "Wavelength (nm),";
+                        string str1 = "";
+
+                        str1 = string.Format("ILMIN,ILMAX");
+                        strTemp += str1;
+
+                        sw.Write(strTemp);
+                        sw.Write("\r\n");
+                        for (int dwIndex = 0; dwIndex < SamplingPoint; dwIndex++)
+                        {
+                            strTemp = Math.Round(pstAutoWaveform.m_pdwWavelengthArray[dwIndex], 3).ToString("####.000") + ",";
+
+                            double dblILMin, dblILMax;
+
+                            dblILMax = pstAutoWaveform.m_pdwILMaxArray[0, dwIndex];
+                            dblILMin = pstAutoWaveform.m_pdwILMinArray[0, dwIndex];
+
+                            str1 = string.Format("{0},{1}", Math.Round(dblILMin, 3).ToString("####.000"), Math.Round(dblILMax, 3).ToString("####.000"));
+                            strTemp += str1;
+
+                            sw.Write(strTemp);
+                            sw.Write("\r\n");
+                        }
+                        sw.Flush();
+                        sw.Close();
+                        file.Close();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Save Raw Data Failed !!!{ex.Message}");
             }
         }
     }

@@ -233,6 +233,7 @@ namespace AWGTestClient
                 frmAWGClient.ShowMsg(errMsg + "  " + ex.ToString(), false);
             }
         }
+       
         /// <summary>
         /// 根据测试值和校准值计算ILMinArray和ILMaxArray
         /// </summary>
@@ -242,6 +243,10 @@ namespace AWGTestClient
            
         }
 
+        public virtual void SaveILMinMax( tagAutoWaveform pstAutoWaveform,string strFile)
+        {
+
+        }
         /// <summary>
         /// 从csv文件读取IL数组
         /// </summary>
